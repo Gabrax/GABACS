@@ -37,6 +37,7 @@ build/
 conan/
 Release/
 Debug/
+vcpkg/
 
 # Ignore file
 CMakeUserPresets.json
