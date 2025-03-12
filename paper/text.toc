@@ -1,3 +1,0 @@
-\contentsline {section}{\numberline {1}Intro}{1}{}%
-\contentsline {section}{\numberline {2}Hello World}{1}{}%
-\contentsline {section}{\numberline {3}Computer Vision}{1}{}%

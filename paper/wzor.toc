@@ -1,0 +1,8 @@
+\contentsline {chapter}{\numberline {1}Wstęp}{5}{}%
+\contentsline {chapter}{\numberline {2}Podstawowe pojęcia}{7}{}%
+\contentsline {section}{\numberline {2.1}Definicje i własności}{7}{}%
+\contentsline {section}{\numberline {2.2}Przykłady}{7}{}%
+\contentsline {chapter}{\numberline {3}Część główna}{9}{}%
+\contentsline {chapter}{\numberline {4}Rozdział badawczy}{11}{}%
+\contentsline {chapter}{\numberline {5}Zakończenie}{13}{}%
+\contentsline {chapter}{Bibliografia}{15}{}%
