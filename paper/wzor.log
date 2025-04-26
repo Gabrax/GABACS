@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  12 MAR 2025 10:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  25 APR 2025 13:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -296,6 +296,9 @@ Rozdzia\PlPrIeC {\l } 1.
 ]
 Rozdzia\PlPrIeC {\l } 2.
 
+LaTeX Warning: Citation `Lang' on page 7 undefined on input line 104.
+
+
 
 [7]
 
@@ -326,18 +329,29 @@ Rozdzia\PlPrIeC {\l } 5.
 [14
 
 ]
+Overfull \hbox (143.5202pt too wide) in paragraph at lines 166--168
+[]\T1/qtm/m/n/12 Rajesh Rao, \T1/qtm/m/it/12 Lec-tu-re 16: Ste-reo and 3D Vi-si
+on,https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qt
+m/m/n/12 ,
+ []
+
+
 
 [15] (wzor.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 4277 strings out of 473898
- 62803 string characters out of 5726479
- 452157 words of memory out of 5000000
- 27095 multiletter control sequences out of 15000+600000
+ 4279 strings out of 473898
+ 62819 string characters out of 5726479
+ 452169 words of memory out of 5000000
+ 27097 multiletter control sequences out of 15000+600000
  593739 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  57i,7n,65p,586b,256s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -349,7 +363,7 @@ blic/amsfonts/cm/cmsy10.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts
 eX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o/AppData/Local/Programs/
 MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/gab-o/AppData/Local/Progr
 ams/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
-Output written on wzor.pdf (15 pages, 171395 bytes).
+Output written on wzor.pdf (15 pages, 173624 bytes).
 PDF statistics:
  90 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

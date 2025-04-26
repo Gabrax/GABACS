@@ -39,13 +39,13 @@
 %autor pracy
 \author{Gabriel Ozeg}
 %numer albumu
-\nralbumu{100000}
+\nralbumu{395263}
 %tytuł pracy
-\title{Tytuł pracy dyplomowej - może być bardzo długi}
+\title{System antykolizyjny na mikroprocesorze Raspberry Pi}
 %kierunek studiów
 \kierunek{Informatyka}
 %promotor w dopełniaczu
-\opiekun{prof. dr hab. Mojego Promotora}
+\opiekun{prof. dr hab. Paweł Zajączkowski}
 \katedra{Katedra Opiekuna}
 %rok
 \date{2025}
@@ -99,32 +99,30 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 \chapter{Podstawowe pojęcia}
 
-\section{Definicje i własności}
+  \section{Definicje i własności}
 
-W niniejszej części pracy podane zostaną pojęcia niezbędne w późniejszych rozważaniach (patrz \cite{Kostrykin} lub \cite{Lang}).
-\begin{defi}
-Niech $G$ będzie niepustym zbiorem. Działaniem w $G$ nazywamy dowolne odwzorowanie $\circ:G\times G\to G$.
-\end{defi}
+  W niniejszej części pracy podane zostaną pojęcia niezbędne w późniejszych rozważaniach (patrz \cite{Kostrykin} lub \cite{Lang}).
+  \begin{defi}
+  Niech $G$ będzie niepustym zbiorem. Działaniem w $G$ nazywamy dowolne odwzorowanie $\circ:G\times G\to G$.
+  \end{defi}
 
-\begin{defi}
-Niech $G$ będzie niepustym zbiorem, $\circ$ działaniem w $G$. Element $e\in G$ nazywamy neutralnym (działania $\circ$), jeśli dla każdego $a\in G$ mamy $a\circ e=e\circ a=a$.
-\end{defi}
+  \begin{defi}
+  Niech $G$ będzie niepustym zbiorem, $\circ$ działaniem w $G$. Element $e\in G$ nazywamy neutralnym (działania $\circ$), jeśli dla każdego $a\in G$ mamy $a\circ e=e\circ a=a$.
+  \end{defi}
 
-\begin{lem}\label{lem:element_neutralny}
-Jeśli działanie $\circ$ w $G$ posiada element neutralny, to jest on jeden.
-\end{lem}
-\pd Niech $e,e'\in G$ będą dwoma elementami neutralnymi. Wtedy
-\begin{equation}\label{eq:element_neutralny}
-e=e'\circ e=e'.
-\end{equation}
-Zatem element neutralny jest jeden. \kd
-
-
-\section{Przykłady}
-
-Działaniem w zbiorze liczb naturalnych jest dodawanie, natomiast działaniem w tym zbiorze nie jest odejmowanie.
+  \begin{lem}\label{lem:element_neutralny}
+  Jeśli działanie $\circ$ w $G$ posiada element neutralny, to jest on jeden.
+  \end{lem}
+  \pd Niech $e,e'\in G$ będą dwoma elementami neutralnymi. Wtedy
+  \begin{equation}\label{eq:element_neutralny}
+  e=e'\circ e=e'.
+  \end{equation}
+  Zatem element neutralny jest jeden. \kd
 
 
+  \section{Przykłady}
+
+  Działaniem w zbiorze liczb naturalnych jest dodawanie, natomiast działaniem w tym zbiorze nie jest odejmowanie.
 
 
 \chapter{Część główna}
@@ -139,24 +137,28 @@ Praca powinna spełniać wymogi formalne, merytoryczne i redakcyjne opisane w Re
 Praca dyplomowa będąca pracą inżynierską powinna zawierać samodzielne opracowanie praktycznego problemu i może mieć charakter projektu, studium porównawczego lub opracowania analitycznego.
 
 
-
-
 \chapter{Zakończenie}
-
-
-
 
 \begin{thebibliography}{7}
 \addcontentsline{toc}{chapter}{Bibliografia}
 %
-\bibitem{Lang}
-Serge Lang, 
-\textit{Algebra. Revised third edition}, 
-New York, Springer-Verlag, 2002.
+\bibitem{opencv}
+OpenCV, 
+\textit{https://opencv.org}.
 %
 \bibitem{Kostrykin} 
 Aleksiej Kostrykin, 
 \textit{Wstęp do algebry. Podstawy algebry},
 Warszawa, Wydawnictwo Naukowe PWN, 2022.
+
+\bibitem{Lambert} 
+John Lambert, 
+\textit{https://johnwlambert.github.io/stereo/}, April 4, 2025.
+
+\bibitem{rao} 
+Rajesh Rao, 
+\textit{Lecture 16: Stereo and 3D Vision,https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf}, University of Washington.
+
+
 \end{thebibliography}
 \end{document}

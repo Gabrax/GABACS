@@ -38,10 +38,16 @@ imgpointsL= []
 
 print('Starting stereo calibration ... ')
 
+ChessImaR = None
+ChessImaL = None
+
 for i in range(0, 64):
     t = str(i)
     ChessImaR = cv2.imread('calib_images/right_chessboard-' + t + '.png', 0)
     ChessImaL = cv2.imread('calib_images/left_chessboard-' + t + '.png', 0)
+    if ChessImaR is None or ChessImaL is None:
+        print(f"⚠️ Warning: Image {t} could not be loaded.")
+        continue  # Skip this iteration if loading failed
     retR, cornersR = cv2.findChessboardCorners(ChessImaR, (9, 6), None)
     retL, cornersL = cv2.findChessboardCorners(ChessImaL, (9, 6), None)
     if retR and retL:
@@ -57,7 +63,7 @@ retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, C
 OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
 OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
 
-print('Cameras Ready to use')
+print('Calibration complete')
 
 retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = criteria_stereo,flags = cv2.CALIB_FIX_INTRINSIC)
 
@@ -69,7 +75,7 @@ Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[:
 Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImaR.shape[::-1], cv2.CV_16SC2)
 
 # Create StereoSGBM and prepare all parameters
-window_size = 3
+window_size = 7
 min_disp = 2
 num_disp = 130-min_disp
 stereo = cv2.StereoSGBM_create(minDisparity = min_disp,numDisparities = num_disp,blockSize = window_size,uniquenessRatio = 10,speckleWindowSize = 100,speckleRange = 32, disp12MaxDiff = 5,
@@ -111,8 +117,8 @@ while True:
     Left_nice= cv2.remap(left_frame,Left_Stereo_Map[0],Left_Stereo_Map[1], interpolation = cv2.INTER_LANCZOS4, borderMode = cv2.BORDER_CONSTANT)  
     Right_nice= cv2.remap(right_frame,Right_Stereo_Map[0],Right_Stereo_Map[1], interpolation = cv2.INTER_LANCZOS4, borderMode = cv2.BORDER_CONSTANT)
 
-    gray_left = cv2.cvtColor(left_frame, cv2.COLOR_BGR2GRAY)
-    gray_right = cv2.cvtColor(right_frame, cv2.COLOR_BGR2GRAY)
+    gray_left = cv2.cvtColor(Left_nice, cv2.COLOR_BGR2GRAY)
+    gray_right = cv2.cvtColor(Right_nice, cv2.COLOR_BGR2GRAY)
 
     disp= stereo.compute(gray_left,gray_right)#.astype(np.float32)/ 16
     dispL= disp
@@ -145,21 +151,29 @@ while True:
     for cnt in contours:
         if cv2.contourArea(cnt) > 500:
             x, y, w, h = cv2.boundingRect(cnt)
-            cv2.rectangle(filt_Color, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            # Use RAW disparity map (just like in coords_mouse_disp)
+            # Use RAW disparity map
             roi_disp = disp[y:y + h, x:x + w].astype(np.float32)
 
-            # Take center 3x3 window for accurate comparison
+            # Center 3x3 window
             cx, cy = x + w // 2, y + h // 2
             sample_disp = disp[cy - 1:cy + 2, cx - 1:cx + 2].astype(np.float32)
             average_disp = np.mean(sample_disp[sample_disp > 0])
 
             if average_disp > 0:
+                # Convert disparity to distance
                 distance = -593.97 * average_disp**3 + 1506.8 * average_disp**2 - 1373.1 * average_disp + 522.06
                 distance = np.around(distance * 0.01, decimals=2)
-                cv2.putText(filt_Color, f"{distance:.2f} m", (x, y - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                if distance < 1.0:
+                    # Choose color based on distance
+                    if distance < 0.5:
+                        box_color = (0, 0, 255)  # Red for very close
+                    else:
+                        box_color = (0, 255, 0)  # Green for safe close
+
+                    cv2.rectangle(filt_Color, (x, y), (x + w, y + h), box_color, 2)
+                    cv2.putText(filt_Color, f"{distance:.2f} m", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
     # --------------------------------
     
     fps = 1 / (current_time - prev_time)
