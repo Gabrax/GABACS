@@ -42,4 +42,4 @@ vcpkg/
 # Ignore file
 CMakeUserPresets.json
 
-Stereo-Vision/calib_images/*
+#Stereo-Vision/calib_images/*
