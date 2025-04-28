@@ -3,6 +3,7 @@ import cv2
 import time
 # from openpyxl import Workbook # Used for writing data into an Excel file
 from sklearn.preprocessing import normalize
+from concurrent.futures import ThreadPoolExecutor
 
 # Filtering
 kernel= np.ones((3,3),np.uint8)
@@ -100,50 +101,52 @@ Cam.set(cv2.CAP_PROP_FPS, 60)
 
 prev_time = time.time()
 
+executor = ThreadPoolExecutor(max_workers=4)
+
 while True:
     current_time = time.time()
-    ret, frame= Cam.read()
+    ret, frame = Cam.read()
     if not ret:
         print("❌ Failed to capture frame. Exiting...")
         break
 
     height, width, _ = frame.shape
-    mid = width // 2  # Middle point for splitting
+    mid = width // 2
+    v_mid = height // 2
 
-    left_frame = frame[:, :mid]   # Left camera view
-    right_frame = frame[:, mid:]  # Right camera view
+    left_frame = frame[:, :mid]
+    right_frame = frame[:, mid:]
 
+    # Start remap operations in parallel
+    future_Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
+    future_Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
 
-    Left_nice= cv2.remap(left_frame,Left_Stereo_Map[0],Left_Stereo_Map[1], interpolation = cv2.INTER_LANCZOS4, borderMode = cv2.BORDER_CONSTANT)  
-    Right_nice= cv2.remap(right_frame,Right_Stereo_Map[0],Right_Stereo_Map[1], interpolation = cv2.INTER_LANCZOS4, borderMode = cv2.BORDER_CONSTANT)
+    Left_nice = future_Left_nice.result()
+    Right_nice = future_Right_nice.result()
 
-    gray_left = cv2.cvtColor(Left_nice, cv2.COLOR_BGR2GRAY)
-    gray_right = cv2.cvtColor(Right_nice, cv2.COLOR_BGR2GRAY)
+    # Start grayscale conversion in parallel
+    future_gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY)
+    future_gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY)
 
-    disp= stereo.compute(gray_left,gray_right)#.astype(np.float32)/ 16
-    dispL= disp
-    dispR= stereoR.compute(gray_right,gray_left)
-    dispL= np.int16(dispL)
-    dispR= np.int16(dispR)
+    gray_left = future_gray_left.result()
+    gray_right = future_gray_right.result()
 
-    #cv2.imshow('Disparity', disp)
-    # closing= cv2.morphologyEx(disp,cv2.MORPH_CLOSE, kernel) # Apply an morphological filter for closing little "black" holes in the picture(Remove noise) 
-    #cv2.imshow('Closing',closing)
-    # dispc= (closing-closing.min())*255
-    # dispC= dispc.astype(np.uint8)                                   # Convert the type of the matrix from float32 to uint8, this way you can show the results with the function cv2.imshow()
-    # disp_Color= cv2.applyColorMap(dispC,cv2.COLORMAP_OCEAN)         # Change the Color of the Picture into an Ocean Color_Map
-    #cv2.imshow('Color Depth',disp_Color)
-    disp= ((disp.astype(np.float32)/ 16)-min_disp)/num_disp # Calculation allowing us to have 0 for the most distant object able to detect
-    # roi_mask = np.zeros_like(gray_left, dtype=np.uint8)
-    # cv2.rectangle(roi_mask, (100, 100), (300, 300), 255, -1)  # Only process this region
-    filteredImg= wls_filter.filter(dispL,gray_left,None,dispR)
-    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX);
+    # Start disparity computations in parallel
+    future_dispL = executor.submit(stereo.compute, gray_left, gray_right)
+    future_dispR = executor.submit(stereoR.compute, gray_right, gray_left)
+
+    dispL = np.int16(future_dispL.result())
+    dispR = np.int16(future_dispR.result())
+
+    disp = ((dispL.astype(np.float32) / 16) - min_disp) / num_disp
+
+    filteredImg = wls_filter.filter(dispL, gray_left, None, dispR)
+    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
     filteredImg = np.uint8(filteredImg)
-    #cv2.imshow('Disparity Map', filteredImg)
 
-    filt_Color= cv2.applyColorMap(filteredImg,cv2.COLORMAP_OCEAN)
+    filt_Color = cv2.applyColorMap(filteredImg, cv2.COLORMAP_OCEAN)
 
-    # --- Close Object Detection ---
+    # ----- Close Object Detection  ----- #
     _, close_mask = cv2.threshold(filteredImg, 160, 255, cv2.THRESH_BINARY)
     close_mask = cv2.morphologyEx(close_mask, cv2.MORPH_CLOSE, kernel)
     contours, _ = cv2.findContours(close_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -152,36 +155,27 @@ while True:
         if cv2.contourArea(cnt) > 500:
             x, y, w, h = cv2.boundingRect(cnt)
 
-            # Use RAW disparity map
             roi_disp = disp[y:y + h, x:x + w].astype(np.float32)
-
-            # Center 3x3 window
             cx, cy = x + w // 2, y + h // 2
             sample_disp = disp[cy - 1:cy + 2, cx - 1:cx + 2].astype(np.float32)
             average_disp = np.mean(sample_disp[sample_disp > 0])
 
             if average_disp > 0:
-                # Convert disparity to distance
                 distance = -593.97 * average_disp**3 + 1506.8 * average_disp**2 - 1373.1 * average_disp + 522.06
                 distance = np.around(distance * 0.01, decimals=2)
 
                 if distance < 1.0:
-                    # Choose color based on distance
-                    if distance < 0.5:
-                        box_color = (0, 0, 255)  # Red for very close
-                    else:
-                        box_color = (0, 255, 0)  # Green for safe close
-
+                    box_color = (0, 0, 255) if distance < 0.5 else (0, 255, 0)
                     cv2.rectangle(filt_Color, (x, y), (x + w, y + h), box_color, 2)
                     cv2.putText(filt_Color, f"{distance:.2f} m", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
-    # --------------------------------
-    
+    # ----- Close Object Detection  ----- #
+
     fps = 1 / (current_time - prev_time)
     prev_time = current_time
 
     cv2.putText(filt_Color, f"FPS: {fps:.2f}", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
     cv2.imshow('Filtered Color Depth', filt_Color)
-    cv2.setMouseCallback("Filtered Color Depth",coords_mouse_disp,filt_Color)
+    cv2.setMouseCallback("Filtered Color Depth", coords_mouse_disp, filt_Color)
 
     if cv2.waitKey(1) & 0xFF == 27:
         break
