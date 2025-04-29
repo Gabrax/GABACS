@@ -18,6 +18,8 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\setcounter{secnumdepth}{4}  % Ensure subsubsection is numbered
+\setcounter{tocdepth}{4}     % Ensure subsubsection appears in TOC
 \usepackage{titlesec}
 \usepackage{color}
 \usepackage{xcolor}
@@ -127,8 +129,215 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 \chapter{Część główna}
 
+\section{Czym jest stereowizja?}
 
+Stereoskopia to proces polegający na przechwyceniu 2 obrazów tej samej sceny w celu utworzenia mapy dysproporcji sceny.
+mapa rozbieżności sceny. Z tej mapy rozbieżności można zmierzyć odległość do obiektu i utworzyć mapę 3D sceny.
+do obiektu i utworzyć mapę 3D sceny.
 
+\subsection{Stereowizja w robotach do pomieszczeń czystych}
+
+Celem tego dużego projektu jest opracowanie robota do pomieszczeń czystych, który może mierzyć cząsteczki w całym pomieszczeniu czystym.
+w całym pomieszczeniu czystym. Aby przeprowadzić pomiar bez żadnych problemów, robot musi orientować się bez kolizji.
+robot musi orientować się bez kolizji. Do tej orientacji zdecydowaliśmy się użyć tylko
+kamer, a do pomiaru odległości od obiektu potrzebujemy co najmniej dwóch kamer
+co najmniej dwóch kamer (stereowizja). Dwie kamery znajdują się w odległości 110
+mm między sobą.
+
+Im większa jest ta odległość, tym lepiej można ocenić odległość do sceny dla obiektów znajdujących się daleko.
+obiektów, które są daleko.
+W tym projekcie zaimplementowano program Python wykorzystujący bibliotekę OpenCV
+do kalibracji kamer i pomiaru odległości do obiektów na scenie.
+obiektów w scenie. (Patrz załącznik)
+
+Kamera stereo składa się z dwóch kamer Logitech Webcam C170.
+
+Widoki wideo są optymalne przy obrazach 640x480 pikseli. Ogniskowa: 2,3 mm.
+Wbudowana kamera stereo:
+
+\section{Model kamery}
+
+Kamery rejestrują promienie świetlne z naszego otoczenia. Zasadniczo kamera działa jak
+nasze oko, odbite promienie światła z naszego otoczenia docierają do naszego oka i są zbierane na siatkówce.
+Są one gromadzone na naszej siatkówce.
+„Kamera otworkowa” jest najprostszym modelem. Jest to dobry uproszczony model do zrozumienia
+zrozumieć, jak działa kamera. W tym modelu wszystkie promienie światła są zatrzymywane przez powierzchnię.
+powierzchnię. Tylko promienie przechodzące przez otwór są przechwytywane i rzutowane w odwrotnej kolejności na powierzchnię w kamerze.
+powierzchnia w kamerze. Poniższa ilustracja wyjaśnia tę zasadę
+
+Źródło: https://funsizephysics.com/use-light-turn-world-upside/\\
+Zasada ta jest bardzo prosta, ale nie jest to dobry sposób na uchwycenie wystarczającej ilości światła przy szybkiej ekspozycji.
+szybkiej ekspozycji. Dlatego soczewki są używane do zbierania
+promieni światła w jednym miejscu. Problem polega na tym, że taki obiektyw powoduje zniekształcenia.
+zniekształcenia.
+Istnieją dwa różne rodzaje zniekształceń:
+- zniekształcenie promieniowe
+- zniekształcenie styczne
+Zniekształcenie promieniowe wynika z kształtu samego obiektywu, a zniekształcenie styczne
+wynika z geometrii kamery. Obrazy można następnie skorygować za pomocą metod matematycznych.
+metod matematycznych.
+Proces kalibracji umożliwia stworzenie modelu geometrii kamery i modelu zniekształceń obiektywu.
+zniekształcenia obiektywu. Modele te tworzą parametry wewnętrzne kamery.
+
+\subsection{Ogniskowa obiektywu}
+\subsection{Zniekształcenie obiektywu}
+\subsection{Kalibracja za pomocą OpenCV}
+\section{Obrazowanie stereoskopowe}
+\subsection{Wyjaśnienie}
+
+Stereo Vision umożliwia rozpoznawanie głębi na obrazie, wykonywanie pomiarów na obrazie
+i przeprowadzanie lokalizacji 3D. Między innymi należy znaleźć punkty, które
+należy znaleźć punkty, które pasują do siebie między dwiema kamerami. Można to następnie wykorzystać do
+odległość między kamerą a punktem. Wykorzystywana jest geometria systemu
+systemu w celu uproszczenia obliczeń.
+
+Te cztery kroki są wykonywane podczas obrazowania stereo:
+1. usuwanie zniekształceń promieniowych i stycznych za pomocą obliczeń matematycznych
+obliczenia. W ten sposób powstają niezniekształcone obrazy.
+2. rektyfikacja kąta i odległości obrazów. Na tym etapie oba obrazy są
+obrazy współpłaszczyznowe na osi Y, co ułatwia wyszukiwanie korespondencji.
+łatwiejsze i wystarczy szukać tylko na jednej osi (osi X).
+(a mianowicie na osi X).
+3. znajdź tę samą cechę na prawym i lewym obrazie. Daje to mapę
+mapę dysproporcji pokazującą różnice między obrazami na osi x.
+4. Ostatnim krokiem jest triangulacja. Mapa rozbieżności jest przekształcana w
+odległości za pomocą triangulacji.
+Krok 1: Usuwanie zniekształceń
+Krok 2: Prostowanie
+Krok 3: Znalezienie tej samej cechy na obu obrazach
+Krok 4: Triangulacja
+
+\subsection{Triangulacja}
+
+W ostatnim kroku, triangulacji, zakłada się, że oba obrazy projekcji są współpłaszczyznowe i że poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiadającym mu obrazem prawego.
+są współpłaszczyznowe i poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiednim poziomym rzędem pikseli lewego obrazu.
+poziomy rząd pikseli lewego obrazu jest wyrównany.
+Poniższy obraz można teraz skonstruować przy użyciu poprzednich hipotez.
+
+Punkt P leży w środowisku i jest pokazany na
+lewym i prawym obrazie na pl i pr, z odpowiadającymi im współrzędnymi
+odpowiadającymi współrzędnymi xl i xr. To
+pozwala nam wprowadzić nową wielkość
+d = xl - xr. Można zauważyć, że im dalej punkt
+punkt P, tym mniejsza staje się wielkość d. Dysproporcja
+jest zatem odwrotnie proporcjonalna do odległości.
+odległości.\\
+Do obliczenia odległości można użyć następującego wzoru
+można obliczyć: Z=f*T/(xl-xr)\\
+
+Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością a odległością.
+istnieje. Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
+różnice w odległości. Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice
+małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na tej podstawie
+można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
+które znajdują się blisko kamery.
+
+Diese Methode funktioniert aber nur wenn die Konfiguration der Stereo-Kamera ideal ist. In
+der Realität ist dies jedoch nicht der Fall. Deswegen wird das linke und rechte Bild
+mathematisch parallel ausgerichtet. Natürlich müssen die Kameras zumindest approximativ
+physisch parallel positioniert werden.
+Bevor wir die Methode zur Mathematischen Ausrichtung der Bildern erklären, müssen wir
+zuerst die Epipolare Geometrie verstehen.
+
+\subsection{Geometria epipolarna}
+
+Das oben dargestellte Bild zeigt uns das Modell einer nicht-perfekten Stereo-Kamera die aus
+zwei Pinhole-Kameramodelle besteht. Durch die Kreuzung der Linie der Projektierungszentren
+(Ol, Or) mit den Proektierungsebenen entstehen die Epipolarpunkten el und er. Die Linien (pl,
+el) und (pr, er) werden Epipolarlinen genannt. Das Bild aller möglichen Punkte eines Punkts
+auf einer Projektierungsebene ist die Epipolarlinie die auf der anderen Bildebene liegt und
+durch den Epipolarpunkt und dem Gesuchten Punkt geht. Dies ermöglicht, die Suche des
+Punkts auf einer einzigen Dimension zu begrenzen anstatt auf einer ganzen Ebene.
+Man kann also folgende Punkte zusammenfassen:
+• Jeder 3D Punkt in der Sicht einer Kamera ist im Epipolaren Plan enthalten
+• Ein Merkmal in einer Ebene muss sich auf der entsprechenden Epipolarlinien der
+andere Ebene befinden (Epipolarbedingung)
+• Eine zweidimensionale Suche eines entsprechenden Merkmals wird zu einer
+eindimensionalen Suche umgewandelt, wenn man die Epipolargeometrie kennt.
+• Die Reihenfolge der Punkte wird behalten, d.h. dass zwei Punkte A und B in derselben
+Reihenfolge auf der Epipolarlinien einer Ebene gefunden werden, wie auf der, der
+anderen Ebene.
+
+\subsection{Macierze podstawowe i fundamentalne}
+
+Aby zrozumieć, w jaki sposób obliczane są linie epipolarne, musimy najpierw wyjaśnić macierze podstawowe
+i macierze fundamentalne (odpowiadające macierzom E i F).
+Macierz podstawowa E zawiera informacje o tym, jak fizycznie rozmieszczone są obie kamery.
+są fizycznie rozmieszczone. Opisuje ona lokalizację drugiej kamery względem pierwszej za pomocą parametrów translacji i rotacji.
+względem pierwszej kamery za pomocą parametrów translacji i rotacji. Parametry te nie są bezpośrednio odczytywane w macierzy
+Parametrów tych nie można odczytać bezpośrednio w macierzy, ponieważ jest ona używana do planowania projektu. W sekcji Kalibracja stereo
+wyjaśnimy, jak obliczyć R i T (macierz rotacji i wektor translacji).
+Macierz F zawiera informacje z podstawowej macierzy E, fizyczny układ kamer i informacje o kamerach.
+kamer i informacje o wewnętrznych parametrach kamer.
+Relacja między rzutowanym punktem na lewym obrazie pl i rzutowanym punktem na prawym obrazie pr jest zdefiniowana następująco
+obraz pr jest zdefiniowany następująco:
+
+prTEpl=0
+Można by pomyśleć, że ta formuła w pełni opisuje związek między lewym i prawym punktem.
+prawym punktem. Należy jednak zauważyć, że macierz 3x3 E jest rzędu
+jest rangi 2. Oznacza to, że wzór ten jest równaniem prostej.
+Aby w pełni zdefiniować relację między punktami, parametry wewnętrzne.
+parametry wewnętrzne.
+Pamiętamy, że q=Mp, z macierzą wewnętrzną M.
+Podstawienie do poprzedniego równania daje wynik
+qrT(Ml-1)TEMl-1ql=0
+Podstawienie:
+F=(Ml-1)TEMl-1
+W ten sposób otrzymujemy
+qrTFql=0
+
+\subsection{Macierz obrotu i wektor przesunięcia}
+
+Teraz, gdy wyjaśniliśmy już macierz podstawową E i macierz podstawową F, musimy
+musimy zobaczyć, jak obliczyć macierz obrotu i wektor translacji.
+Zdefiniujemy następujące oznaczenia:
+- Pl i Pr definiują pozycje punktu w układzie współrzędnych odpowiednio lewej i prawej kamery.
+prawa kamera
+- Rl i Tl (lub Rr i Tr) definiują obrót i translację z kamery
+do punktu w otoczeniu dla lewej (lub prawej) kamery.
+- R i T to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
+R i T to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
+Daje to następujące wyniki
+Pl=RlP+Tl i Pr=RrP+Tr
+Mamy również:
+Pl=RT(Pr-T)
+Z tych trzech równań ostateczny wynik to
+R=RrRlT
+T=Tr-RTl
+
+\subsection{Rektyfikacja stereo}
+
+Dotychczas zajmowaliśmy się tematem „kalibracji stereo”. Chodziło o
+opis geometrycznego rozmieszczenia obu kamer. Zadaniem
+rektyfikacji jest rzutowanie dwóch obrazów tak, aby leżały dokładnie w tej samej płaszczyźnie i precyzyjne wyrównanie rzędów pikseli tak, aby linie epipolarne stały się poziome w celu zapewnienia zgodności punktu na dwóch obrazach.
+aby znaleźć zgodność punktu na dwóch obrazach w sposób bardziej losowy.
+W wyniku procesu wyrównywania obu obrazów uzyskuje się 8 wyrażeń, po 4 dla każdej kamery.
+kamery:
+- wektor zniekształceń
+- macierz rotacji Rrect, która musi zostać zastosowana do obrazu
+- wyprostowana macierz kamery Mrect
+- nierektyfikowana macierz kamery M
+OpenCV pozwala nam obliczyć te warunki za pomocą dwóch algorytmów: algorytmu Hartleya
+i algorytmu Bougueta.
+
+\subsubsection{Algorytm Hartley'a}
+
+Algorytm Hartleya wyszukuje te same punkty na obu obrazach. Próbuje on
+stara się zminimalizować rozbieżności i znaleźć homografie, które ustawiają epipole w nieskończoności.
+nieskończoność. Dzięki tej metodzie nie jest więc konieczne obliczanie parametrów wewnętrznych dla każdej kamery.
+dla każdej kamery.
+Zaletą tej metody jest to, że kalibracja jest możliwa tylko dzięki obserwacji punktów w scenie.
+punktów na scenie. Główną wadą jest jednak brak skalowania obrazu
+Masz tylko informacje o względnej odległości. Nie można dokładnie zmierzyć
+jak daleko obiekt znajduje się od kamer.
+
+\subsubsection{Algorytm Bougueta}
+
+Algorytm Bougueta wykorzystuje obliczoną macierz obrotu i wektor translacji
+aby obrócić obie rzutowane płaszczyzny o pół obrotu, tak aby znalazły się w tej samej płaszczyźnie.
+tej samej płaszczyźnie. Sprawia to, że główne promienie są równoległe, a płaszczyzny współpłaszczyznowe.
+ale nie są jeszcze wyrównane w rzędach. Zostanie to zrobione później.
+W projekcie wykorzystaliśmy algorytm Bougueta.
 
 \chapter{Rozdział badawczy}
 
@@ -136,6 +345,85 @@ Praca powinna spełniać wymogi formalne, merytoryczne i redakcyjne opisane w Re
 
 Praca dyplomowa będąca pracą inżynierską powinna zawierać samodzielne opracowanie praktycznego problemu i może mieć charakter projektu, studium porównawczego lub opracowania analitycznego.
 
+\section{Funkcjonalność programu do obrazowania stereo}
+
+Jak już wspomniano, program jest kodowany w Pythonie i wykorzystywana jest biblioteka OpenCV.
+jest używana. Zdecydowaliśmy się na język Python i bibliotekę OpenCV, ponieważ
+mieliśmy już z nimi doświadczenie i ponieważ istnieje wiele dokumentacji na ich temat. Innym
+argumentem za tą decyzją jest to, że chcieliśmy pracować tylko z bibliotekami „open source”.
+biblioteki.
+Na potrzeby tego projektu opracowano dwa programy w języku Python.
+Pierwszy z nich, „Take-images-for-calibration.py”, służy do robienia dobrych zdjęć, które są później wykorzystywane do kalibracji obu kamer.
+Później są one wykorzystywane do kalibracji obu kamer (kalibracja zniekształceń i kalibracja stereo).
+kalibracja.
+Drugi program, a tym samym główny program „Main-Stereo-Vision-Prog.py” jest używany do obrazowania stereo.
+jest używany do obrazowania stereo. W tym programie kalibrujemy kamery za pomocą wykonanych zdjęć, generujemy mapę dysproporcji i dzięki doświadczalnemu równaniu
+równania, które zostało znalezione eksperymentalnie, możemy zmierzyć odległość dla każdego piksela.
+pomiar. Na końcu używany jest filtr WLS, aby lepiej rozpoznawać krawędzie obiektów.
+rozpoznać krawędzie obiektów.
+
+\subsection{Wykorzystane pakiety}
+
+Do programu zaimportowano następujące pakiety:
+- Wersja OpenCV.3.2.0 z opencv-contrib (zawiera funkcje stereo) jako.
+„cv2” w Pythonie, zawiera:
+o bibliotekę do przetwarzania obrazów
+o funkcje do stereowizji
+- Numpy.1.12.
+o Używany do operacji na macierzach (obrazy składają się z macierzy)
+- Skoroszyt z openpyxl
+o Pakiet umożliwiający zapisywanie danych w pliku Excel
+- „normalizacja” biblioteki sklearn 0.18.1
+o sklearn umożliwia uczenie maszynowe, ale w tym projekcie używany jest
+tylko filtr WLS
+
+\subsection{Główna pętla}
+
+Aby pracować z kamerami, należy je najpierw aktywować. Funkcja
+cv2.VideoCapture() aktywuje obie kamery poprzez wprowadzenie numeru portu każdej z nich.
+kamery (w programie tworzone są dwa obiekty korzystające z metod klasy cv2.VideoCapture()).
+klasy cv2.VideoCapture()).
+
+Aby uzyskać obraz z kamer, używana jest metoda cv2.VideoCapture().read()
+Wyjściem jest obraz sceny, którą kamera ogląda w momencie wywołania tej funkcji.
+funkcja jest wywoływana. Aby uzyskać obraz wideo, należy wywołać tę metodę
+w nieskończonej pętli. Aby być bardziej wydajnym, zaleca się
+aby przekonwertować obrazy BGR na obrazy w odcieniach szarości, odbywa się to za pomocą funkcji cv2.cvtColor()
+funkcja.
+
+Aby wyświetlić wideo na komputerze, używana jest funkcja cv2.imshow().
+aby otworzyć okno, w którym można wyświetlić wideo.
+
+Przerwanie służy do wyjścia z nieskończonej pętli. Staje się ona aktywna
+za każdym razem, gdy użytkownik naciśnie spację. Rozpoznanie, że klawisz został naciśnięty
+jest rozpoznawane dzięki funkcji cv2.waitKey().
+Wreszcie, dwie używane kamery muszą zostać dezaktywowane za pomocą metody
+cv2.VideoCapture().release(), a otwarte okna są niszczone za pomocą funkcji
+cv2.destroyAllWindows().
+
+\subsection{Funkcjonalność programu „Take-images-for-calibration.py”}
+
+Po uruchomieniu tego programu obie kamery stają się aktywne i otwierane są dwa okna.
+aby użytkownik mógł zobaczyć, gdzie na obrazach znajduje się szachownica.
+
+\subsubsection{Wektory kalibracyjne}
+
+Funkcja cv2.findChessboardCorners() wyszuka określoną liczbę narożników szachownicy
+i wygenerowane zostaną następujące wektory:
+- imgpointsR: zawiera współrzędne narożników na prawym obrazie (w przestrzeni obrazu)
+- imgpointsL: zawiera współrzędne narożników na lewym obrazie (w przestrzeni obrazu)
+- objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
+Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
+cv2.cornerSubPix().
+
+\subsubsection{Pozyskiwanie obrazów do kalibracji}
+\subsection{Funkcjonalność programu „Main-Stereo-Vision-Prog.py”}
+\subsubsection{Kalibracja zniekształceń}
+\subsubsection{Kalibracja kamery stereo}
+\subsubsection{Obliczanie mapy rozbieżności}
+\subsubsection{Zastosowanie filtra WLS (ważonych najmniejszych kwadratów)}
+\subsubsection{Pomiar odległości}
+\subsubsection{Możliwe ulepszenia}
 
 \chapter{Zakończenie}
 

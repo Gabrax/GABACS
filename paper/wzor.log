@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  25 APR 2025 13:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  29 APR 2025 22:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -210,20 +210,20 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 ) (wzor.aux)
 \openout1 = `wzor.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 87.
-LaTeX Font Info:    ... okay on input line 87.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
+LaTeX Font Info:    ... okay on input line 89.
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
@@ -253,14 +253,14 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 <logo_math_ul_h_pl_rgb.png, id=1, 1514.65875pt x 587.19376pt>
 File: logo_math_ul_h_pl_rgb.png Graphic file (type png)
 <use logo_math_ul_h_pl_rgb.png>
-Package pdftex.def Info: logo_math_ul_h_pl_rgb.png  used on input line 89.
+Package pdftex.def Info: logo_math_ul_h_pl_rgb.png  used on input line 91.
 (pdftex.def)             Requested size: 378.66376pt x 146.79808pt.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 89.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 91.
 
  (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 89.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 91.
 
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -273,30 +273,30 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc} <./logo_math
 _ul_h_pl_rgb.png>]
 
-[2] (wzor.toc)
+[2] (wzor.toc
+
+[3
+
+])
 \tf@toc=\write3
 \openout3 = `wzor.toc'.
 
 
 
-[3
-
-]
-
-[4
-
-]
+[4]
 Rozdzia\PlPrIeC {\l } 1.
 
 
-[5]
+[5
+
+]
 
 [6
 
 ]
 Rozdzia\PlPrIeC {\l } 2.
 
-LaTeX Warning: Citation `Lang' on page 7 undefined on input line 104.
+LaTeX Warning: Citation `Lang' on page 7 undefined on input line 106.
 
 
 
@@ -307,29 +307,69 @@ LaTeX Warning: Citation `Lang' on page 7 undefined on input line 104.
 ]
 Rozdzia\PlPrIeC {\l } 3.
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [9]
 
-[10
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 217--227
 
-]
-Rozdzia\PlPrIeC {\l } 4.
+ []
+
+LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 2
+52.
+(C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
+File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 
 
 [11]
 
-[12
+[12{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
+.enc}]
+Underfull \vbox (badness 5147) has occurred while \output is active []
+
+
+
+[13]
+
+[14]
+Rozdzia\PlPrIeC {\l } 4.
+
+
+[15
+
+]
+Overfull \hbox (38.56227pt too wide) in paragraph at lines 382--386
+\T1/qtm/m/n/12 two-rzo-ne s¡ dwa obiek-ty ko-rzy-sta-j¡-ce z me-tod kla-sy cv2.
+VideoCapture()). kla-sy cv2.VideoCapture()). 
+ []
+
+
+Underfull \vbox (badness 1331) has occurred while \output is active []
+
+
+
+[16]
+
+[17]
+
+[18
 
 ]
 Rozdzia\PlPrIeC {\l } 5.
 
 
-[13]
+[19]
 
-[14
+[20
 
 ]
-Overfull \hbox (143.5202pt too wide) in paragraph at lines 166--168
+Overfull \hbox (143.5202pt too wide) in paragraph at lines 447--449
 []\T1/qtm/m/n/12 Rajesh Rao, \T1/qtm/m/it/12 Lec-tu-re 16: Ste-reo and 3D Vi-si
 on,https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qt
 m/m/n/12 ,
@@ -337,7 +377,7 @@ m/m/n/12 ,
 
 
 
-[15] (wzor.aux)
+[21] (wzor.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
@@ -348,11 +388,11 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 4279 strings out of 473898
- 62819 string characters out of 5726479
- 452169 words of memory out of 5000000
- 27097 multiletter control sequences out of 15000+600000
- 593739 words of font info for 75 fonts, out of 8000000 for 9000
+ 4309 strings out of 473898
+ 63343 string characters out of 5726479
+ 458169 words of memory out of 5000000
+ 27122 multiletter control sequences out of 15000+600000
+ 594115 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  57i,7n,65p,586b,256s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
@@ -363,9 +403,9 @@ blic/amsfonts/cm/cmsy10.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts
 eX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o/AppData/Local/Programs/
 MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/gab-o/AppData/Local/Progr
 ams/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
-Output written on wzor.pdf (15 pages, 173624 bytes).
+Output written on wzor.pdf (21 pages, 197664 bytes).
 PDF statistics:
- 90 PDF objects out of 1000 (max. 8388607)
+ 113 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
