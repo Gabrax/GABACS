@@ -1,12 +1,6 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%Przykładowy dokument%%%%%%%%%%%%%%%
-%%%%%%%%%%wraz z klasą pracadyp.cls%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % w nawiasie kwadratowym wpisujemy rodzaj pracy: 
 % magisterska, licencjacka, inzynierska
 \documentclass[magisterska]{pracadypl}
-
 
 %% ważne definicje %%
 \usepackage{tgtermes}
@@ -17,6 +11,7 @@
 \pdfgentounicode=1
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{caption}
 \usepackage{graphicx}
 \setcounter{secnumdepth}{4}  % Ensure subsubsection is numbered
 \setcounter{tocdepth}{4}     % Ensure subsubsection appears in TOC
@@ -34,8 +29,6 @@
 \def\et{Title in English}
 %% koniec ważnych definicji %%
 
-
-
 %% wypełnia Autor pracy %%
 
 %autor pracy
@@ -52,11 +45,11 @@
 %rok
 \date{2025}
 %Słowa kluczowe:
-\slkluczowe{pierwsze, drugie, trzecie, czwarte}
+\slkluczowe{Przetwarzanie obrazu, Głębia obrazu, Metody pomiaru odległości w czasie rzeczywistym, Zastosowania w robotyce}
 %tytuł po angielsku
-\tytulang{Title in English}
+\tytulang{Collision avoidance system on Raspberry Pi microprocessor}
 %słowa kluczowe po angielsku
-\keywords{first, second, third, fourth}
+\keywords{Image Processing, Image Depth, Real-Time Distance Measurement Methods, Applications in Robotics}
 %% koniec ważnych definicji %%
 
 %% APD %%
@@ -129,6 +122,111 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 \chapter{Część główna}
 
+\section{Rodzaje kamer i techniki używane do estymacji głębi}
+
+\subsection{Monocular Vision}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/MONO.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+
+Single camera.
+
+Relies on cues like motion, texture gradients, perspective, learned priors (deep learning).
+
+Examples: Depth estimation from a single image using CNNs or transformers.
+
+\subsection{Stereo Vision}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/STEREO.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Two cameras with known relative positions.
+
+Depth estimated via triangulation from pixel disparity.
+
+\subsection{Multiview / Structure from Motion (SfM)}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/SFM.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Uses multiple images taken from different viewpoints (can be from a moving camera).
+
+Reconstructs 3D structure by tracking features and estimating camera poses.
+
+\subsection{Time-of-Flight (ToF) Cameras}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/TOF-IR.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Emits infrared (IR) light and measures the time it takes to bounce back.
+
+Direct depth measurement.
+
+Common in smartphones (e.g., some iPhones, Kinect v2).
+
+\subsection{Structured Light}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.1\textwidth]{images/POINTCLOUD.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Projects a known light pattern (e.g., dots or stripes) onto a scene.
+
+Deformation of the pattern gives depth info.
+
+Used in original Microsoft Kinect.
+
+\subsection{LIDAR (Light Detection and Ranging)}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.1\textwidth]{images/LIDAR.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Emits laser beams and measures return time.
+
+Produces very accurate 3D point clouds.
+
+Widely used in autonomous vehicles.
+
+\subsection{Ultrasound / Sonar}
+Common in robotics, underwater applications, and medical imaging.
+
+Measures distance using the echo of sound waves.
+
+\subsection{Event Cameras (Neuromorphic sensors)}
+Capture changes in intensity over time (not full frames).
+
+Can be used for depth estimation when combined with motion.
+
 \section{Czym jest stereowizja?}
 
 Stereoskopia to proces polegający na przechwyceniu 2 obrazów tej samej sceny w celu utworzenia mapy dysproporcji sceny.
@@ -165,7 +263,14 @@ zrozumieć, jak działa kamera. W tym modelu wszystkie promienie światła są z
 powierzchnię. Tylko promienie przechodzące przez otwór są przechwytywane i rzutowane w odwrotnej kolejności na powierzchnię w kamerze.
 powierzchnia w kamerze. Poniższa ilustracja wyjaśnia tę zasadę
 
-Źródło: https://funsizephysics.com/use-light-turn-world-upside/\\
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/light.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://funsizephysics.com/use-light-turn-world-upside/}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
+
 Zasada ta jest bardzo prosta, ale nie jest to dobry sposób na uchwycenie wystarczającej ilości światła przy szybkiej ekspozycji.
 szybkiej ekspozycji. Dlatego soczewki są używane do zbierania
 promieni światła w jednym miejscu. Problem polega na tym, że taki obiektyw powoduje zniekształcenia.
@@ -180,8 +285,125 @@ Proces kalibracji umożliwia stworzenie modelu geometrii kamery i modelu znieksz
 zniekształcenia obiektywu. Modele te tworzą parametry wewnętrzne kamery.
 
 \subsection{Ogniskowa obiektywu}
+
+Względny rozmiar obrazu rzutowanego na powierzchnię w kamerze zależy od ogniskowej.
+ogniskowa. W modelu otworkowym ogniskowa to odległość między otworem
+a obszarem, na który rzutowany jest obraz.
+Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
+
+\begin{itemize}
+  \item \textbf{x}: obraz obiektu (znak minus wynika z tego, że obraz jest odwrócony)
+  \item \textbf{X}: rozmiar obiektu
+  \item \textbf{Z}: odległość od otworu do obiektu
+  \item \textbf{f}: ogniskowa, odległość od otworu do obrazu
+\end{itemize}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/pinhole.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 639}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Ponieważ soczewka nie jest idealnie wyśrodkowana, wprowadzono dwa parametry, Cx i Cy, oznaczające odpowiednio poziome i pionowe przemieszczenie soczewki.
+odpowiednio poziome i pionowe przemieszczenie soczewki. Ogniskowa na osiach X i
+Y są również różne, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór
+Daje to następujący wzór na położenie obiektu na powierzchni.
+
+\[
+x_{\text{screen}} = f_x \left( \frac{X}{Z} \right) + c_x, \quad
+y_{\text{screen}} = f_y \left( \frac{Y}{Z} \right) + c_y
+\]
+
+Rzutowane punkty świata rzeczywistego na powierzchnię obrazu można zatem modelować w następujący sposób
+modelowany. M jest tutaj macierzą wewnętrzną.
+
+\[
+q = MQ, \quad \text{where} \quad
+q = \begin{bmatrix} x \\ y \\ w \end{bmatrix}, \quad
+M = \begin{bmatrix}
+f_x & 0 & c_x \\
+0 & f_y & c_y \\
+0 & 0 & 1
+\end{bmatrix}, \quad
+Q = \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
+\]
+
 \subsection{Zniekształcenie obiektywu}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.3\textwidth]{images/barrel.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: Wikipedia}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Teoretycznie możliwe jest zbudowanie obiektywu, który nie powoduje zniekształceń za pomocą soczewki parabolicznej.
+soczewki parabolicznej. W praktyce jednak znacznie łatwiej jest stworzyć soczewkę sferyczną niż paraboliczną.
+niż soczewkę paraboliczną. Jak wspomniano wcześniej, istnieją dwa rodzaje zniekształceń. Zniekształcenie
+promieniowe, które wynikają z kształtu obiektywu i zniekształcenia styczne spowodowane procesem montażu kamery.
+przez proces montażu kamery.
+
+W centrum optycznym nie ma zniekształceń promieniowych, a przy zbliżaniu się do krawędzi stają się one coraz większe.
+większe, gdy zbliżamy się do krawędzi. W praktyce zniekształcenie to pozostaje niewielkie.
+W praktyce zniekształcenie to pozostaje niewielkie, wystarczy wykonać rozwinięcie Taylora do trzeciego członu.
+członu. Daje to następujący wzór.
+
+\begin{align*}
+x_{\text{corrected}} &= x \left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6 \right) \\
+y_{\text{corrected}} &= y \left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6 \right)
+\end{align*}
+
+x i y to współrzędne oryginalnego punktu na obszarze obrazu, które są używane do obliczenia pozycji skorygowanego punktu.
+skorygowanego punktu.
+Występuje również zniekształcenie styczne, ponieważ obiektyw nie jest idealnie
+idealnie równoległa do powierzchni obrazu. Aby to skorygować
+wprowadzane są dwa dodatkowe parametry, p1 i p2.
+
+\begin{align*}
+x_{\text{corrected}} &= x + \left[2p_1 y + p_2 (r^2 + 2x^2)\right] \\
+y_{\text{corrected}} &= y + \left[p_1 (r^2 + 2y^2) + 2p_2 x\right]
+\end{align*}
+
 \subsection{Kalibracja za pomocą OpenCV}
+
+Biblioteka OpenCV pozwala nam obliczyć parametry wewnętrzne za pomocą określonych funkcji.
+Proces ten nazywany jest kalibracją. Jest to możliwe dzięki różnym
+widoków szachownicy.
+
+Program do robienia zdjęć do późniejszej kalibracji nosi nazwę
+„Take-images-for-calibration.py”.
+Jeśli rogi szachownicy zostaną rozpoznane na obu kamerach, otworzą się dwa okna z rozpoznanym obrazem dla każdej kamery.
+z rozpoznanym obrazem dla każdej kamery. Obrazy są następnie zapisywane lub usuwane
+zapisywane lub usuwane. Można rozpoznać dobre obrazy, na których narożniki
+są bardzo wyraźnie rozpoznawalne. Obrazy te są później używane do kalibracji w głównym programie
+programie „Main-Stereo-Vision-Prog.py”. OpenCV zaleca posiadanie co najmniej 10
+obrazów dla każdej kamery, aby uzyskać dobrą kalibrację. My uzyskaliśmy dobre wyniki przy 50
+obrazów dla każdej kamery.
+Aby skalibrować kamery, kod Pythona wyszukuje narożniki szachownicy na każdym
+obrazie dla każdej kamery przy użyciu funkcji OpenCV: cv2.findChesssboardCorners
+
+Pozycja narożników dla każdego obrazu jest następnie zapisywana w wektorze obrazu, a punkty obiektu dla sceny 3D są zapisywane w innym wektorze.
+dla sceny 3D są zapisywane w innym wektorze. Następnie należy użyć
+następnie użyć tych Imgpoints i Objpoints w funkcji cv2.calibeCamera(), której wynikiem jest
+macierz kamery, współczynniki zniekształceń, wektory obrotu i translacji
+są zwracane.
+
+Funkcja cv2.getOptimalNewCameraMatrix() umożliwia nam uzyskanie dokładnych macierzy kamer.
+które później wykorzystamy w funkcji cv2.stereoRectify().
+
+Po kalibracji za pomocą OpenCV otrzymujemy następującą macierz M dla naszej kamery:
+
+Matryca M bez rektyfikacji (prawa kamera):
+
+Matrix Mrekt Rectified (prawa kamera):
+
+Matryca M bez rektyfikacji (lewa kamera):
+
+Matryca M wyprostowana (lewa kamera):
+
 \section{Obrazowanie stereoskopowe}
 \subsection{Wyjaśnienie}
 
@@ -192,22 +414,29 @@ odległość między kamerą a punktem. Wykorzystywana jest geometria systemu
 systemu w celu uproszczenia obliczeń.
 
 Te cztery kroki są wykonywane podczas obrazowania stereo:
-1. usuwanie zniekształceń promieniowych i stycznych za pomocą obliczeń matematycznych
+
+\begin{enumerate}
+  \item usuwanie zniekształceń promieniowych i stycznych za pomocą obliczeń matematycznych
 obliczenia. W ten sposób powstają niezniekształcone obrazy.
-2. rektyfikacja kąta i odległości obrazów. Na tym etapie oba obrazy są
+  \item rektyfikacja kąta i odległości obrazów. Na tym etapie oba obrazy są
 obrazy współpłaszczyznowe na osi Y, co ułatwia wyszukiwanie korespondencji.
 łatwiejsze i wystarczy szukać tylko na jednej osi (osi X).
 (a mianowicie na osi X).
-3. znajdź tę samą cechę na prawym i lewym obrazie. Daje to mapę
+  \item znajdź tę samą cechę na prawym i lewym obrazie. Daje to mapę
 mapę dysproporcji pokazującą różnice między obrazami na osi x.
-4. Ostatnim krokiem jest triangulacja. Mapa rozbieżności jest przekształcana w
+  \item Ostatnim krokiem jest triangulacja. Mapa rozbieżności jest przekształcana w
 odległości za pomocą triangulacji.
-Krok 1: Usuwanie zniekształceń
-Krok 2: Prostowanie
-Krok 3: Znalezienie tej samej cechy na obu obrazach
-Krok 4: Triangulacja
+\end{enumerate}
 
 \subsection{Triangulacja}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/triangulation.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 705}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
 
 W ostatnim kroku, triangulacji, zakłada się, że oba obrazy projekcji są współpłaszczyznowe i że poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiadającym mu obrazem prawego.
 są współpłaszczyznowe i poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiednim poziomym rzędem pikseli lewego obrazu.
@@ -223,7 +452,7 @@ punkt P, tym mniejsza staje się wielkość d. Dysproporcja
 jest zatem odwrotnie proporcjonalna do odległości.
 odległości.\\
 Do obliczenia odległości można użyć następującego wzoru
-można obliczyć: Z=f*T/(xl-xr)\\
+można obliczyć: \[Z=f*T/(xl-xr)\]
 
 Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością a odległością.
 istnieje. Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
@@ -232,31 +461,44 @@ małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na 
 można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
 które znajdują się blisko kamery.
 
-Diese Methode funktioniert aber nur wenn die Konfiguration der Stereo-Kamera ideal ist. In
-der Realität ist dies jedoch nicht der Fall. Deswegen wird das linke und rechte Bild
-mathematisch parallel ausgerichtet. Natürlich müssen die Kameras zumindest approximativ
-physisch parallel positioniert werden.
-Bevor wir die Methode zur Mathematischen Ausrichtung der Bildern erklären, müssen wir
-zuerst die Epipolare Geometrie verstehen.
+Metoda ta działa jednak tylko wtedy, gdy konfiguracja kamery stereo jest idealna. W
+rzeczywistości tak nie jest. Właśnie dlatego lewy i prawy obraz są
+matematycznie wyrównane równolegle. Oczywiście kamery muszą być fizycznie ustawione równolegle.
+fizycznie ustawione równolegle.
+Zanim wyjaśnimy metodę matematycznego wyrównywania obrazów, musimy najpierw zrozumieć geometrię epipolarną.
+najpierw zrozumieć geometrię epipolarną.
 
 \subsection{Geometria epipolarna}
 
-Das oben dargestellte Bild zeigt uns das Modell einer nicht-perfekten Stereo-Kamera die aus
-zwei Pinhole-Kameramodelle besteht. Durch die Kreuzung der Linie der Projektierungszentren
-(Ol, Or) mit den Proektierungsebenen entstehen die Epipolarpunkten el und er. Die Linien (pl,
-el) und (pr, er) werden Epipolarlinen genannt. Das Bild aller möglichen Punkte eines Punkts
-auf einer Projektierungsebene ist die Epipolarlinie die auf der anderen Bildebene liegt und
-durch den Epipolarpunkt und dem Gesuchten Punkt geht. Dies ermöglicht, die Suche des
-Punkts auf einer einzigen Dimension zu begrenzen anstatt auf einer ganzen Ebene.
-Man kann also folgende Punkte zusammenfassen:
-• Jeder 3D Punkt in der Sicht einer Kamera ist im Epipolaren Plan enthalten
-• Ein Merkmal in einer Ebene muss sich auf der entsprechenden Epipolarlinien der
-andere Ebene befinden (Epipolarbedingung)
-• Eine zweidimensionale Suche eines entsprechenden Merkmals wird zu einer
-eindimensionalen Suche umgewandelt, wenn man die Epipolargeometrie kennt.
-• Die Reihenfolge der Punkte wird behalten, d.h. dass zwei Punkte A und B in derselben
-Reihenfolge auf der Epipolarlinien einer Ebene gefunden werden, wie auf der, der
-anderen Ebene.
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 709}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Powyższy obrazek przedstawia model niedoskonałej kamery stereo składającej się z dwóch modeli kamer otworkowych.
+dwóch modeli kamer otworkowych. Przecięcie linii środków projekcji
+(Ol, Or) z płaszczyznami projekcji tworzone są punkty epipolarne el i er. Linie (pl,
+el) i (pr, er) są nazywane liniami epipolarnymi. Obrazem wszystkich możliwych punktów punktu
+na płaszczyźnie rzutowania jest linia epipolarna, która leży na drugiej płaszczyźnie obrazu i
+przechodzi przez punkt epipolarny i szukany punkt. Umożliwia to ograniczenie wyszukiwania punktu
+punktu na jednym wymiarze zamiast na całej płaszczyźnie.
+Można zatem podsumować następujące punkty:
+
+\begin{itemize}
+  \item Każdy punkt 3D w widoku kamery jest zawarty w planie epipolarnym
+  \item Element w jednej płaszczyźnie musi znajdować się na odpowiednich liniach epipolarnych drugiej płaszczyzny (warunek epipolarny).
+drugiej płaszczyzny (warunek epipolarny)
+  \item Dwuwymiarowe wyszukiwanie odpowiadającego elementu jest konwertowane na
+jednowymiarowe, jeśli znana jest geometria epipolarna.
+  \item Kolejność punktów jest zachowana, tzn. dwa punkty A i B są w tej samej kolejności na liniach epipolarnych płaszczyzny.
+
+\end{itemize}
+
+ta sama kolejność na liniach epipolarnych jednej płaszczyzny, co na liniach epipolarnych drugiej płaszczyzny.
+drugiej płaszczyzny.
 
 \subsection{Macierze podstawowe i fundamentalne}
 
@@ -272,36 +514,39 @@ kamer i informacje o wewnętrznych parametrach kamer.
 Relacja między rzutowanym punktem na lewym obrazie pl i rzutowanym punktem na prawym obrazie pr jest zdefiniowana następująco
 obraz pr jest zdefiniowany następująco:
 
-prTEpl=0
+prTEpl=0\\
 Można by pomyśleć, że ta formuła w pełni opisuje związek między lewym i prawym punktem.
 prawym punktem. Należy jednak zauważyć, że macierz 3x3 E jest rzędu
-jest rangi 2. Oznacza to, że wzór ten jest równaniem prostej.
+jest rangi 2. Oznacza to, że wzór ten jest równaniem prostej.\\
 Aby w pełni zdefiniować relację między punktami, parametry wewnętrzne.
-parametry wewnętrzne.
-Pamiętamy, że q=Mp, z macierzą wewnętrzną M.
-Podstawienie do poprzedniego równania daje wynik
-qrT(Ml-1)TEMl-1ql=0
-Podstawienie:
-F=(Ml-1)TEMl-1
-W ten sposób otrzymujemy
-qrTFql=0
+parametry wewnętrzne.\\
+Pamiętamy, że q=Mp, z macierzą wewnętrzną M.\\
+Podstawienie do poprzedniego równania daje wynik\\
+qrT(Ml-1)TEMl-1ql=0\\
+Podstawienie:\\
+F=(Ml-1)TEMl-1\\
+W ten sposób otrzymujemy\\
+qrTFql=0\\
 
 \subsection{Macierz obrotu i wektor przesunięcia}
 
 Teraz, gdy wyjaśniliśmy już macierz podstawową E i macierz podstawową F, musimy
 musimy zobaczyć, jak obliczyć macierz obrotu i wektor translacji.
 Zdefiniujemy następujące oznaczenia:
-- Pl i Pr definiują pozycje punktu w układzie współrzędnych odpowiednio lewej i prawej kamery.
+
+\begin{itemize}
+  \item Pl i Pr definiują pozycje punktu w układzie współrzędnych odpowiednio lewej i prawej kamery.
 prawa kamera
-- Rl i Tl (lub Rr i Tr) definiują obrót i translację z kamery
+  \item Rl i Tl (lub Rr i Tr) definiują obrót i translację z kamery
 do punktu w otoczeniu dla lewej (lub prawej) kamery.
-- R i T to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
-R i T to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
+  \item R i T to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
+\end{itemize}
+
 Daje to następujące wyniki
-Pl=RlP+Tl i Pr=RrP+Tr
+Pl=RlP+Tl i Pr=RrP+Tr\\
 Mamy również:
-Pl=RT(Pr-T)
-Z tych trzech równań ostateczny wynik to
+Pl=RT(Pr-T)\\
+Z tych trzech równań ostateczny wynik to\\
 R=RrRlT
 T=Tr-RTl
 
@@ -313,10 +558,14 @@ rektyfikacji jest rzutowanie dwóch obrazów tak, aby leżały dokładnie w tej 
 aby znaleźć zgodność punktu na dwóch obrazach w sposób bardziej losowy.
 W wyniku procesu wyrównywania obu obrazów uzyskuje się 8 wyrażeń, po 4 dla każdej kamery.
 kamery:
-- wektor zniekształceń
-- macierz rotacji Rrect, która musi zostać zastosowana do obrazu
-- wyprostowana macierz kamery Mrect
-- nierektyfikowana macierz kamery M
+
+\begin{itemize}
+  \item wektor zniekształceń
+  \item macierz rotacji Rrect, która musi zostać zastosowana do obrazu
+  \item wyprostowana macierz kamery Mrect
+  \item nierektyfikowana macierz kamery M
+\end{itemize}
+
 OpenCV pozwala nam obliczyć te warunki za pomocą dwóch algorytmów: algorytmu Hartleya
 i algorytmu Bougueta.
 
@@ -341,9 +590,41 @@ W projekcie wykorzystaliśmy algorytm Bougueta.
 
 \chapter{Rozdział badawczy}
 
-Praca powinna spełniać wymogi formalne, merytoryczne i redakcyjne opisane w Regulaminie  Studiów (Rozdział IX) oraz w uchwale nr 184 Rady Wydziału Matematyki i Informatyki UŁ z dnia 25.09.2019 ze szczególnym uwzględnieniem wymogu, aby była ona samodzielnym opracowaniem zagadnienia naukowego lub praktycznego albo dokonaniem technicznym, prezentującym ogólną wiedzę i umiejętności studenta, związanym ze studiami na danym kierunku, poziomie i profilu oraz umiejętności samodzielnego analizowania i wnioskowania (Ustawa 2.0 Art. 76 p. 2)
+\section{Raspberry Pi}
 
-Praca dyplomowa będąca pracą inżynierską powinna zawierać samodzielne opracowanie praktycznego problemu i może mieć charakter projektu, studium porównawczego lub opracowania analitycznego.
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/RPI.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2023/11/Raspberry-5-pi-.jpg}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.7\textwidth]{images/RPI-SPEC.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
+    \label{fig:rpi-spec}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
+    \label{fig:rpi-gpio}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+\section{Camera}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://pl.aliexpress.com/i/1005006618001887.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
 
 \section{Funkcjonalność programu do obrazowania stereo}
 

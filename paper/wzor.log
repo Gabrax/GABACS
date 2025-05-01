@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  29 APR 2025 22:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  1 MAY 2025 21:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -136,6 +136,24 @@ LaTeX Info: Redefining \Relbar on input line 970.
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 )
+(C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
+(C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen151
+\captionmargin=\dimen152
+\caption@leftmargin=\dimen153
+\caption@rightmargin=\dimen154
+\caption@width=\dimen155
+\caption@indent=\dimen156
+\caption@parindent=\dimen157
+\caption@hangindent=\dimen158
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count281
+\c@continuedfloat=\count282
+)
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 
@@ -154,20 +172,20 @@ Package graphics Info: Driver file: pdftex.def on input line 106.
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
 File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen151
-\Gin@req@width=\dimen152
+\Gin@req@height=\dimen159
+\Gin@req@width=\dimen160
 )
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty
 Package: titlesec 2025/01/04 v2.17 Sectioning titles
 \ttl@box=\box54
 \beforetitleunit=\skip54
 \aftertitleunit=\skip55
-\ttl@plus=\dimen153
-\ttl@minus=\dimen154
+\ttl@plus=\dimen161
+\ttl@minus=\dimen162
 \ttl@toksa=\toks26
-\titlewidth=\dimen155
-\titlewidthlast=\dimen156
-\titlewidthfirst=\dimen157
+\titlewidth=\dimen163
+\titlewidthlast=\dimen164
+\titlewidthfirst=\dimen165
 )
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
 Package: color 2024/01/14 v1.3d Standard LaTeX Color (DPC)
@@ -196,48 +214,84 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 )
-\c@defi=\count281
-\c@uwaga=\count282
-\c@tw=\count283
-\c@lem=\count284
-\c@wn=\count285
+\c@defi=\count283
+\c@uwaga=\count284
+\c@tw=\count285
+\c@lem=\count286
+\c@wn=\count287
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count286
+\l__color_backend_stack_int=\count288
 \l__pdf_internal_box=\box55
-) (wzor.aux)
+) (wzor.aux
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:rpi' multiply defined.
+
+
+LaTeX Warning: Label `fig:rpi' multiply defined.
+
+
+LaTeX Warning: Label `fig:rpi' multiply defined.
+
+
+LaTeX Warning: Label `fig:rpi' multiply defined.
+
+
+LaTeX Warning: Label `fig:rpi' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+)
 \openout1 = `wzor.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count287
-\scratchdimen=\dimen158
+\scratchcounter=\count289
+\scratchdimen=\dimen166
 \scratchbox=\box56
-\nofMPsegments=\count288
-\nofMParguments=\count289
+\nofMPsegments=\count290
+\nofMParguments=\count291
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count290
-\MPscratchDim=\dimen159
-\MPnumerator=\count291
-\makeMPintoPDFobject=\count292
+\MPscratchCnt=\count292
+\MPscratchDim=\dimen167
+\MPnumerator=\count293
+\makeMPintoPDFobject=\count294
 \everyMPtoPDFconversion=\toks28
 )
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
@@ -250,17 +304,18 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-<logo_math_ul_h_pl_rgb.png, id=1, 1514.65875pt x 587.19376pt>
-File: logo_math_ul_h_pl_rgb.png Graphic file (type png)
-<use logo_math_ul_h_pl_rgb.png>
-Package pdftex.def Info: logo_math_ul_h_pl_rgb.png  used on input line 91.
+<images/logo_math_ul_h_pl_rgb.png, id=1, 1514.65875pt x 587.19376pt>
+File: images/logo_math_ul_h_pl_rgb.png Graphic file (type png)
+<use images/logo_math_ul_h_pl_rgb.png>
+Package pdftex.def Info: images/logo_math_ul_h_pl_rgb.png  used on input line 8
+4.
 (pdftex.def)             Requested size: 378.66376pt x 146.79808pt.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 91.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 84.
 
  (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 91.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 84.
 
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -270,8 +325,8 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [1
 
 {C:/Users/gab-o/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/gab-
-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc} <./logo_math
-_ul_h_pl_rgb.png>]
+o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc} <./images/lo
+go_math_ul_h_pl_rgb.png>]
 
 [2] (wzor.toc
 
@@ -296,7 +351,7 @@ Rozdzia\PlPrIeC {\l } 1.
 ]
 Rozdzia\PlPrIeC {\l } 2.
 
-LaTeX Warning: Citation `Lang' on page 7 undefined on input line 106.
+LaTeX Warning: Citation `Lang' on page 7 undefined on input line 99.
 
 
 
@@ -306,70 +361,190 @@ LaTeX Warning: Citation `Lang' on page 7 undefined on input line 106.
 
 ]
 Rozdzia\PlPrIeC {\l } 3.
+<images/MONO.jpg, id=37, 344.78813pt x 344.78813pt>
+File: images/MONO.jpg Graphic file (type jpg)
+<use images/MONO.jpg>
+Package pdftex.def Info: images/MONO.jpg  used on input line 131.
+(pdftex.def)             Requested size: 220.50887pt x 220.51106pt.
+<images/STEREO.jpg, id=38, 1284.8pt x 1284.8pt>
+File: images/STEREO.jpg Graphic file (type jpg)
+<use images/STEREO.jpg>
+Package pdftex.def Info: images/STEREO.jpg  used on input line 148.
+(pdftex.def)             Requested size: 220.50887pt x 220.49118pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<images/SFM.png, id=39, 474.77374pt x 408.52625pt>
+File: images/SFM.png Graphic file (type png)
+<use images/SFM.png>
+Package pdftex.def Info: images/SFM.png  used on input line 162.
+(pdftex.def)             Requested size: 220.50887pt x 189.73833pt.
+
+
+[9 <./images/MONO.jpg>]
+<images/TOF-IR.jpg, id=43, 2569.6pt x 1713.40125pt>
+File: images/TOF-IR.jpg Graphic file (type jpg)
+<use images/TOF-IR.jpg>
+Package pdftex.def Info: images/TOF-IR.jpg  used on input line 176.
+(pdftex.def)             Requested size: 220.50887pt x 147.00975pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<images/POINTCLOUD.jpg, id=44, 2569.6pt x 2569.6pt>
+File: images/POINTCLOUD.jpg Graphic file (type jpg)
+<use images/POINTCLOUD.jpg>
+Package pdftex.def Info: images/POINTCLOUD.jpg  used on input line 192.
+(pdftex.def)             Requested size: 44.10446pt x 44.07079pt.
+
+
+[10 <./images/STEREO.jpg> <./images/SFM.png (PNG copy)>]
+<images/LIDAR.jpg, id=48, 526.96875pt x 666.99188pt>
+File: images/LIDAR.jpg Graphic file (type jpg)
+<use images/LIDAR.jpg>
+Package pdftex.def Info: images/LIDAR.jpg  used on input line 208.
+(pdftex.def)             Requested size: 44.10446pt x 55.82338pt.
+
+
+[11 <./images/TOF-IR.jpg> <./images/POINTCLOUD.jpg> <./images/LIDAR.jpg>]
+
+[12]
+<images/light.png, id=55, 401.5pt x 274.02374pt>
+File: images/light.png Graphic file (type png)
+<use images/light.png>
+Package pdftex.def Info: images/light.png  used on input line 268.
+(pdftex.def)             Requested size: 220.50887pt x 150.50027pt.
+LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 2
+95.
+ (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
+File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
+)
+<images/pinhole.png, id=56, 315.42844pt x 130.23656pt>
+File: images/pinhole.png Graphic file (type png)
+<use images/pinhole.png>
+Package pdftex.def Info: images/pinhole.png  used on input line 303.
+(pdftex.def)             Requested size: 220.50887pt x 91.04573pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+
+[13{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
+.enc} <./images/light.png>]
+<images/barrel.png, id=63, 1027.84pt x 1027.84pt>
+File: images/barrel.png Graphic file (type png)
+<use images/barrel.png>
+Package pdftex.def Info: images/barrel.png  used on input line 337.
+(pdftex.def)             Requested size: 132.30666pt x 132.30647pt.
+
+
+[14 <./images/pinhole.png> <./images/barrel.png>]
+Overfull \hbox (34.74306pt too wide) in paragraph at lines 376--387
+[]\T1/qtm/m/n/12 Program do ro-bie-nia zdj¦¢ do pó¹-niej-szej ka-li-bra-cji no-
+si na-zw¦ ^^RTake-images-for-calibration.py^^Q.
+ []
+
+
+
+[15]
+<images/triangulation.png, id=75, 227.34938pt x 216.81pt>
+File: images/triangulation.png Graphic file (type png)
+<use images/triangulation.png>
+Package pdftex.def Info: images/triangulation.png  used on input line 435.
+(pdftex.def)             Requested size: 220.50887pt x 210.2889pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+
+[16]
+<images/epipolar.png, id=79, 295.1025pt x 184.43906pt>
+File: images/epipolar.png Graphic file (type png)
+<use images/epipolar.png>
+Package pdftex.def Info: images/epipolar.png  used on input line 475.
+(pdftex.def)             Requested size: 220.50887pt x 137.81955pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[9]
+[17 <./images/triangulation.png>]
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 217--227
+[18 <./images/epipolar.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 517--530
 
  []
 
-LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 2
-52.
-(C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
-File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
-)
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
+[19]
 
-[11]
+[20]
 
-[12{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
-.enc}]
-Underfull \vbox (badness 5147) has occurred while \output is active []
+[21]
 
-
-
-[13]
-
-[14]
-Rozdzia\PlPrIeC {\l } 4.
-
-
-[15
+[22
 
 ]
-Overfull \hbox (38.56227pt too wide) in paragraph at lines 382--386
+Rozdzia\PlPrIeC {\l } 4.
+<images/RPI.jpg, id=101, 385.44pt x 252.945pt>
+File: images/RPI.jpg Graphic file (type jpg)
+<use images/RPI.jpg>
+Package pdftex.def Info: images/RPI.jpg  used on input line 597.
+(pdftex.def)             Requested size: 220.50887pt x 144.70891pt.
+<images/RPI-SPEC.jpg, id=102, 385.44pt x 203.76125pt>
+File: images/RPI-SPEC.jpg Graphic file (type jpg)
+<use images/RPI-SPEC.jpg>
+Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 605.
+(pdftex.def)             Requested size: 308.71106pt x 163.19887pt.
+<images/RPI-PIN.jpg, id=103, 1214.5375pt x 644.4075pt>
+File: images/RPI-PIN.jpg Graphic file (type jpg)
+<use images/RPI-PIN.jpg>
+Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 613.
+(pdftex.def)             Requested size: 220.50887pt x 116.99129pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<images/MAINSTEREO.png, id=104, 963.6pt x 963.6pt>
+File: images/MAINSTEREO.png Graphic file (type png)
+<use images/MAINSTEREO.png>
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 623.
+(pdftex.def)             Requested size: 220.50887pt x 220.50589pt.
+
+
+[23 <./images/RPI.jpg> <./images/RPI-SPEC.jpg>]
+
+[24 <./images/RPI-PIN.jpg> <./images/MAINSTEREO.png>]
+Overfull \hbox (38.56227pt too wide) in paragraph at lines 663--667
 \T1/qtm/m/n/12 two-rzo-ne s¡ dwa obiek-ty ko-rzy-sta-j¡-ce z me-tod kla-sy cv2.
 VideoCapture()). kla-sy cv2.VideoCapture()). 
  []
 
 
-Underfull \vbox (badness 1331) has occurred while \output is active []
+Underfull \vbox (badness 6141) has occurred while \output is active []
 
 
 
-[16]
+[25]
 
-[17]
-
-[18
-
-]
+[26]
 Rozdzia\PlPrIeC {\l } 5.
 
 
-[19]
-
-[20
+[27
 
 ]
-Overfull \hbox (143.5202pt too wide) in paragraph at lines 447--449
+
+[28
+
+]
+Overfull \hbox (143.5202pt too wide) in paragraph at lines 728--730
 []\T1/qtm/m/n/12 Rajesh Rao, \T1/qtm/m/it/12 Lec-tu-re 16: Ste-reo and 3D Vi-si
 on,https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qt
 m/m/n/12 ,
@@ -377,7 +552,7 @@ m/m/n/12 ,
 
 
 
-[21] (wzor.aux)
+[29] (wzor.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
@@ -386,26 +561,32 @@ L3 programming layer <2024-08-30>
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 4309 strings out of 473898
- 63343 string characters out of 5726479
- 458169 words of memory out of 5000000
- 27122 multiletter control sequences out of 15000+600000
- 594115 words of font info for 76 fonts, out of 8000000 for 9000
+ 5781 strings out of 473898
+ 92432 string characters out of 5726479
+ 476141 words of memory out of 5000000
+ 28589 multiletter control sequences out of 15000+600000
+ 602671 words of font info for 79 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,7n,65p,586b,256s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,11n,65p,266b,389s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmmi12.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmr12.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o/AppData/Local/Programs/
-MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/gab-o/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
-Output written on wzor.pdf (21 pages, 197664 bytes).
+cmex10.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmmi12.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmmi8.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gab-o/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gab-o/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gab-o/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/g
+ab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
+Output written on wzor.pdf (29 pages, 1620937 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
+ 173 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

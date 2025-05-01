@@ -32,7 +32,7 @@
     \let\footnoterule\relax
     \let \footnote \thanks
     \begin{center}
-      \includegraphics[scale=0.25]{logo_math_ul_h_pl_rgb.png}\par
+      \includegraphics[scale=0.25]{images/logo_math_ul_h_pl_rgb.png}\par
       %
       %\vspace{2mm plus 1fill} 
       {\Huge\@author\par}
