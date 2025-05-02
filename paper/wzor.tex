@@ -122,26 +122,54 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 \chapter{Część główna}
 
-\section{Rodzaje kamer i techniki używane do estymacji głębi}
+\section{Przetwarzanie obrazu}
 
-\subsection{Monocular Vision}
+Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się analizą, modyfikacją i interpretacją obrazów cyfrowych za pomocą metod numerycznych i algorytmów komputerowych. Jej celem jest poprawa jakości obrazów, ekstrakcja informacji, segmentacja obiektów lub ich klasyfikacja. Przetwarzanie obrazu znajduje zastosowanie w wielu obszarach, takich jak medycyna (np. analiza zdjęć RTG), przemysł (np. kontrola jakości), bezpieczeństwo (np. rozpoznawanie twarzy), robotyka oraz systemy wizyjne pojazdów autonomicznych. Dzięki połączeniu technik matematycznych, statystycznych i sztucznej inteligencji możliwe jest coraz bardziej precyzyjne i automatyczne rozumienie zawartości obrazów.
+
+\subsection{Rodzaje kamer i techniki używane do estymacji głębi}
+
+\subsubsection{Monocular Vision}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/MONO.jpg}  % Adjust the path and width as necessary
+    \includegraphics[width=0.3\textwidth]{images/MONO.jpg}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
     \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
 
-Single camera.
+Monocular vision (widzenie monokularne) to technika pozyskiwania informacji wizualnych przy użyciu tylko jednejkamery, czyli takiej, która rejestruje obraz z pojedynczego punktu widzenia — podobnie jak jedno oko u człowieka.\\
 
-Relies on cues like motion, texture gradients, perspective, learned priors (deep learning).
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Zalety:}
+\begin{itemize}
+  \item Niska cena: Wymaga tylko jednej kamery – tańsze niż systemy stereo lub LiDAR.
 
-Examples: Depth estimation from a single image using CNNs or transformers.
+  \item Mniejsze zużycie energii: Idealne dla urządzeń mobilnych, dronów, robotów.
 
-\subsection{Stereo Vision}
+  \item Prosta instalacja: Nie trzeba kalibrować dwóch kamer ani martwić się synchronizacją.
+
+  \item Łatwo dostępne dane: Każdy smartfon lub laptop może być źródłem obrazu.
+
+  \item Możliwość działania w czasie rzeczywistym: Przy odpowiedniej optymalizacji algorytmu.
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Wady:}
+\begin{itemize}
+  \item Brak skali bezwzględnej: Nie wiadomo, czy obiekt jest 1 metr czy 10 metrów od kamery bez dodatkowej informacji (np. IMU, GPS).
+
+  \item Słabsza dokładność głębokości: W porównaniu do stereowizji lub sensorów ToF/LiDAR.
+
+  \item Trudności w scenach jednorodnych: Powtarzalne tekstury lub słabe oświetlenie utrudniają analizę.
+
+  \item Potrzeba ruchu kamery (np. w SLAM): Dla bardziej precyzyjnej rekonstrukcji sceny.
+\end{itemize}
+\end{minipage}
+
+\subsubsection{Stereo Vision}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -151,11 +179,38 @@ Examples: Depth estimation from a single image using CNNs or transformers.
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Two cameras with known relative positions.
+Stereo vision (widzenie stereoskopowe) to technika komputerowego przetwarzania obrazu, która umożliwia określenie głębokości i kształtu obiektów w scenie poprzez analizę dwóch obrazów zarejestrowanych przez dwie kamery umieszczone w pewnej odległości od siebie (zwykle poziomej — jak oczy u człowieka).
 
-Depth estimated via triangulation from pixel disparity.
+Porównując różnice (czyli dysparycje) w położeniu tych samych punktów na lewym i prawym obrazie, można obliczyć odległość obiektów od kamer — dzięki znanym wzorom geometrycznym (triangulacja).
 
-\subsection{Multiview / Structure from Motion (SfM)}
+
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Zalety:}
+\begin{itemize}
+  \item Prawdziwa głębokość geometryczna — możliwa do przeliczenia na metry.
+
+  \item Działa w czasie rzeczywistym — przy użyciu odpowiedniego sprzętu (np. ZED Camera, Intel RealSense).
+
+  \item Nie wymaga poruszania kamerą — wystarczą dwa obrazy z dwóch stałych punktów.
+
+  \item Nadaje się do zastosowań mobilnych i przemysłowych (robotyka, autonomiczne pojazdy, pomiary 3D).
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Wady:}
+\begin{itemize}
+  \item Wrażliwość na warunki oświetleniowe — słabe światło, odbicia lub brak tekstury mogą uniemożliwić porównanie obrazów.
+
+  \item Potrzebna kalibracja — kamery muszą być dokładnie skalibrowane (ustalenie ich pozycji i parametrów).
+
+  \item Złożoność obliczeniowa — dopasowanie punktów między obrazami może być kosztowne.
+
+  \item Martwe strefy — obiekty o jednolitej teksturze (np. ściana) mogą nie dawać użytecznych danych.
+\end{itemize}
+\end{minipage}
+
+\subsubsection{Structure from Motion (SfM)}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -165,11 +220,44 @@ Depth estimated via triangulation from pixel disparity.
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Uses multiple images taken from different viewpoints (can be from a moving camera).
+Structure from Motion (SfM) to technika wizyjna, która pozwala zrekonstruować strukturę trójwymiarową sceny oraz trajektorię ruchu kamery na podstawie zwykłych zdjęć lub klatek wideo wykonanych jedną lub wieloma kamerami, które poruszają się względem sceny.
 
-Reconstructs 3D structure by tracking features and estimating camera poses.
+SfM działa tak:
+Wykrywa punkty charakterystyczne (np. rogi, krawędzie) na zdjęciach.
+Śledzi ich pozycje na kolejnych ujęciach.
+Oblicza względne pozycje kamer i 3D współrzędne punktów w scenie – czyli rekonstruuje kształt i ruch.
 
-\subsection{Time-of-Flight (ToF) Cameras}
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Zalety:}
+\begin{itemize}
+  \item Umożliwia 3D rekonstrukcję z pojedynczej kamery – wystarczy poruszać kamerą wokół obiektu.
+
+  \item Niski koszt sprzętowy – można wykorzystać zwykły aparat lub smartfon.
+
+  \item Brak potrzeby kalibracji sprzętu z góry – SfM może działać nawet na niekalibrowanych zdjęciach.
+
+  \item Wysoka dokładność w scenach z dobrą teksturą.
+
+  \item Zastosowania w wielu dziedzinach: archeologia, kartografia, VR, robotyka, fotogrametria.
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Wady:}
+\begin{itemize}
+  \item Wymaga wielu zdjęć z różnych perspektyw – nie działa dobrze, jeśli kamera stoi w miejscu.
+
+  \item Problemy w scenach z małą teksturą – np. gładkie ściany, powierzchnie bez szczegółów.
+
+  \item Czasochłonność obliczeniowa – rekonstrukcja może trwać długo, szczególnie dla dużych zbiorów zdjęć.
+
+  \item Brak skali bezwzględnej – SfM daje model „w skali względnej”, czyli np. 1 m może być 1 cm, jeśli nie ma referencji.
+
+  \item Wrażliwe na rozmycie, szum, ruch obiektów w tle.
+\end{itemize}
+\end{minipage}
+
+\subsubsection{Time-of-Flight (ToF)}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -179,81 +267,120 @@ Reconstructs 3D structure by tracking features and estimating camera poses.
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Emits infrared (IR) light and measures the time it takes to bounce back.
+Time-of-Flight (ToF) to technologia, która służy do mierzenia odległości za pomocą światła, wysyłając impuls świetlny (zwykle w postaci podczerwieni) i rejestrując czas, jaki upływa, zanim światło odbije się od obiektu i wróci do czujnika. Dzięki temu możliwe jest uzyskanie dokładnych pomiarów odległości w czasie rzeczywistym.
 
-Direct depth measurement.
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Zalety:}
+\begin{itemize}
+  \item Precyzyjne pomiary – ToF pozwala na bardzo dokładne pomiary odległości, nawet w trudnych warunkach, takich jak słabe oświetlenie.
 
-Common in smartphones (e.g., some iPhones, Kinect v2).
+  \item Szybkość – Technologie ToF oferują bardzo szybkie pomiary, co jest przydatne w systemach wymagających analizy danych w czasie rzeczywistym, np. w robotyce czy samochodach autonomicznych.
 
-\subsection{Structured Light}
+  \item Wielozadaniowość – Dzięki ToF możliwe jest uzyskanie mapy głębi w czasie rzeczywistym, co może być użyteczne w takich dziedzinach jak rozpoznawanie twarzy, zautomatyzowane rozpoznawanie obiektów, monitorowanie przestrzeni 3D itp.
+
+  \item Wydajność przy różnych warunkach oświetleniowych – Technologia działa dobrze zarówno w pełnym słońcu, jak i w ciemności, co czyni ją bardziej wszechstronną w porównaniu do innych metod pomiarów odległości, takich jak lidar czy radar.
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Wady:}
+\begin{itemize}
+  \item Czułość na zakłócenia – ToF może być wrażliwa na różne źródła zakłóceń, takie jak silne światło zewnętrzne, np. słońce, które może wpłynąć na dokładność pomiaru.
+
+  \item Ograniczenia w zasięgu – Chociaż ToF oferuje szybkie pomiary, jego zasięg jest ograniczony, a czujniki mogą mieć problemy w przypadku większych odległości.
+
+  \item Jakość obrazu – W niektórych zastosowaniach, jak np. kamera 3D, ToF może generować dane o niższej jakości w porównaniu do innych technologii, takich jak stereo-vision, szczególnie w warunkach złożonych.
+
+  \item Koszt – Zaawansowane czujniki ToF, zwłaszcza te o dużej rozdzielczości, mogą być dość drogie, co może stanowić barierę w masowym wdrożeniu.
+\end{itemize}
+\end{minipage}
+
+\subsubsection{Structured Light}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.1\textwidth]{images/POINTCLOUD.jpg}  % Adjust the path and width as necessary
+    \includegraphics[width=0.5\textwidth]{images/POINTCLOUD.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
     \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Projects a known light pattern (e.g., dots or stripes) onto a scene.
+Structured Light (światło strukturalne) to technologia wykorzystywana do pomiaru głębi i tworzenia map 3D obiektów. Polega na projekcji wzorca świetlnego (np. linii, siatki, wzorów) na powierzchnię obiektu, a następnie analizie deformacji tego wzorca przez czujnik kamery. Na podstawie tych deformacji obliczane są odległości punktów na powierzchni obiektu, co pozwala na stworzenie mapy głębi.
 
-Deformation of the pattern gives depth info.
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Zalety:}
+\begin{itemize}
+  \item Wysoka dokładność – Dzięki projekcji specyficznych wzorców świetlnych, ta metoda może zapewnić bardzo dokładne pomiary głębi, szczególnie w porównaniu do innych technologii, takich jak stereo vision.
 
-Used in original Microsoft Kinect.
+  \item Szybkość pomiarów – Structured Light pozwala na szybkie tworzenie map 3D, co jest szczególnie przydatne w aplikacjach wymagających analizy w czasie rzeczywistym, jak np. w systemach rozpoznawania twarzy, analizie powierzchni itp.
 
-\subsection{LIDAR (Light Detection and Ranging)}
+  \item Dobre działanie w kontrolowanych warunkach – W przypadku dobrze oświetlonych i kontrolowanych warunków (np. w laboratoriach, produkcji), structured light może zapewnić bardzo wysoką jakość obrazu 3D.
+
+  \item Kompatybilność z kamerami RGB – Technologia może być używana w połączeniu z tradycyjnymi kamerami RGB, co pozwala na łatwiejsze połączenie danych o głębi z obrazami kolorowymi.
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Wady:}
+\begin{itemize}
+  \item Wrażliwość na oświetlenie – Structured Light jest wrażliwa na zmieniające się warunki oświetleniowe, zwłaszcza w przypadku silnego, niejednorodnego oświetlenia lub cieni. Może to prowadzić do błędów w pomiarach.
+
+  \item Ograniczona skuteczność na dużych odległościach – Zasięg systemów Structured Light jest zwykle ograniczony do kilku metrów, co sprawia, że nie nadają się one dobrze do pomiarów w dużych przestrzeniach lub na dużych odległościach.
+
+  \item Problemy z teksturami powierzchni – Obiekty o gładkich powierzchniach lub o jednorodnym kolorze mogą sprawiać trudności, ponieważ brak wyraźnych cech do analizy może prowadzić do mniej dokładnych pomiarów.
+
+  \item Złożoność systemu – Aby uzyskać dokładne pomiary, systemy Structured Light wymagają zaawansowanego sprzętu do projekcji wzorców i rejestracji obrazu, co może podnieść koszt urządzenia.
+\end{itemize}
+\end{minipage}
+
+\subsubsection{LIDAR (Light Detection and Ranging)}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.1\textwidth]{images/LIDAR.jpg}  % Adjust the path and width as necessary
+    \includegraphics[width=0.5\textwidth]{images/LIDAR.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
     \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Emits laser beams and measures return time.
+LIDAR (Light Detection and Ranging) to technologia zdalnego pomiaru odległości, która działa poprzez wysyłanie impulsów laserowych i mierzenie czasu, jaki upływa od ich odbicia od obiektu do powrotu do sensora. Na tej podstawie LIDAR tworzy bardzo dokładne mapy 3D otoczenia.
 
-Produces very accurate 3D point clouds.
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Zalety:}
+\begin{itemize}
+  \item Bardzo wysoka dokładność – LIDAR potrafi tworzyć szczegółowe modele 3D otoczenia z dokładnością rzędu centymetrów lub milimetrów.
 
-Widely used in autonomous vehicles.
+  \item Długi zasięg – Niektóre systemy LIDAR mogą mierzyć odległości na setki metrów, co sprawia, że są bardzo przydatne w samochodach autonomicznych, dronach i mapowaniu terenu.
 
-\subsection{Ultrasound / Sonar}
-Common in robotics, underwater applications, and medical imaging.
+  \item Działa w nocy – Ponieważ LIDAR używa własnego źródła światła (lasera), działa niezależnie od oświetlenia zewnętrznego, także w całkowitej ciemności.
 
-Measures distance using the echo of sound waves.
+  \item Wysoka częstotliwość pomiaru – LIDAR może zbierać dane bardzo szybko, co jest istotne w systemach czasu rzeczywistego, np. podczas jazdy.
 
-\subsection{Event Cameras (Neuromorphic sensors)}
+  \item Tworzenie map 3D – Idealnie nadaje się do tworzenia chmur punktów i modeli przestrzennych w 3D, np. w kartografii czy inżynierii.
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Wady:}
+\begin{itemize}
+  \item Wysoki koszt – Profesjonalne systemy LIDAR są kosztowne, co ogranicza ich zastosowanie w tanich produktach konsumenckich.
+
+  \item Wrażliwość na warunki atmosferyczne – Deszcz, mgła, śnieg czy kurz mogą zaburzyć pomiary lub obniżyć ich dokładność.
+
+  \item Rozmiar i waga – Choć istnieją miniaturowe wersje, wiele dokładnych systemów LIDAR jest nadal dość duże i ciężkie.
+
+  \item Brak informacji o kolorze/teksturze – LIDAR dostarcza dane o odległości (głębi), ale nie zawiera informacji o kolorze czy wyglądzie powierzchni (w przeciwieństwie do kamer).
+
+\item Ograniczenia w odbiciach od niektórych materiałów – Niektóre powierzchnie, np. czarne lub bardzo błyszczące, mogą słabo odbijać laser, co pogarsza pomiar.
+\end{itemize}
+\end{minipage}
+
+\subsubsection{Event Cameras (Neuromorphic sensors)}
 Capture changes in intensity over time (not full frames).
 
 Can be used for depth estimation when combined with motion.
 
-\section{Czym jest stereowizja?}
-
-Stereoskopia to proces polegający na przechwyceniu 2 obrazów tej samej sceny w celu utworzenia mapy dysproporcji sceny.
-mapa rozbieżności sceny. Z tej mapy rozbieżności można zmierzyć odległość do obiektu i utworzyć mapę 3D sceny.
-do obiektu i utworzyć mapę 3D sceny.
-
-\subsection{Stereowizja w robotach do pomieszczeń czystych}
-
-Celem tego dużego projektu jest opracowanie robota do pomieszczeń czystych, który może mierzyć cząsteczki w całym pomieszczeniu czystym.
-w całym pomieszczeniu czystym. Aby przeprowadzić pomiar bez żadnych problemów, robot musi orientować się bez kolizji.
-robot musi orientować się bez kolizji. Do tej orientacji zdecydowaliśmy się użyć tylko
-kamer, a do pomiaru odległości od obiektu potrzebujemy co najmniej dwóch kamer
-co najmniej dwóch kamer (stereowizja). Dwie kamery znajdują się w odległości 110
-mm między sobą.
-
-Im większa jest ta odległość, tym lepiej można ocenić odległość do sceny dla obiektów znajdujących się daleko.
-obiektów, które są daleko.
-W tym projekcie zaimplementowano program Python wykorzystujący bibliotekę OpenCV
-do kalibracji kamer i pomiaru odległości do obiektów na scenie.
-obiektów w scenie. (Patrz załącznik)
-
-Kamera stereo składa się z dwóch kamer Logitech Webcam C170.
-
-Widoki wideo są optymalne przy obrazach 640x480 pikseli. Ogniskowa: 2,3 mm.
-Wbudowana kamera stereo:
-
-\section{Model kamery}
+\section{Natura kamery}
 
 Kamery rejestrują promienie świetlne z naszego otoczenia. Zasadniczo kamera działa jak
 nasze oko, odbite promienie światła z naszego otoczenia docierają do naszego oka i są zbierane na siatkówce.
@@ -306,7 +433,7 @@ Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Ponieważ soczewka nie jest idealnie wyśrodkowana, wprowadzono dwa parametry, Cx i Cy, oznaczające odpowiednio poziome i pionowe przemieszczenie soczewki.
+Ponieważ soczewka nie jest idealnie wyśrodkowana, wprowadzono dwa parametry, $C_x$ i $C_y$, oznaczające odpowiednio poziome i pionowe przemieszczenie soczewki.
 odpowiednio poziome i pionowe przemieszczenie soczewki. Ogniskowa na osiach X i
 Y są również różne, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór
 Daje to następujący wzór na położenie obiektu na powierzchni.
@@ -320,7 +447,7 @@ Rzutowane punkty świata rzeczywistego na powierzchnię obrazu można zatem mode
 modelowany. M jest tutaj macierzą wewnętrzną.
 
 \[
-q = MQ, \quad \text{where} \quad
+q = MQ, \quad \text{gdzie} \quad
 q = \begin{bmatrix} x \\ y \\ w \end{bmatrix}, \quad
 M = \begin{bmatrix}
 f_x & 0 & c_x \\
@@ -367,45 +494,8 @@ x_{\text{corrected}} &= x + \left[2p_1 y + p_2 (r^2 + 2x^2)\right] \\
 y_{\text{corrected}} &= y + \left[p_1 (r^2 + 2y^2) + 2p_2 x\right]
 \end{align*}
 
-\subsection{Kalibracja za pomocą OpenCV}
-
-Biblioteka OpenCV pozwala nam obliczyć parametry wewnętrzne za pomocą określonych funkcji.
-Proces ten nazywany jest kalibracją. Jest to możliwe dzięki różnym
-widoków szachownicy.
-
-Program do robienia zdjęć do późniejszej kalibracji nosi nazwę
-„Take-images-for-calibration.py”.
-Jeśli rogi szachownicy zostaną rozpoznane na obu kamerach, otworzą się dwa okna z rozpoznanym obrazem dla każdej kamery.
-z rozpoznanym obrazem dla każdej kamery. Obrazy są następnie zapisywane lub usuwane
-zapisywane lub usuwane. Można rozpoznać dobre obrazy, na których narożniki
-są bardzo wyraźnie rozpoznawalne. Obrazy te są później używane do kalibracji w głównym programie
-programie „Main-Stereo-Vision-Prog.py”. OpenCV zaleca posiadanie co najmniej 10
-obrazów dla każdej kamery, aby uzyskać dobrą kalibrację. My uzyskaliśmy dobre wyniki przy 50
-obrazów dla każdej kamery.
-Aby skalibrować kamery, kod Pythona wyszukuje narożniki szachownicy na każdym
-obrazie dla każdej kamery przy użyciu funkcji OpenCV: cv2.findChesssboardCorners
-
-Pozycja narożników dla każdego obrazu jest następnie zapisywana w wektorze obrazu, a punkty obiektu dla sceny 3D są zapisywane w innym wektorze.
-dla sceny 3D są zapisywane w innym wektorze. Następnie należy użyć
-następnie użyć tych Imgpoints i Objpoints w funkcji cv2.calibeCamera(), której wynikiem jest
-macierz kamery, współczynniki zniekształceń, wektory obrotu i translacji
-są zwracane.
-
-Funkcja cv2.getOptimalNewCameraMatrix() umożliwia nam uzyskanie dokładnych macierzy kamer.
-które później wykorzystamy w funkcji cv2.stereoRectify().
-
-Po kalibracji za pomocą OpenCV otrzymujemy następującą macierz M dla naszej kamery:
-
-Matryca M bez rektyfikacji (prawa kamera):
-
-Matrix Mrekt Rectified (prawa kamera):
-
-Matryca M bez rektyfikacji (lewa kamera):
-
-Matryca M wyprostowana (lewa kamera):
 
 \section{Obrazowanie stereoskopowe}
-\subsection{Wyjaśnienie}
 
 Stereo Vision umożliwia rozpoznawanie głębi na obrazie, wykonywanie pomiarów na obrazie
 i przeprowadzanie lokalizacji 3D. Między innymi należy znaleźć punkty, które
@@ -443,11 +533,11 @@ są współpłaszczyznowe i poziomy rząd pikseli lewego obrazu jest wyrównany 
 poziomy rząd pikseli lewego obrazu jest wyrównany.
 Poniższy obraz można teraz skonstruować przy użyciu poprzednich hipotez.
 
-Punkt P leży w środowisku i jest pokazany na
-lewym i prawym obrazie na pl i pr, z odpowiadającymi im współrzędnymi
-odpowiadającymi współrzędnymi xl i xr. To
+Punkt $P$ leży w środowisku i jest pokazany na
+lewym i prawym obrazie na $P_l$ i $P_r$, z odpowiadającymi im współrzędnymi
+odpowiadającymi współrzędnymi $X_l$ i $X_r$. To
 pozwala nam wprowadzić nową wielkość
-d = xl - xr. Można zauważyć, że im dalej punkt
+$d = X_l - X_r$. Można zauważyć, że im dalej punkt
 punkt P, tym mniejsza staje się wielkość d. Dysproporcja
 jest zatem odwrotnie proporcjonalna do odległości.
 odległości.\\
@@ -590,7 +680,7 @@ W projekcie wykorzystaliśmy algorytm Bougueta.
 
 \chapter{Rozdział badawczy}
 
-\section{Raspberry Pi}
+\section{Opis projektu}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -615,8 +705,6 @@ W projekcie wykorzystaliśmy algorytm Bougueta.
     \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
     \label{fig:rpi-gpio}  % Optional: use to refer to this image later in the text
 \end{figure}
-
-\section{Camera}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -687,13 +775,55 @@ cv2.destroyAllWindows().
 Po uruchomieniu tego programu obie kamery stają się aktywne i otwierane są dwa okna.
 aby użytkownik mógł zobaczyć, gdzie na obrazach znajduje się szachownica.
 
+
+\subsubsection{Kalibracja za pomocą OpenCV}
+
+Biblioteka OpenCV pozwala nam obliczyć parametry wewnętrzne za pomocą określonych funkcji.
+Proces ten nazywany jest kalibracją. Jest to możliwe dzięki różnym
+widoków szachownicy.
+
+Program do robienia zdjęć do późniejszej kalibracji nosi nazwę
+„Take-images-for-calibration.py”.
+Jeśli rogi szachownicy zostaną rozpoznane na obu kamerach, otworzą się dwa okna z rozpoznanym obrazem dla każdej kamery.
+z rozpoznanym obrazem dla każdej kamery. Obrazy są następnie zapisywane lub usuwane
+zapisywane lub usuwane. Można rozpoznać dobre obrazy, na których narożniki
+są bardzo wyraźnie rozpoznawalne. Obrazy te są później używane do kalibracji w głównym programie
+programie „Main-Stereo-Vision-Prog.py”. OpenCV zaleca posiadanie co najmniej 10
+obrazów dla każdej kamery, aby uzyskać dobrą kalibrację. My uzyskaliśmy dobre wyniki przy 50
+obrazów dla każdej kamery.
+Aby skalibrować kamery, kod Pythona wyszukuje narożniki szachownicy na każdym
+obrazie dla każdej kamery przy użyciu funkcji OpenCV: cv2.findChesssboardCorners
+
+Pozycja narożników dla każdego obrazu jest następnie zapisywana w wektorze obrazu, a punkty obiektu dla sceny 3D są zapisywane w innym wektorze.
+dla sceny 3D są zapisywane w innym wektorze. Następnie należy użyć
+następnie użyć tych Imgpoints i Objpoints w funkcji cv2.calibeCamera(), której wynikiem jest
+macierz kamery, współczynniki zniekształceń, wektory obrotu i translacji
+są zwracane.
+
+Funkcja cv2.getOptimalNewCameraMatrix() umożliwia nam uzyskanie dokładnych macierzy kamer.
+które później wykorzystamy w funkcji cv2.stereoRectify().
+
+Po kalibracji za pomocą OpenCV otrzymujemy następującą macierz M dla naszej kamery:
+
+Matryca M bez rektyfikacji (prawa kamera):
+
+Matrix Mrekt Rectified (prawa kamera):
+
+Matryca M bez rektyfikacji (lewa kamera):
+
+Matryca M wyprostowana (lewa kamera):
+
 \subsubsection{Wektory kalibracyjne}
 
 Funkcja cv2.findChessboardCorners() wyszuka określoną liczbę narożników szachownicy
 i wygenerowane zostaną następujące wektory:
-- imgpointsR: zawiera współrzędne narożników na prawym obrazie (w przestrzeni obrazu)
-- imgpointsL: zawiera współrzędne narożników na lewym obrazie (w przestrzeni obrazu)
-- objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
+
+\begin{itemize}
+  \item imgpointsR: zawiera współrzędne narożników na prawym obrazie (w przestrzeni obrazu)
+  \item imgpointsL: zawiera współrzędne narożników na lewym obrazie (w przestrzeni obrazu)
+  \itme objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
+\end{itemize}
+
 Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
 cv2.cornerSubPix().
 
