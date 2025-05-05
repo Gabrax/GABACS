@@ -22,7 +22,7 @@
 \contentsline {subsection}{\numberline {3.3.4}Macierz obrotu i wektor przesunięcia}{24}{}%
 \contentsline {subsection}{\numberline {3.3.5}Rektyfikacja stereo}{24}{}%
 \contentsline {subsubsection}{\numberline {3.3.5.1}Algorytm Hartley'a}{25}{}%
-\contentsline {subsubsection}{\numberline {3.3.5.2}Algorytm Bougueta}{25}{}%
+\contentsline {subsubsection}{\numberline {3.3.5.2}Algorytm Bouguet'a}{25}{}%
 \contentsline {chapter}{\numberline {4}Rozdział badawczy}{27}{}%
 \contentsline {section}{\numberline {4.1}Opis projektu}{27}{}%
 \contentsline {section}{\numberline {4.2}Funkcjonalność programu do obrazowania stereo}{28}{}%

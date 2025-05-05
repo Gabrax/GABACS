@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  2 MAY 2025 20:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  5 MAY 2025 21:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -351,6 +351,9 @@ Rozdzia\PlPrIeC {\l } 1.
 ]
 Rozdzia\PlPrIeC {\l } 2.
 
+LaTeX Warning: Citation `Kostrykin' on page 7 undefined on input line 99.
+
+
 LaTeX Warning: Citation `Lang' on page 7 undefined on input line 99.
 
 
@@ -597,7 +600,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 <images/light.png, id=74, 401.5pt x 274.02374pt>
 File: images/light.png Graphic file (type png)
 <use images/light.png>
-Package pdftex.def Info: images/light.png  used on input line 395.
+Package pdftex.def Info: images/light.png  used on input line 391.
 (pdftex.def)             Requested size: 220.50887pt x 150.50027pt.
 
 
@@ -605,12 +608,12 @@ Package pdftex.def Info: images/light.png  used on input line 395.
 <images/pinhole.png, id=79, 315.42844pt x 130.23656pt>
 File: images/pinhole.png Graphic file (type png)
 <use images/pinhole.png>
-Package pdftex.def Info: images/pinhole.png  used on input line 430.
+Package pdftex.def Info: images/pinhole.png  used on input line 425.
 (pdftex.def)             Requested size: 220.50887pt x 91.04573pt.
 <images/barrel.png, id=80, 1027.84pt x 1027.84pt>
 File: images/barrel.png Graphic file (type png)
 <use images/barrel.png>
-Package pdftex.def Info: images/barrel.png  used on input line 464.
+Package pdftex.def Info: images/barrel.png  used on input line 456.
 (pdftex.def)             Requested size: 132.30666pt x 132.30647pt.
 
 
@@ -624,7 +627,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <images/triangulation.png, id=93, 227.34938pt x 216.81pt>
 File: images/triangulation.png Graphic file (type png)
 <use images/triangulation.png>
-Package pdftex.def Info: images/triangulation.png  used on input line 525.
+Package pdftex.def Info: images/triangulation.png  used on input line 508.
 (pdftex.def)             Requested size: 220.50887pt x 210.2889pt.
 
 
@@ -632,10 +635,10 @@ Package pdftex.def Info: images/triangulation.png  used on input line 525.
 <images/epipolar.png, id=98, 295.1025pt x 184.43906pt>
 File: images/epipolar.png Graphic file (type png)
 <use images/epipolar.png>
-Package pdftex.def Info: images/epipolar.png  used on input line 565.
-(pdftex.def)             Requested size: 220.50887pt x 137.81955pt.
+Package pdftex.def Info: images/epipolar.png  used on input line 542.
+(pdftex.def)             Requested size: 308.71106pt x 192.94907pt.
 
-Overfull \hbox (3.83109pt too wide) in paragraph at lines 571--579
+Overfull \hbox (3.83109pt too wide) in paragraph at lines 548--553
 []\T1/qtm/m/n/12 Powy»szy ob-ra-zek przed-sta-wia mo-del nie-do-sko-na-ªej ka-m
 e-ry ste-reo skªa-da-j¡-cej si¦ z dwóch
  []
@@ -643,7 +646,12 @@ e-ry ste-reo skªa-da-j¡-cej si¦ z dwóch
 
 
 [22 <./images/epipolar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 607--620
+Underfull \hbox (badness 10000) in paragraph at lines 584--586
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 586--588
 
  []
 
@@ -662,17 +670,17 @@ Rozdzia\PlPrIeC {\l } 4.
 <images/RPI.jpg, id=116, 385.44pt x 252.945pt>
 File: images/RPI.jpg Graphic file (type jpg)
 <use images/RPI.jpg>
-Package pdftex.def Info: images/RPI.jpg  used on input line 687.
+Package pdftex.def Info: images/RPI.jpg  used on input line 663.
 (pdftex.def)             Requested size: 220.50887pt x 144.70891pt.
 <images/RPI-SPEC.jpg, id=117, 385.44pt x 203.76125pt>
 File: images/RPI-SPEC.jpg Graphic file (type jpg)
 <use images/RPI-SPEC.jpg>
-Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 695.
+Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 671.
 (pdftex.def)             Requested size: 308.71106pt x 163.19887pt.
 <images/RPI-PIN.jpg, id=118, 1214.5375pt x 644.4075pt>
 File: images/RPI-PIN.jpg Graphic file (type jpg)
 <use images/RPI-PIN.jpg>
-Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 703.
+Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 679.
 (pdftex.def)             Requested size: 220.50887pt x 116.99129pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -680,7 +688,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <images/MAINSTEREO.png, id=119, 963.6pt x 963.6pt>
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 711.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 687.
 (pdftex.def)             Requested size: 220.50887pt x 220.50589pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -693,7 +701,7 @@ Underfull \vbox (badness 2818) has occurred while \output is active []
 
 
 [28 <./images/RPI-PIN.jpg> <./images/MAINSTEREO.png>]
-Overfull \hbox (38.56227pt too wide) in paragraph at lines 751--755
+Overfull \hbox (38.56227pt too wide) in paragraph at lines 727--731
 \T1/qtm/m/n/12 two-rzo-ne s¡ dwa obiek-ty ko-rzy-sta-j¡-ce z me-tod kla-sy cv2.
 VideoCapture()). kla-sy cv2.VideoCapture()). 
  []
@@ -701,7 +709,7 @@ VideoCapture()). kla-sy cv2.VideoCapture()).
 
 
 [29]
-Overfull \hbox (34.74306pt too wide) in paragraph at lines 785--796
+Overfull \hbox (34.74306pt too wide) in paragraph at lines 761--772
 []\T1/qtm/m/n/12 Program do ro-bie-nia zdj¦¢ do pó¹-niej-szej ka-li-bra-cji no-
 si na-zw¦ ^^RTake-images-for-calibration.py^^Q.
  []
@@ -723,10 +731,9 @@ Rozdzia\PlPrIeC {\l } 5.
 [34
 
 ]
-Overfull \hbox (143.5202pt too wide) in paragraph at lines 854--856
-[]\T1/qtm/m/n/12 Rajesh Rao, \T1/qtm/m/it/12 Lec-tu-re 16: Ste-reo and 3D Vi-si
-on,https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qt
-m/m/n/12 ,
+Overfull \hbox (90.3002pt too wide) in paragraph at lines 829--831
+[]\T1/qtm/m/n/12 Stereo and 3D Vi-sion, Ra-jesh Rao, \T1/qtm/m/it/12 https://co
+urses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qtm/m/n/12 . 
  []
 
 
@@ -745,10 +752,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5783 strings out of 473898
- 92492 string characters out of 5726479
+ 5785 strings out of 473898
+ 92543 string characters out of 5726479
  480141 words of memory out of 5000000
- 28591 multiletter control sequences out of 15000+600000
+ 28593 multiletter control sequences out of 15000+600000
  602671 words of font info for 79 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  57i,11n,65p,751b,389s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -763,7 +770,7 @@ al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gab-o/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o
 /AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/g
 ab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
-Output written on wzor.pdf (35 pages, 1834223 bytes).
+Output written on wzor.pdf (35 pages, 1834839 bytes).
 PDF statistics:
  194 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

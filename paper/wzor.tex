@@ -384,11 +384,7 @@ Can be used for depth estimation when combined with motion.
 
 Kamery rejestrują promienie świetlne z naszego otoczenia. Zasadniczo kamera działa jak
 nasze oko, odbite promienie światła z naszego otoczenia docierają do naszego oka i są zbierane na siatkówce.
-Są one gromadzone na naszej siatkówce.
-„Kamera otworkowa” jest najprostszym modelem. Jest to dobry uproszczony model do zrozumienia
-zrozumieć, jak działa kamera. W tym modelu wszystkie promienie światła są zatrzymywane przez powierzchnię.
-powierzchnię. Tylko promienie przechodzące przez otwór są przechwytywane i rzutowane w odwrotnej kolejności na powierzchnię w kamerze.
-powierzchnia w kamerze. Poniższa ilustracja wyjaśnia tę zasadę
+„Kamera otworkowa” jest najprostszym modelem. Jest to dobry uproszczony model do zrozumienia, jak działa kamera. W tym modelu wszystkie promienie światła są zatrzymywane przez powierzchnię. Tylko promienie przechodzące przez otwór są przechwytywane i rzutowane w odwrotnej kolejności na powierzchnię w kamerze. Poniższa ilustracja wyjaśnia tę zasadę
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -399,30 +395,29 @@ powierzchnia w kamerze. Poniższa ilustracja wyjaśnia tę zasadę
 \end{figure}
 
 Zasada ta jest bardzo prosta, ale nie jest to dobry sposób na uchwycenie wystarczającej ilości światła przy szybkiej ekspozycji.
-szybkiej ekspozycji. Dlatego soczewki są używane do zbierania
-promieni światła w jednym miejscu. Problem polega na tym, że taki obiektyw powoduje zniekształcenia.
-zniekształcenia.
+Dlatego soczewki są używane do zbierania promieni światła w jednym miejscu. Problem polega na tym, że taki obiektyw powoduje zniekształcenia.
 Istnieją dwa różne rodzaje zniekształceń:
-- zniekształcenie promieniowe
-- zniekształcenie styczne
+\begin{itemize}
+  \item zniekształcenie promieniowe
+  \item zniekształcenie styczne
+\end{itemize}
 Zniekształcenie promieniowe wynika z kształtu samego obiektywu, a zniekształcenie styczne
 wynika z geometrii kamery. Obrazy można następnie skorygować za pomocą metod matematycznych.
-metod matematycznych.
 Proces kalibracji umożliwia stworzenie modelu geometrii kamery i modelu zniekształceń obiektywu.
-zniekształcenia obiektywu. Modele te tworzą parametry wewnętrzne kamery.
+Modele te tworzą parametry wewnętrzne kamery.
 
 \subsection{Ogniskowa obiektywu}
 
 Względny rozmiar obrazu rzutowanego na powierzchnię w kamerze zależy od ogniskowej.
-ogniskowa. W modelu otworkowym ogniskowa to odległość między otworem
+W modelu otworkowym ogniskowa to odległość między otworem
 a obszarem, na który rzutowany jest obraz.
 Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
 
 \begin{itemize}
-  \item \textbf{x}: obraz obiektu (znak minus wynika z tego, że obraz jest odwrócony)
-  \item \textbf{X}: rozmiar obiektu
-  \item \textbf{Z}: odległość od otworu do obiektu
-  \item \textbf{f}: ogniskowa, odległość od otworu do obrazu
+  \item \textbf{$x$}: obraz obiektu (znak minus wynika z tego, że obraz jest odwrócony)
+  \item \textbf{$X$}: rozmiar obiektu
+  \item \textbf{$Z$}: odległość od otworu do obiektu
+  \item \textbf{$f$}: ogniskowa, odległość od otworu do obrazu
 \end{itemize}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
@@ -434,17 +429,14 @@ Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
 \end{figure}
 
 Ponieważ soczewka nie jest idealnie wyśrodkowana, wprowadzono dwa parametry, $C_x$ i $C_y$, oznaczające odpowiednio poziome i pionowe przemieszczenie soczewki.
-odpowiednio poziome i pionowe przemieszczenie soczewki. Ogniskowa na osiach X i
-Y są również różne, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór
-Daje to następujący wzór na położenie obiektu na powierzchni.
+Ogniskowa na osiach $X$ i $Y$ są również różne, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór na położenie obiektu na powierzchni.
 
 \[
 x_{\text{screen}} = f_x \left( \frac{X}{Z} \right) + c_x, \quad
 y_{\text{screen}} = f_y \left( \frac{Y}{Z} \right) + c_y
 \]
 
-Rzutowane punkty świata rzeczywistego na powierzchnię obrazu można zatem modelować w następujący sposób
-modelowany. M jest tutaj macierzą wewnętrzną.
+Rzutowane punkty świata rzeczywistego na powierzchnię obrazu można zatem modelować w następujący sposób. $M$ jest tutaj macierzą wewnętrzną.
 
 \[
 q = MQ, \quad \text{gdzie} \quad
@@ -468,26 +460,23 @@ Q = \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
 \end{figure}
 
 Teoretycznie możliwe jest zbudowanie obiektywu, który nie powoduje zniekształceń za pomocą soczewki parabolicznej.
-soczewki parabolicznej. W praktyce jednak znacznie łatwiej jest stworzyć soczewkę sferyczną niż paraboliczną.
-niż soczewkę paraboliczną. Jak wspomniano wcześniej, istnieją dwa rodzaje zniekształceń. Zniekształcenie
+W praktyce jednak znacznie łatwiej jest stworzyć soczewkę sferyczną niż paraboliczną.
+Jak wspomniano wcześniej, istnieją dwa rodzaje zniekształceń. Zniekształcenie
 promieniowe, które wynikają z kształtu obiektywu i zniekształcenia styczne spowodowane procesem montażu kamery.
-przez proces montażu kamery.
 
-W centrum optycznym nie ma zniekształceń promieniowych, a przy zbliżaniu się do krawędzi stają się one coraz większe.
-większe, gdy zbliżamy się do krawędzi. W praktyce zniekształcenie to pozostaje niewielkie.
-W praktyce zniekształcenie to pozostaje niewielkie, wystarczy wykonać rozwinięcie Taylora do trzeciego członu.
-członu. Daje to następujący wzór.
+W centrum optycznym nie ma zniekształceń promieniowych, a przy zbliżaniu się do krawędzi stają się one coraz większe, gdy zbliżamy się do krawędzi. W praktyce zniekształcenie to pozostaje niewielkie, wystarczy wykonać rozwinięcie Taylora do trzeciego członu.
+Daje to następujący wzór.
 
 \begin{align*}
 x_{\text{corrected}} &= x \left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6 \right) \\
 y_{\text{corrected}} &= y \left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6 \right)
 \end{align*}
 
-x i y to współrzędne oryginalnego punktu na obszarze obrazu, które są używane do obliczenia pozycji skorygowanego punktu.
+$x$ i $y$ to współrzędne oryginalnego punktu na obszarze obrazu, które są używane do obliczenia pozycji skorygowanego punktu.
 skorygowanego punktu.
 Występuje również zniekształcenie styczne, ponieważ obiektyw nie jest idealnie
 idealnie równoległa do powierzchni obrazu. Aby to skorygować
-wprowadzane są dwa dodatkowe parametry, p1 i p2.
+wprowadzane są dwa dodatkowe parametry, $p_1$ i $p_2$.
 
 \begin{align*}
 x_{\text{corrected}} &= x + \left[2p_1 y + p_2 (r^2 + 2x^2)\right] \\
@@ -498,24 +487,18 @@ y_{\text{corrected}} &= y + \left[p_1 (r^2 + 2y^2) + 2p_2 x\right]
 \section{Obrazowanie stereoskopowe}
 
 Stereo Vision umożliwia rozpoznawanie głębi na obrazie, wykonywanie pomiarów na obrazie
-i przeprowadzanie lokalizacji 3D. Między innymi należy znaleźć punkty, które
-należy znaleźć punkty, które pasują do siebie między dwiema kamerami. Można to następnie wykorzystać do
-odległość między kamerą a punktem. Wykorzystywana jest geometria systemu
-systemu w celu uproszczenia obliczeń.
+i przeprowadzanie lokalizacji 3D. Między innymi należy znaleźć punkty, które pasują do siebie między dwiema kamerami. Można to następnie wykorzystać do odległość między kamerą a punktem. Wykorzystywana jest geometria systemu w celu uproszczenia obliczeń.
 
 Te cztery kroki są wykonywane podczas obrazowania stereo:
 
 \begin{enumerate}
   \item usuwanie zniekształceń promieniowych i stycznych za pomocą obliczeń matematycznych
-obliczenia. W ten sposób powstają niezniekształcone obrazy.
+obliczenia. W ten sposób powstają obrazy bez deformacji.
   \item rektyfikacja kąta i odległości obrazów. Na tym etapie oba obrazy są
-obrazy współpłaszczyznowe na osi Y, co ułatwia wyszukiwanie korespondencji.
-łatwiejsze i wystarczy szukać tylko na jednej osi (osi X).
-(a mianowicie na osi X).
-  \item znajdź tę samą cechę na prawym i lewym obrazie. Daje to mapę
-mapę dysproporcji pokazującą różnice między obrazami na osi x.
-  \item Ostatnim krokiem jest triangulacja. Mapa rozbieżności jest przekształcana w
-odległości za pomocą triangulacji.
+obrazy współpłaszczyznowe na osi $Y$, co ułatwia wyszukiwanie korespondencji.
+łatwiejsze i wystarczy szukać tylko na jednej osi (osi $X$).
+  \item znajdź tę samą cechę na prawym i lewym obrazie. Daje to mapę dysproporcji pokazującą różnice między obrazami na osi $X$.
+  \item Ostatnim krokiem jest triangulacja. Mapa rozbieżności jest przekształcana w odległości za pomocą triangulacji.
 \end{enumerate}
 
 \subsection{Triangulacja}
@@ -529,8 +512,7 @@ odległości za pomocą triangulacji.
 \end{figure}
 
 W ostatnim kroku, triangulacji, zakłada się, że oba obrazy projekcji są współpłaszczyznowe i że poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiadającym mu obrazem prawego.
-są współpłaszczyznowe i poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiednim poziomym rzędem pikseli lewego obrazu.
-poziomy rząd pikseli lewego obrazu jest wyrównany.
+
 Poniższy obraz można teraz skonstruować przy użyciu poprzednich hipotez.
 
 Punkt $P$ leży w środowisku i jest pokazany na
@@ -538,43 +520,35 @@ lewym i prawym obrazie na $P_l$ i $P_r$, z odpowiadającymi im współrzędnymi
 odpowiadającymi współrzędnymi $X_l$ i $X_r$. To
 pozwala nam wprowadzić nową wielkość
 $d = X_l - X_r$. Można zauważyć, że im dalej punkt
-punkt P, tym mniejsza staje się wielkość d. Dysproporcja
+punkt $P$, tym mniejsza staje się wielkość $d$. Dysproporcja
 jest zatem odwrotnie proporcjonalna do odległości.
 odległości.\\
 Do obliczenia odległości można użyć następującego wzoru
 można obliczyć: \[Z=f*T/(xl-xr)\]
 
 Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością a odległością.
-istnieje. Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
-różnice w odległości. Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice
-małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na tej podstawie
-można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
-które znajdują się blisko kamery.
+Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
+Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na tej podstawie można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
 
 Metoda ta działa jednak tylko wtedy, gdy konfiguracja kamery stereo jest idealna. W
 rzeczywistości tak nie jest. Właśnie dlatego lewy i prawy obraz są
 matematycznie wyrównane równolegle. Oczywiście kamery muszą być fizycznie ustawione równolegle.
-fizycznie ustawione równolegle.
-Zanim wyjaśnimy metodę matematycznego wyrównywania obrazów, musimy najpierw zrozumieć geometrię epipolarną.
-najpierw zrozumieć geometrię epipolarną.
+Zanim zostanie wyjaśniona metoda matematycznego wyrównywania obrazów, trzeba najpierw zrozumieć geometrię epipolarną.
 
 \subsection{Geometria epipolarna}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.7\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
     \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 709}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
 Powyższy obrazek przedstawia model niedoskonałej kamery stereo składającej się z dwóch modeli kamer otworkowych.
-dwóch modeli kamer otworkowych. Przecięcie linii środków projekcji
-(Ol, Or) z płaszczyznami projekcji tworzone są punkty epipolarne el i er. Linie (pl,
-el) i (pr, er) są nazywane liniami epipolarnymi. Obrazem wszystkich możliwych punktów punktu
+Przecięcie linii środków projekcji ($O_l$, $O_r$) z płaszczyznami projekcji tworzone są punkty epipolarne $e_l$ i $e_r$. Linie ($p_l$, $e_l$) i ($p_r$, $e_r$) są nazywane liniami epipolarnymi. Obrazem wszystkich możliwych punktów punktu
 na płaszczyźnie rzutowania jest linia epipolarna, która leży na drugiej płaszczyźnie obrazu i
-przechodzi przez punkt epipolarny i szukany punkt. Umożliwia to ograniczenie wyszukiwania punktu
-punktu na jednym wymiarze zamiast na całej płaszczyźnie.
+przechodzi przez punkt epipolarny i szukany punkt. Umożliwia to ograniczenie wyszukiwania punktu na jednym wymiarze zamiast na całej płaszczyźnie.\\
 Można zatem podsumować następujące punkty:
 
 \begin{itemize}
@@ -583,62 +557,65 @@ Można zatem podsumować następujące punkty:
 drugiej płaszczyzny (warunek epipolarny)
   \item Dwuwymiarowe wyszukiwanie odpowiadającego elementu jest konwertowane na
 jednowymiarowe, jeśli znana jest geometria epipolarna.
-  \item Kolejność punktów jest zachowana, tzn. dwa punkty A i B są w tej samej kolejności na liniach epipolarnych płaszczyzny.
+  \item Kolejność punktów jest zachowana, tzn. dwa punkty $A$ i $B$ są w tej samej kolejności na liniach epipolarnych płaszczyzny.
 
 \end{itemize}
 
 ta sama kolejność na liniach epipolarnych jednej płaszczyzny, co na liniach epipolarnych drugiej płaszczyzny.
-drugiej płaszczyzny.
 
 \subsection{Macierze podstawowe i fundamentalne}
 
 Aby zrozumieć, w jaki sposób obliczane są linie epipolarne, musimy najpierw wyjaśnić macierze podstawowe
-i macierze fundamentalne (odpowiadające macierzom E i F).
-Macierz podstawowa E zawiera informacje o tym, jak fizycznie rozmieszczone są obie kamery.
-są fizycznie rozmieszczone. Opisuje ona lokalizację drugiej kamery względem pierwszej za pomocą parametrów translacji i rotacji.
-względem pierwszej kamery za pomocą parametrów translacji i rotacji. Parametry te nie są bezpośrednio odczytywane w macierzy
-Parametrów tych nie można odczytać bezpośrednio w macierzy, ponieważ jest ona używana do planowania projektu. W sekcji Kalibracja stereo
-wyjaśnimy, jak obliczyć R i T (macierz rotacji i wektor translacji).
-Macierz F zawiera informacje z podstawowej macierzy E, fizyczny układ kamer i informacje o kamerach.
-kamer i informacje o wewnętrznych parametrach kamer.
-Relacja między rzutowanym punktem na lewym obrazie pl i rzutowanym punktem na prawym obrazie pr jest zdefiniowana następująco
-obraz pr jest zdefiniowany następująco:
+i macierze fundamentalne (odpowiadające macierzom $E$ i $F$).
+Macierz podstawowa $E$ zawiera informacje o tym, jak fizycznie rozmieszczone są obie kamery.
+Opisuje ona lokalizację drugiej kamery względem pierwszej za pomocą parametrów translacji i rotacji.
+Parametrów tych nie można odczytać bezpośrednio w macierzy, ponieważ jest ona używana do planowania projektu. W sekcji Kalibracja stereo wyjaśnone będzie, jak obliczyć $R$ i $T$ (macierz rotacji i wektor translacji).
+Macierz $F$ zawiera informacje z podstawowej macierzy $E$, fizyczny układ kamer i informacje o wewnętrznych parametrach kamer.
+Relacja między rzutowanym punktem na lewym obrazie $p_l$ i rzutowanym punktem na prawym obrazie $p_r$ jest zdefiniowana następująco:
 
-prTEpl=0\\
+\[prTEpl=0\]
 Można by pomyśleć, że ta formuła w pełni opisuje związek między lewym i prawym punktem.
-prawym punktem. Należy jednak zauważyć, że macierz 3x3 E jest rzędu
-jest rangi 2. Oznacza to, że wzór ten jest równaniem prostej.\\
+prawym punktem. Należy jednak zauważyć, że macierz 3x3 $E$ jest rzędu
+jest rangi 2. Oznacza to, że wzór ten jest równaniem prostej.
 Aby w pełni zdefiniować relację między punktami, parametry wewnętrzne.
-parametry wewnętrzne.\\
-Pamiętamy, że q=Mp, z macierzą wewnętrzną M.\\
-Podstawienie do poprzedniego równania daje wynik\\
-qrT(Ml-1)TEMl-1ql=0\\
+parametry wewnętrzne.
+Pamiętamy, że $q = Mp$, z macierzą wewnętrzną $M$.
+Podstawienie do poprzedniego równania daje wynik:
+\[qrT(Ml-1)TEMl-1ql=0\]
 Podstawienie:\\
-F=(Ml-1)TEMl-1\\
+\[F=(Ml-1)TEMl-1\]
 W ten sposób otrzymujemy\\
-qrTFql=0\\
+\[qrTFql=0\]
 
 \subsection{Macierz obrotu i wektor przesunięcia}
 
-Teraz, gdy wyjaśniliśmy już macierz podstawową E i macierz podstawową F, musimy
-musimy zobaczyć, jak obliczyć macierz obrotu i wektor translacji.
+Teraz, gdy zostałą wyjaśniona macierz podstawową $E$ i macierz podstawową $F$, trzeba zobaczyć, jak obliczyć macierz obrotu i wektor translacji.
 Zdefiniujemy następujące oznaczenia:
 
 \begin{itemize}
-  \item Pl i Pr definiują pozycje punktu w układzie współrzędnych odpowiednio lewej i prawej kamery.
-prawa kamera
-  \item Rl i Tl (lub Rr i Tr) definiują obrót i translację z kamery
+  \item $P_l$ i $P_r$ definiują pozycje punktu w układzie współrzędnych odpowiednio lewej i prawej kamery.
+  \item $R_l$ i $T_l$ (lub $R_r$ i $T_r$) definiują obrót i translację z kamery
 do punktu w otoczeniu dla lewej (lub prawej) kamery.
-  \item R i T to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
+  \item $R$ i $T$ to obrót i translacja układu współrzędnych prawej kamery w układzie współrzędnych lewej kamery.
 \end{itemize}
 
 Daje to następujące wyniki
-Pl=RlP+Tl i Pr=RrP+Tr\\
+\[
+\begin{array}{cc}
+P_l = R_l P + T_l & \quad P_r = R_r P + T_r
+\end{array}
+\]
 Mamy również:
-Pl=RT(Pr-T)\\
-Z tych trzech równań ostateczny wynik to\\
-R=RrRlT
-T=Tr-RTl
+\[Pl=RT(Pr-T)\]
+Z tych trzech równań ostateczny wynik to
+\[
+\begin{array}{cc}
+R = R_r R_l^T & \quad T = T_r - R T_l
+\end{array}
+\]
+
+
+
 
 \subsection{Rektyfikacja stereo}
 
@@ -646,18 +623,17 @@ Dotychczas zajmowaliśmy się tematem „kalibracji stereo”. Chodziło o
 opis geometrycznego rozmieszczenia obu kamer. Zadaniem
 rektyfikacji jest rzutowanie dwóch obrazów tak, aby leżały dokładnie w tej samej płaszczyźnie i precyzyjne wyrównanie rzędów pikseli tak, aby linie epipolarne stały się poziome w celu zapewnienia zgodności punktu na dwóch obrazach.
 aby znaleźć zgodność punktu na dwóch obrazach w sposób bardziej losowy.
-W wyniku procesu wyrównywania obu obrazów uzyskuje się 8 wyrażeń, po 4 dla każdej kamery.
-kamery:
+W wyniku procesu wyrównywania obu obrazów uzyskuje się 8 wyrażeń, po 4 dla każdej kamery:
 
 \begin{itemize}
   \item wektor zniekształceń
   \item macierz rotacji Rrect, która musi zostać zastosowana do obrazu
   \item wyprostowana macierz kamery Mrect
-  \item nierektyfikowana macierz kamery M
+  \item nierektyfikowana macierz kamery $M$
 \end{itemize}
 
-OpenCV pozwala nam obliczyć te warunki za pomocą dwóch algorytmów: algorytmu Hartleya
-i algorytmu Bougueta.
+OpenCV pozwala nam obliczyć te warunki za pomocą dwóch algorytmów: algorytmu Hartley'a
+i algorytmu Bouguet'a.
 
 \subsubsection{Algorytm Hartley'a}
 
@@ -670,7 +646,7 @@ punktów na scenie. Główną wadą jest jednak brak skalowania obrazu
 Masz tylko informacje o względnej odległości. Nie można dokładnie zmierzyć
 jak daleko obiekt znajduje się od kamer.
 
-\subsubsection{Algorytm Bougueta}
+\subsubsection{Algorytm Bouguet'a}
 
 Algorytm Bougueta wykorzystuje obliczoną macierz obrotu i wektor translacji
 aby obrócić obie rzutowane płaszczyzny o pół obrotu, tak aby znalazły się w tej samej płaszczyźnie.
@@ -821,7 +797,7 @@ i wygenerowane zostaną następujące wektory:
 \begin{itemize}
   \item imgpointsR: zawiera współrzędne narożników na prawym obrazie (w przestrzeni obrazu)
   \item imgpointsL: zawiera współrzędne narożników na lewym obrazie (w przestrzeni obrazu)
-  \itme objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
+  \item objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
 \end{itemize}
 
 Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
@@ -840,24 +816,21 @@ cv2.cornerSubPix().
 
 \begin{thebibliography}{7}
 \addcontentsline{toc}{chapter}{Bibliografia}
-%
+
 \bibitem{opencv}
 OpenCV, 
 \textit{https://opencv.org}.
-%
-\bibitem{Kostrykin} 
-Aleksiej Kostrykin, 
-\textit{Wstęp do algebry. Podstawy algebry},
-Warszawa, Wydawnictwo Naukowe PWN, 2022.
 
 \bibitem{Lambert} 
-John Lambert, 
-\textit{https://johnwlambert.github.io/stereo/}, April 4, 2025.
+Stereo and Disparity, John Lambert,  
+\textit{https://johnwlambert.github.io/stereo/}.
 
 \bibitem{rao} 
-Rajesh Rao, 
-\textit{Lecture 16: Stereo and 3D Vision,https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf}, University of Washington.
+Stereo and 3D Vision, Rajesh Rao, 
+\textit{https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf}.
 
+\bibitem{reilly} 
+Learning OpenCV 3, O'Reilly. 
 
 \end{thebibliography}
 \end{document}
