@@ -91,6 +91,8 @@
 
 We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego studenta w uzyskanie przedstawianych wyników a także informacje o podstawowych źródłach, na podstawie których student przygotował pracę.
 
+Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się analizą, modyfikacją i interpretacją obrazów cyfrowych za pomocą metod numerycznych i algorytmów komputerowych. Jej celem jest poprawa jakości obrazów, ekstrakcja informacji, segmentacja obiektów lub ich klasyfikacja. Przetwarzanie obrazu znajduje zastosowanie w wielu obszarach, takich jak medycyna (np. analiza zdjęć RTG), przemysł (np. kontrola jakości), bezpieczeństwo (np. rozpoznawanie twarzy), robotyka oraz systemy wizyjne pojazdów autonomicznych. Dzięki połączeniu technik matematycznych, statystycznych i sztucznej inteligencji możliwe jest coraz bardziej precyzyjne i automatyczne rozumienie zawartości obrazów.
+
 
 \chapter{Podstawowe pojęcia}
 
@@ -121,229 +123,6 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 
 \chapter{Część główna}
-
-\section{Przetwarzanie obrazu}
-
-Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się analizą, modyfikacją i interpretacją obrazów cyfrowych za pomocą metod numerycznych i algorytmów komputerowych. Jej celem jest poprawa jakości obrazów, ekstrakcja informacji, segmentacja obiektów lub ich klasyfikacja. Przetwarzanie obrazu znajduje zastosowanie w wielu obszarach, takich jak medycyna (np. analiza zdjęć RTG), przemysł (np. kontrola jakości), bezpieczeństwo (np. rozpoznawanie twarzy), robotyka oraz systemy wizyjne pojazdów autonomicznych. Dzięki połączeniu technik matematycznych, statystycznych i sztucznej inteligencji możliwe jest coraz bardziej precyzyjne i automatyczne rozumienie zawartości obrazów.
-
-\subsection{Rodzaje kamer i technik używane do estymacji głębi}
-
-\subsubsection{Monocular Vision}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.2\textwidth]{images/MONO.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-
-Monocular vision (widzenie monokularne) to technika pozyskiwania informacji wizualnych przy użyciu tylko jednej kamery, czyli takiej, która rejestruje obraz z pojedynczego punktu widzenia — podobnie jak jedno oko u człowieka.
-W przypadku obrazu monokularnego, każdy piksel dostarcza jedynie informacji o jasności i kolorze w płaszczyźnie 2D. Brakuje natomiast bezpośredniej informacji o głębokości, czyli odległości od kamery. Z tego względu estymacja głębi z pojedynczego obrazu jest niedookreślonym problemem inwersyjnym – wiele różnych trójwymiarowych scen może prowadzić do identycznej projekcji 2D.
-
-Aby rozwiązać ten problem, konieczne jest wprowadzenie priorytetów – dodatkowych założeń na temat struktury świata, geometrii sceny lub charakterystyki obiektów. Przykładowe priorytety to:
-
-\begin{itemize}
-  \item Zakładanie horyzontalności podłoża i pionowości ścian.
-
-  \item Regularność obiektów (np. ludzie mają podobną wysokość).
-
-  \item Perspektywa (linie zbiegające się w punkcie zbiegu sugerują głębię).
-
-  \item Znajomość statystycznych regularności obrazów.
-\end{itemize}
-
-Z matematycznego punktu widzenia, obraz monokularny powstaje na skutek rzutowania sceny trójwymiarowej na płaszczyznę dwuwymiarową za pomocą rzutowania perspektywicznego. Każdy punkt $P = (X,Y,Z)$ w przestrzeni 3D odwzorowany jest na punkt $p = (x,y)$ w obrazie 2D zgodnie z wzorami:
-
-\[
-x = f \cdot \frac{X}{Z}, \quad
-y = f \cdot \frac{Y}{Z}
-\]
-
-gdzie $f$ to ogniskowa kamery, a $Z$ to głębokość. Zauważmy, że głębokość $Z$ znajduje się w mianowniku, co oznacza, że jej zmiany mają kluczowy wpływ na rozmiar i położenie obiektów na obrazie.
-
-W kontekście wizji monokularnej, głębokie uczenie odgrywa kluczową rolę, umożliwiając estymację głębi, rekonstrukcję scen 3D czy detekcję obiektów na podstawie pojedynczego obrazu. Zamiast polegać na klasycznych metodach geometrycznych, takich jak triangulacja czy analiza ruchu, sieci neuronowe uczą się z dużych zbiorów danych, wychwytując złożone wzorce i zależności przestrzenne. Mimo wysokiej skuteczności, tego typu podejścia mają swoje ograniczenia – wymagają dużej mocy obliczeniowej, są podatne na błędy przy nietypowych danych wejściowych, a ich efektywność jest ściśle związana z jakością i zakresem danych użytych do treningu.
-
-\begin{minipage}[t]{\textwidth}
-\textbf{Wady i ograniczenia:}
-\begin{itemize}
-  \item Brak absolutnej skali – z jednego obrazu nie można jednoznacznie wywnioskować rzeczywistej odległości.
-
-  \item Trudności w teksturowo jednorodnych obszarach – gdzie brak cech uniemożliwia dobre przewidywanie.
-
-  \item Problemy z generalizacją – modele trenowane na jednej dziedzinie mogą słabo działać na innych.
-
-  \item Dynamiczne sceny i obiekty poruszające się niezależnie od kamery – zaburzają proces estymacji.
-\end{itemize}
-\end{minipage}
-
-
-\subsubsection{Stereo Vision}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-Wizja stereoskopowa (lub stereowizja) to technika polegająca na wykorzystaniu dwóch (lub więcej) obrazów tej samej sceny, uchwyconych z nieco innych punktów widzenia, do wyodrębnienia informacji przestrzennych. Jest to jedno z najstarszych i najintensywniej badanych podejść do estymacji głębi, inspirowane sposobem, w jaki ludzkie oczy – jako dwa przesunięte względem siebie punkty obserwacyjne – postrzegają świat trójwymiarowy.
-
-W odróżnieniu od wizji monokularnej, stereowizja oferuje geometrycznie uzasadnioną możliwość bezpośredniego obliczenia głębokości, co czyni ją bardzo atrakcyjną w aplikacjach wymagających wysokiej dokładności. W tym rozdziale przedstawiono podstawy matematyczne wizji stereo, klasyczne i współczesne metody obliczania głębi, a także omówiono praktyczne zastosowania i ograniczenia tej technologii.
-
-W systemie stereowizyjnym wykorzystuje się dwa obrazy uchwycone przez kamery umieszczone w znanej odległości od siebie (baza stereo). Podstawowym pojęciem jest paralaksa – przesunięcie obrazu tego samego punktu sceny pomiędzy obrazami lewego i prawego oka/kamery.
-
-Zakładając idealną konfigurację (kamery wyrównane, płaszczyzny obrazu równoległe), głębokość $Z$ danego punktu sceny można obliczyć ze wzoru:
-\[
-z = \frac{f \cdot B}{d}
-\]
-\begin{itemize}
-  \item $f$ - ogniskowa kamery.
-  \item $B$ - odległość między kamerami.
-  \item $d$ - przesunięcie danego punktu w obrazie lewym względem prawego.
-\end{itemize}
-
-Im większe $d$, tym mniejsza głębokość – obiekty bliżej kamery mają większe przesunięcie między obrazami.
-
-\begin{minipage}[t]{\textwidth}
-\textbf{Wady i ograniczenia:}
-\begin{itemize}
-  \item Wymóg kalibracji i synchronizacji kamer – błędy w tym zakresie przekładają się bezpośrednio na błędną głębokość.
-
-  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
-
-  \item Problemy przy silnym oświetleniu i odbiciach – zmienność intensywności zaburza dopasowanie.
-
-  \item Duży koszt obliczeniowy – szczególnie w przypadku metod globalnych lub opartych na deep learningu.
-
-  \item Widzenie tylko z jednej perspektywy – martwe strefy między kamerami lub poza polem widzenia jednej z nich.
-\end{itemize}
-\end{minipage}
-
-\subsubsection{Time-of-Flight (ToF)}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/TOF-IR.jpg}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-Time-of-Flight (ToF) to technologia, która służy do mierzenia odległości za pomocą światła, wysyłając impuls świetlny (zwykle w postaci podczerwieni) i rejestrując czas, jaki upływa, zanim światło odbije się od obiektu i wróci do czujnika. Dzięki temu możliwe jest uzyskanie dokładnych pomiarów odległości w czasie rzeczywistym.
-
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Zalety:}
-\begin{itemize}
-  \item Precyzyjne pomiary – ToF pozwala na bardzo dokładne pomiary odległości, nawet w trudnych warunkach, takich jak słabe oświetlenie.
-
-  \item Szybkość – Technologie ToF oferują bardzo szybkie pomiary, co jest przydatne w systemach wymagających analizy danych w czasie rzeczywistym, np. w robotyce czy samochodach autonomicznych.
-
-  \item Wielozadaniowość – Dzięki ToF możliwe jest uzyskanie mapy głębi w czasie rzeczywistym, co może być użyteczne w takich dziedzinach jak rozpoznawanie twarzy, zautomatyzowane rozpoznawanie obiektów, monitorowanie przestrzeni 3D itp.
-
-  \item Wydajność przy różnych warunkach oświetleniowych – Technologia działa dobrze zarówno w pełnym słońcu, jak i w ciemności, co czyni ją bardziej wszechstronną w porównaniu do innych metod pomiarów odległości, takich jak lidar czy radar.
-\end{itemize}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Wady:}
-\begin{itemize}
-  \item Czułość na zakłócenia – ToF może być wrażliwa na różne źródła zakłóceń, takie jak silne światło zewnętrzne, np. słońce, które może wpłynąć na dokładność pomiaru.
-
-  \item Ograniczenia w zasięgu – Chociaż ToF oferuje szybkie pomiary, jego zasięg jest ograniczony, a czujniki mogą mieć problemy w przypadku większych odległości.
-
-  \item Jakość obrazu – W niektórych zastosowaniach, jak np. kamera 3D, ToF może generować dane o niższej jakości w porównaniu do innych technologii, takich jak stereo-vision, szczególnie w warunkach złożonych.
-
-  \item Koszt – Zaawansowane czujniki ToF, zwłaszcza te o dużej rozdzielczości, mogą być dość drogie, co może stanowić barierę w masowym wdrożeniu.
-\end{itemize}
-\end{minipage}
-
-\subsubsection{Structured Light}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/POINTCLOUD.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-Structured Light (światło strukturalne) to technologia wykorzystywana do pomiaru głębi i tworzenia map 3D obiektów. Polega na projekcji wzorca świetlnego (np. linii, siatki, wzorów) na powierzchnię obiektu, a następnie analizie deformacji tego wzorca przez czujnik kamery. Na podstawie tych deformacji obliczane są odległości punktów na powierzchni obiektu, co pozwala na stworzenie mapy głębi.
-
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Zalety:}
-\begin{itemize}
-  \item Wysoka dokładność – Dzięki projekcji specyficznych wzorców świetlnych, ta metoda może zapewnić bardzo dokładne pomiary głębi, szczególnie w porównaniu do innych technologii, takich jak stereo vision.
-
-  \item Szybkość pomiarów – Structured Light pozwala na szybkie tworzenie map 3D, co jest szczególnie przydatne w aplikacjach wymagających analizy w czasie rzeczywistym, jak np. w systemach rozpoznawania twarzy, analizie powierzchni itp.
-
-  \item Dobre działanie w kontrolowanych warunkach – W przypadku dobrze oświetlonych i kontrolowanych warunków (np. w laboratoriach, produkcji), structured light może zapewnić bardzo wysoką jakość obrazu 3D.
-
-  \item Kompatybilność z kamerami RGB – Technologia może być używana w połączeniu z tradycyjnymi kamerami RGB, co pozwala na łatwiejsze połączenie danych o głębi z obrazami kolorowymi.
-\end{itemize}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Wady:}
-\begin{itemize}
-  \item Wrażliwość na oświetlenie – Structured Light jest wrażliwa na zmieniające się warunki oświetleniowe, zwłaszcza w przypadku silnego, niejednorodnego oświetlenia lub cieni. Może to prowadzić do błędów w pomiarach.
-
-  \item Ograniczona skuteczność na dużych odległościach – Zasięg systemów Structured Light jest zwykle ograniczony do kilku metrów, co sprawia, że nie nadają się one dobrze do pomiarów w dużych przestrzeniach lub na dużych odległościach.
-
-  \item Problemy z teksturami powierzchni – Obiekty o gładkich powierzchniach lub o jednorodnym kolorze mogą sprawiać trudności, ponieważ brak wyraźnych cech do analizy może prowadzić do mniej dokładnych pomiarów.
-
-  \item Złożoność systemu – Aby uzyskać dokładne pomiary, systemy Structured Light wymagają zaawansowanego sprzętu do projekcji wzorców i rejestracji obrazu, co może podnieść koszt urządzenia.
-\end{itemize}
-\end{minipage}
-
-\subsubsection{LIDAR (Light Detection and Ranging)}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/LIDAR.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-LIDAR (Light Detection and Ranging) to technologia zdalnego pomiaru odległości, która działa poprzez wysyłanie impulsów laserowych i mierzenie czasu, jaki upływa od ich odbicia od obiektu do powrotu do sensora. Na tej podstawie LIDAR tworzy bardzo dokładne mapy 3D otoczenia.
-
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Zalety:}
-\begin{itemize}
-  \item Bardzo wysoka dokładność – LIDAR potrafi tworzyć szczegółowe modele 3D otoczenia z dokładnością rzędu centymetrów lub milimetrów.
-
-  \item Długi zasięg – Niektóre systemy LIDAR mogą mierzyć odległości na setki metrów, co sprawia, że są bardzo przydatne w samochodach autonomicznych, dronach i mapowaniu terenu.
-
-  \item Działa w nocy – Ponieważ LIDAR używa własnego źródła światła (lasera), działa niezależnie od oświetlenia zewnętrznego, także w całkowitej ciemności.
-
-  \item Wysoka częstotliwość pomiaru – LIDAR może zbierać dane bardzo szybko, co jest istotne w systemach czasu rzeczywistego, np. podczas jazdy.
-
-  \item Tworzenie map 3D – Idealnie nadaje się do tworzenia chmur punktów i modeli przestrzennych w 3D, np. w kartografii czy inżynierii.
-\end{itemize}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Wady:}
-\begin{itemize}
-  \item Wysoki koszt – Profesjonalne systemy LIDAR są kosztowne, co ogranicza ich zastosowanie w tanich produktach konsumenckich.
-
-  \item Wrażliwość na warunki atmosferyczne – Deszcz, mgła, śnieg czy kurz mogą zaburzyć pomiary lub obniżyć ich dokładność.
-
-  \item Rozmiar i waga – Choć istnieją miniaturowe wersje, wiele dokładnych systemów LIDAR jest nadal dość duże i ciężkie.
-
-  \item Brak informacji o kolorze/teksturze – LIDAR dostarcza dane o odległości (głębi), ale nie zawiera informacji o kolorze czy wyglądzie powierzchni (w przeciwieństwie do kamer).
-
-\item Ograniczenia w odbiciach od niektórych materiałów – Niektóre powierzchnie, np. czarne lub bardzo błyszczące, mogą słabo odbijać laser, co pogarsza pomiar.
-\end{itemize}
-\end{minipage}
-
-\subsubsection{Event Cameras (Neuromorphic sensors)}
-Capture changes in intensity over time (not full frames).
-
-Can be used for depth estimation when combined with motion.
 
 \section{Natura kamery}
 
@@ -448,6 +227,255 @@ x_{\text{corrected}} &= x + \left[2p_1 y + p_2 (r^2 + 2x^2)\right] \\
 y_{\text{corrected}} &= y + \left[p_1 (r^2 + 2y^2) + 2p_2 x\right]
 \end{align*}
 
+\section{Rodzaje kamer i technik używane do estymacji głębi}
+
+\subsection{Monocular Vision}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.2\textwidth]{images/MONO.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Monocular vision (widzenie monokularne) to technika pozyskiwania informacji wizualnych przy użyciu tylko jednej kamery, czyli takiej, która rejestruje obraz z pojedynczego punktu widzenia — podobnie jak jedno oko u człowieka.
+W przypadku obrazu monokularnego, każdy piksel dostarcza jedynie informacji o jasności i kolorze w płaszczyźnie 2D. Brakuje natomiast bezpośredniej informacji o głębokości, czyli odległości od kamery. Z tego względu estymacja głębi z pojedynczego obrazu jest niedookreślonym problemem inwersyjnym – wiele różnych trójwymiarowych scen może prowadzić do identycznej projekcji 2D.
+
+Aby rozwiązać ten problem, konieczne jest wprowadzenie priorytetów – dodatkowych założeń na temat struktury świata, geometrii sceny lub charakterystyki obiektów. Przykładowe priorytety to:
+
+\begin{itemize}
+  \item Zakładanie horyzontalności podłoża i pionowości ścian.
+
+  \item Regularność obiektów (np. ludzie mają podobną wysokość).
+
+  \item Perspektywa (linie zbiegające się w punkcie zbiegu sugerują głębię).
+
+  \item Znajomość statystycznych regularności obrazów.
+\end{itemize}
+
+Z matematycznego punktu widzenia, obraz monokularny powstaje na skutek rzutowania sceny trójwymiarowej na płaszczyznę dwuwymiarową za pomocą rzutowania perspektywicznego. Każdy punkt $P = (X,Y,Z)$ w przestrzeni 3D odwzorowany jest na punkt $p = (x,y)$ w obrazie 2D zgodnie z wzorami:
+
+\[
+x = f \cdot \frac{X}{Z}, \quad
+y = f \cdot \frac{Y}{Z}
+\]
+
+gdzie $f$ to ogniskowa kamery, a $Z$ to głębokość. Zauważmy, że głębokość $Z$ znajduje się w mianowniku, co oznacza, że jej zmiany mają kluczowy wpływ na rozmiar i położenie obiektów na obrazie.
+
+W kontekście wizji monokularnej, głębokie uczenie odgrywa kluczową rolę, umożliwiając estymację głębi, rekonstrukcję scen 3D czy detekcję obiektów na podstawie pojedynczego obrazu. Zamiast polegać na klasycznych metodach geometrycznych, takich jak triangulacja czy analiza ruchu, sieci neuronowe uczą się z dużych zbiorów danych, wychwytując złożone wzorce i zależności przestrzenne. Mimo wysokiej skuteczności, tego typu podejścia mają swoje ograniczenia – wymagają dużej mocy obliczeniowej, są podatne na błędy przy nietypowych danych wejściowych, a ich efektywność jest ściśle związana z jakością i zakresem danych użytych do treningu.
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
+\begin{itemize}
+  \item Brak absolutnej skali – z jednego obrazu nie można jednoznacznie wywnioskować rzeczywistej odległości.
+
+  \item Trudności w teksturowo jednorodnych obszarach – gdzie brak cech uniemożliwia dobre przewidywanie.
+
+  \item Problemy z generalizacją – modele trenowane na jednej dziedzinie mogą słabo działać na innych.
+
+  \item Dynamiczne sceny i obiekty poruszające się niezależnie od kamery – zaburzają proces estymacji.
+\end{itemize}
+\end{minipage}
+
+\subsection{Stereo Vision}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Wizja stereoskopowa (lub stereowizja) to technika polegająca na wykorzystaniu dwóch (lub więcej) obrazów tej samej sceny, uchwyconych z nieco innych punktów widzenia, do wyodrębnienia informacji przestrzennych. Jest to jedno z najstarszych i najintensywniej badanych podejść do estymacji głębi, inspirowane sposobem, w jaki ludzkie oczy – jako dwa przesunięte względem siebie punkty obserwacyjne – postrzegają świat trójwymiarowy.
+
+W odróżnieniu od wizji monokularnej, stereowizja oferuje geometrycznie uzasadnioną możliwość bezpośredniego obliczenia głębokości, co czyni ją bardzo atrakcyjną w aplikacjach wymagających wysokiej dokładności. W tym rozdziale przedstawiono podstawy matematyczne wizji stereo, klasyczne i współczesne metody obliczania głębi, a także omówiono praktyczne zastosowania i ograniczenia tej technologii.
+
+W systemie stereowizyjnym wykorzystuje się dwa obrazy uchwycone przez kamery umieszczone w znanej odległości od siebie (baza stereo). Podstawowym pojęciem jest paralaksa – przesunięcie obrazu tego samego punktu sceny pomiędzy obrazami lewego i prawego oka/kamery.
+
+Zakładając idealną konfigurację (kamery wyrównane, płaszczyzny obrazu równoległe), głębokość $Z$ danego punktu sceny można obliczyć ze wzoru:
+\[
+z = \frac{f \cdot B}{d}
+\]
+\begin{itemize}
+  \item $f$ - ogniskowa kamery.
+  \item $B$ - odległość między kamerami.
+  \item $d$ - przesunięcie danego punktu w obrazie lewym względem prawego.
+\end{itemize}
+
+Im większe $d$, tym mniejsza głębokość – obiekty bliżej kamery mają większe przesunięcie między obrazami.
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
+\begin{itemize}
+  \item Wymóg kalibracji i synchronizacji kamer – błędy w tym zakresie przekładają się bezpośrednio na błędną głębokość.
+
+  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
+
+  \item Problemy przy silnym oświetleniu i odbiciach – zmienność intensywności zaburza dopasowanie.
+
+  \item Duży koszt obliczeniowy – szczególnie w przypadku metod globalnych lub opartych na deep learningu.
+
+  \item Widzenie tylko z jednej perspektywy – martwe strefy między kamerami lub poza polem widzenia jednej z nich.
+\end{itemize}
+\end{minipage}
+
+\subsection{Structured Light}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/POINTCLOUD.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+Structured Light (pol. światło strukturalne) to technika aktywnej wizji komputerowej wykorzystywana do precyzyjnego pomiaru kształtu i głębokości obiektów. Polega na projekcji znanego wzorca świetlnego (np. siatki, kropek, pasków) na powierzchnię sceny, a następnie analizie deformacji tego wzorca za pomocą kamery. Technologia ta jest szeroko stosowana w systemach 3D skanowania, rozpoznawania gestów, robotyce, a także w popularnych urządzeniach konsumenckich, takich jak Kinect v1
+
+System Structured Light składa się zazwyczaj z dwóch komponentów:
+
+\begin{itemize}
+  \item Projektora – emituje wzorzec świetlny (np. siatkę punktów lub paski) na obserwowaną scenę.
+
+  \item Kamery – rejestruje zniekształcony wzorzec po odbiciu od obiektów w przestrzeni.
+\end{itemize}
+
+Proces działa następująco:
+
+\begin{enumerate}
+  \item Znany wzorzec zostaje wyświetlony na scenie.
+
+  \item Gdy wzorzec napotyka obiekty o różnych kształtach i odległościach, zostaje geometrycznie zniekształcony.
+
+  \item Kamera rejestruje te deformacje.
+
+  \item System porównuje zarejestrowany obraz wzorca ze wzorcem referencyjnym, który byłby widoczny na płaskiej powierzchni.
+
+  \item Na podstawie różnic (tzw. disparity) obliczana jest głębokość – za pomocą triangulacji.
+\end{enumerate}
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
+\begin{itemize}
+  \item W jasnym świetle dziennym (szczególnie na zewnątrz), wzorzec świetlny może zostać zaburzony lub całkowicie zaniknąć – szczególnie jeśli działa w paśmie IR.
+
+  \item Technika najlepiej sprawdza się na krótkich dystansach (0,5–2 m). Dalsze obiekty dają mniej wyraźne zniekształcenia wzorca.
+
+  \item Szkło, lustra, woda lub powierzchnie metaliczne mogą zaburzyć wzorzec lub wprowadzać wielokrotne odbicia.
+
+  \item Projektor i kamera muszą być precyzyjnie skalibrowane względem siebie – błędy kalibracji mogą znacząco wpłynąć na jakość głębi.
+
+  \item Gdy wzorzec nie dotrze do części sceny (np. w załomach, pod kątem), pomiar głębokości w tych miejscach będzie niemożliwy.
+\end{itemize}
+\end{minipage}
+
+\subsection{LIDAR (Light Detection and Ranging)}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/LIDAR.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
+
+LIDAR (Light Detection and Ranging) to technologia zdalnego pomiaru odległości, która działa poprzez wysyłanie impulsów laserowych i mierzenie czasu, jaki upływa od ich odbicia od obiektu do powrotu do sensora. Na tej podstawie LIDAR tworzy bardzo dokładne mapy 3D otoczenia.
+
+Podstawowy mechanizm działania LiDAR opiera się na bardzo prostej zasadzie:
+
+Sensor emituje impuls laserowy w kierunku otoczenia.
+
+Światło odbija się od powierzchni obiektów i wraca do detektora.
+
+System mierzy czas, jaki upłynął od wysłania do odebrania sygnału (Time-of-Flight, ToF).
+
+Znając prędkość światła, obliczana jest dokładna odległość:
+
+\begin{itemize}
+  \item Sensor emituje impuls laserowy w kierunku otoczenia.
+  \item Światło odbija się od powierzchni obiektów i wraca do detektora.
+  \item System mierzy czas, jaki upłynął od wysłania do odebrania sygnału (Time-of-Flight, ToF).
+  \item Znając prędkość światła, obliczana jest dokładna odległość:
+    \[
+    d = \frac{c \cdot \Delta t}{2}
+    \]
+
+  gdzie:
+  \begin{align*}
+  d &- \text{odległość do obiektu} \\
+  c &- \text{prędkość światła (ok. } 3 \cdot 10^8 \, \text{m/s)} \\
+  \Delta t &- \text{czas przelotu sygnału}
+  \end{align*} 
+\end{itemize}
+
+LiDAR-y mogą wykonywać takie pomiary miliony razy na sekundę, skanując środowisko w 2D (jeden plan) lub 3D (pełna chmura punktów).
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
+\begin{itemize}
+  \item Mgła, deszcz, śnieg i kurz mogą zakłócać odbicie promieni lasera, co wpływa na dokładność pomiarów.
+
+  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
+
+  \item LiDAR rejestruje wyłącznie dane geometryczne – nie dostarcza żadnych informacji o kolorze czy teksturze powierzchni.
+
+  \item W porównaniu do kamer, LiDAR-y mają stosunkowo rzadką siatkę pomiarową, co skutkuje niższą rozdzielczością przy dużych odległościach (np. obiekt 100 m dalej może być opisany przez kilka punktów).
+
+  \item Bardzo ciemne lub przezroczyste powierzchnie (np. szyby) mogą słabo odbijać impulsy lasera lub w ogóle je przepuszczać.
+\end{itemize}
+\end{minipage}
+
+\subsection{Kamery zdarzeniowe}
+
+Kamery zdarzeniowe (ang. Event Cameras) to innowacyjne sensory wizyjne, które różnią się fundamentalnie od tradycyjnych kamer opartych na matrycy CMOS. Zamiast przechwytywać obraz w sposób klatkowy (frame-based), rejestrują one zmiany jasności na poziomie pojedynczych pikseli, co pozwala na znacznie wyższą rozdzielczość czasową i lepszą reakcję na dynamiczne sceny. Dzięki temu technologia ta znajduje coraz szersze zastosowanie w systemach robotycznych, autonomicznych pojazdach, AR/VR i przetwarzaniu sygnałów w czasie rzeczywistym.
+
+W tradycyjnych kamerach każda klatka rejestrowana jest w określonym interwale czasowym, co powoduje powstawanie rozmycia ruchu i dużego opóźnienia w dynamicznych scenach. Kamery zdarzeniowe działają zupełnie inaczej:
+
+Każdy piksel działa niezależnie i stale monitoruje zmiany lokalnej jasności.
+
+Gdy zmiana przekroczy ustalony próg (np. 10% zmiany jasności), piksel generuje tzw. zdarzenie (event).
+
+Zdarzenie zawiera informację o:
+
+\begin{itemize}
+  \item położeniu piksela (x, y),
+
+  \item czasie zdarzenia (z dokładnością do mikrosekund),
+
+  \item polaryzacji zmiany (jasność wzrosła lub zmalała).
+\end{itemize}
+
+Dzięki temu kamera generuje strumień asynchronicznych zdarzeń, a nie szereg klatek. Przykładami takich kamer są m.in. DVS (Dynamic Vision Sensor), DAVIS (łączący klasyczną kamerę z kamerą zdarzeniową) oraz CeleX.
+
+Brak informacji o statycznych obiektach: jeśli scena się nie zmienia, kamera nie generuje zdarzeń – co utrudnia pełną rekonstrukcję otoczenia.
+
+Trudności w przetwarzaniu danych: strumień zdarzeń ma inną strukturę niż klasyczne obrazy – wymaga specjalnych algorytmów i często dedykowanego sprzętu (np. FPGA).
+
+Niska rozdzielczość przestrzenna: w porównaniu do tradycyjnych kamer, choć technologia ta dynamicznie się rozwija.
+
+Szum przy słabym oświetleniu: niektóre sensory są bardziej podatne na fałszywe zdarzenia w nocy lub w ciemnych pomieszczeniach.
+
+Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komercyjnie.
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
+\begin{itemize}
+  \item Wymóg kalibracji i synchronizacji kamer – błędy w tym zakresie przekładają się bezpośrednio na błędną głębokość.
+
+  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
+
+  \item Problemy przy silnym oświetleniu i odbiciach – zmienność intensywności zaburza dopasowanie.
+
+  \item Duży koszt obliczeniowy – szczególnie w przypadku metod globalnych lub opartych na deep learningu.
+
+  \item Widzenie tylko z jednej perspektywy – martwe strefy między kamerami lub poza polem widzenia jednej z nich.
+\end{itemize}
+\end{minipage}
+
+
+
+\section{Opis projektu}
 
 \section{Obrazowanie stereoskopowe}
 
@@ -579,9 +607,6 @@ R = R_r R_l^T & \quad T = T_r - R T_l
 \end{array}
 \]
 
-
-
-
 \subsection{Rektyfikacja stereo}
 
 Dotychczas zajmowaliśmy się tematem „kalibracji stereo”. Chodziło o
@@ -672,46 +697,7 @@ równania, które zostało znalezione eksperymentalnie, możemy zmierzyć odleg�
 pomiar. Na końcu używany jest filtr WLS, aby lepiej rozpoznawać krawędzie obiektów.
 rozpoznać krawędzie obiektów.
 
-\subsection{Wykorzystane pakiety}
-
-Do programu zaimportowano następujące pakiety:
-- Wersja OpenCV.3.2.0 z opencv-contrib (zawiera funkcje stereo) jako.
-„cv2” w Pythonie, zawiera:
-o bibliotekę do przetwarzania obrazów
-o funkcje do stereowizji
-- Numpy.1.12.
-o Używany do operacji na macierzach (obrazy składają się z macierzy)
-- Skoroszyt z openpyxl
-o Pakiet umożliwiający zapisywanie danych w pliku Excel
-- „normalizacja” biblioteki sklearn 0.18.1
-o sklearn umożliwia uczenie maszynowe, ale w tym projekcie używany jest
-tylko filtr WLS
-
-\subsection{Główna pętla}
-
-Aby pracować z kamerami, należy je najpierw aktywować. Funkcja
-cv2.VideoCapture() aktywuje obie kamery poprzez wprowadzenie numeru portu każdej z nich.
-kamery (w programie tworzone są dwa obiekty korzystające z metod klasy cv2.VideoCapture()).
-klasy cv2.VideoCapture()).
-
-Aby uzyskać obraz z kamer, używana jest metoda cv2.VideoCapture().read()
-Wyjściem jest obraz sceny, którą kamera ogląda w momencie wywołania tej funkcji.
-funkcja jest wywoływana. Aby uzyskać obraz wideo, należy wywołać tę metodę
-w nieskończonej pętli. Aby być bardziej wydajnym, zaleca się
-aby przekonwertować obrazy BGR na obrazy w odcieniach szarości, odbywa się to za pomocą funkcji cv2.cvtColor()
-funkcja.
-
-Aby wyświetlić wideo na komputerze, używana jest funkcja cv2.imshow().
-aby otworzyć okno, w którym można wyświetlić wideo.
-
-Przerwanie służy do wyjścia z nieskończonej pętli. Staje się ona aktywna
-za każdym razem, gdy użytkownik naciśnie spację. Rozpoznanie, że klawisz został naciśnięty
-jest rozpoznawane dzięki funkcji cv2.waitKey().
-Wreszcie, dwie używane kamery muszą zostać dezaktywowane za pomocą metody
-cv2.VideoCapture().release(), a otwarte okna są niszczone za pomocą funkcji
-cv2.destroyAllWindows().
-
-\subsection{Funkcjonalność programu „Take-images-for-calibration.py”}
+\subsection{Kalibracja kamery}
 
 Po uruchomieniu tego programu obie kamery stają się aktywne i otwierane są dwa okna.
 aby użytkownik mógł zobaczyć, gdzie na obrazach znajduje się szachownica.
@@ -769,7 +755,7 @@ Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą 
 cv2.cornerSubPix().
 
 \subsubsection{Pozyskiwanie obrazów do kalibracji}
-\subsection{Funkcjonalność programu „Main-Stereo-Vision-Prog.py”}
+\subsection{Główny algorytm}
 \subsubsection{Kalibracja zniekształceń}
 \subsubsection{Kalibracja kamery stereo}
 \subsubsection{Obliczanie mapy rozbieżności}

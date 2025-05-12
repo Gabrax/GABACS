@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  6 MAY 2025 21:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  12 MAY 2025 23:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -227,25 +227,19 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__pdf_internal_box=\box55
 ) (wzor.aux
 
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
 LaTeX Warning: Label `fig:rpi' multiply defined.
 
 
 LaTeX Warning: Label `fig:rpi' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
+
+
+LaTeX Warning: Label `fig:mono' multiply defined.
 
 
 LaTeX Warning: Label `fig:rpi' multiply defined.
@@ -351,10 +345,10 @@ Rozdzia\PlPrIeC {\l } 1.
 ]
 Rozdzia\PlPrIeC {\l } 2.
 
-LaTeX Warning: Citation `Kostrykin' on page 7 undefined on input line 99.
+LaTeX Warning: Citation `Kostrykin' on page 7 undefined on input line 101.
 
 
-LaTeX Warning: Citation `Lang' on page 7 undefined on input line 99.
+LaTeX Warning: Citation `Lang' on page 7 undefined on input line 101.
 
 
 
@@ -364,246 +358,139 @@ LaTeX Warning: Citation `Lang' on page 7 undefined on input line 99.
 
 ]
 Rozdzia\PlPrIeC {\l } 3.
-<images/MONO.png, id=37, 359.3425pt x 313.17pt>
-File: images/MONO.png Graphic file (type png)
-<use images/MONO.png>
-Package pdftex.def Info: images/MONO.png  used on input line 135.
-(pdftex.def)             Requested size: 88.2022pt x 76.86829pt.
-
-
-[9 <./images/MONO.png>]
+<images/light.png, id=37, 401.5pt x 274.02374pt>
+File: images/light.png Graphic file (type png)
+<use images/light.png>
+Package pdftex.def Info: images/light.png  used on input line 135.
+(pdftex.def)             Requested size: 220.50887pt x 150.50027pt.
 LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
-48.
-
+45.
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 )
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 168--180
+
+[9{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.
+enc} <./images/light.png>]
+<images/pinhole.png, id=43, 315.42844pt x 130.23656pt>
+File: images/pinhole.png Graphic file (type png)
+<use images/pinhole.png>
+Package pdftex.def Info: images/pinhole.png  used on input line 169.
+(pdftex.def)             Requested size: 220.50887pt x 91.04573pt.
+<images/barrel.png, id=44, 1027.84pt x 1027.84pt>
+File: images/barrel.png Graphic file (type png)
+<use images/barrel.png>
+Package pdftex.def Info: images/barrel.png  used on input line 200.
+(pdftex.def)             Requested size: 132.30666pt x 132.30647pt.
+
+
+[10 <./images/pinhole.png>]
+<images/MONO.png, id=51, 359.3425pt x 313.17pt>
+File: images/MONO.png Graphic file (type png)
+<use images/MONO.png>
+Package pdftex.def Info: images/MONO.png  used on input line 236.
+(pdftex.def)             Requested size: 88.2022pt x 76.86829pt.
+
+Underfull \vbox (badness 2293) has occurred while \output is active []
+
+
+
+[11 <./images/barrel.png>]
+
+[12 <./images/MONO.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 268--280
 [][] 
  []
 
-
-Underfull \vbox (badness 2426) has occurred while \output is active []
-
-
-
-[10{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
-.enc}]
-<images/MAINSTEREO.png, id=46, 788.9475pt x 207.77625pt>
+<images/MAINSTEREO.png, id=61, 788.9475pt x 207.77625pt>
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 186.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 285.
 (pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
-Overfull \hbox (8.93008pt too wide) in paragraph at lines 196--197
+
+[13 <./images/MAINSTEREO.png>]
+Overfull \hbox (8.93008pt too wide) in paragraph at lines 295--296
 []\T1/qtm/m/n/12 W sys-te-mie ste-reo-wi-zyj-nym wy-ko-rzy-stu-je si¦ dwa ob-ra
 -zy uchwy-co-ne przez ka-me-ry umiesz-
  []
 
 
-Overfull \hbox (20.11821pt too wide) in paragraph at lines 196--197
+Overfull \hbox (20.11821pt too wide) in paragraph at lines 295--296
 \T1/qtm/m/n/12 prze-su-ni¦-cie ob-ra-zu te-go sa-me-go punk-tu sce-ny po-mi¦-dz
 y ob-ra-za-mi le-we-go i pra-we-go oka/kamery. 
  []
 
 
-
-[11 <./images/MAINSTEREO.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 210--224
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 309--323
 [][] 
  []
 
-<images/TOF-IR.jpg, id=51, 2569.6pt x 1713.40125pt>
-File: images/TOF-IR.jpg Graphic file (type jpg)
-<use images/TOF-IR.jpg>
-Package pdftex.def Info: images/TOF-IR.jpg  used on input line 229.
-(pdftex.def)             Requested size: 220.50887pt x 147.00975pt.
-
-Underfull \hbox (badness 2334) in paragraph at lines 244--245
-[]\T1/qtm/m/n/12 Wielozadaniowo±¢ ^^U Dzi¦-ki ToF
- []
-
-
-Underfull \hbox (badness 3000) in paragraph at lines 246--247
-[]\T1/qtm/m/n/12 Wydajno±¢ przy ró»-nych wa-run-
- []
-
-
-Underfull \hbox (badness 1337) in paragraph at lines 257--258
-\T1/qtm/m/n/12 vision, szcze-gól-nie w wa-run-kach
- []
-
-
-Underfull \hbox (badness 3838) in paragraph at lines 259--260
-[]\T1/qtm/m/n/12 Koszt ^^U Za-awan-so-wa-ne czuj-ni-ki
- []
-
-
-
-[12 <./images/TOF-IR.jpg>]
-<images/POINTCLOUD.png, id=55, 2441.12pt x 722.7pt>
+<images/POINTCLOUD.png, id=67, 2441.12pt x 722.7pt>
 File: images/POINTCLOUD.png Graphic file (type png)
 <use images/POINTCLOUD.png>
-Package pdftex.def Info: images/POINTCLOUD.png  used on input line 267.
+Package pdftex.def Info: images/POINTCLOUD.png  used on input line 328.
 (pdftex.def)             Requested size: 220.50887pt x 65.27176pt.
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 278--279
-[]\T1/qtm/m/n/12 Wysoka do-kªad-no±¢ ^^U Dzi¦-ki
- []
-
-
-Underfull \hbox (badness 3088) in paragraph at lines 278--279
-\T1/qtm/m/n/12 pro-jek-cji spe-cy-ficz-nych wzor-ców
- []
-
-
-Underfull \hbox (badness 2884) in paragraph at lines 278--279
-\T1/qtm/m/n/12 ±wietl-nych, ta me-to-da mo-»e za-
- []
-
-
-Underfull \hbox (badness 1502) in paragraph at lines 278--279
-\T1/qtm/m/n/12 gª¦-bi, szcze-gól-nie w po-rów-na-niu
- []
-
-
-Underfull \hbox (badness 1028) in paragraph at lines 280--281
-[]\T1/qtm/m/n/12 Szybko±¢ po-mia-rów ^^U Struc-tu-red
- []
-
-
-Underfull \hbox (badness 3919) in paragraph at lines 280--281
-\T1/qtm/m/n/12 np. w sys-te-mach roz-po-zna-wa-nia
- []
-
-
-Underfull \hbox (badness 3323) in paragraph at lines 291--292
-\T1/qtm/m/n/12 nia-j¡-ce si¦ wa-run-ki o±wie-tle-nio-
- []
-
-
-Underfull \hbox (badness 2435) in paragraph at lines 291--292
-\T1/qtm/m/n/12 we, zwªasz-cza w przy-pad-ku sil-
- []
-
-
-Underfull \hbox (badness 2495) in paragraph at lines 293--294
-[]\T1/qtm/m/n/12 Ograniczona sku-tecz-no±¢ na du-
- []
-
-
-Underfull \hbox (badness 1755) in paragraph at lines 295--296
-\T1/qtm/m/n/12 brak wy-ra¹-nych cech do ana-li-zy
- []
-
-
-
-[13]
-Overfull \vbox (4.6728pt too high) has occurred while \output is active []
-
-
-
 [14 <./images/POINTCLOUD.png>]
-<images/LIDAR.png, id=64, 290.08376pt x 290.08376pt>
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 358--372
+[][] 
+ []
+
+<images/LIDAR.png, id=72, 290.08376pt x 290.08376pt>
 File: images/LIDAR.png Graphic file (type png)
 <use images/LIDAR.png>
-Package pdftex.def Info: images/LIDAR.png  used on input line 305.
+Package pdftex.def Info: images/LIDAR.png  used on input line 377.
 (pdftex.def)             Requested size: 220.50887pt x 220.5102pt.
 
-Underfull \hbox (badness 1082) in paragraph at lines 318--319
-[]\T1/qtm/m/n/12 Dªugi za-si¦g ^^U Nie-któ-re sys-te-my
+
+[15]
+
+[16 <./images/LIDAR.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 414--428
+[][] 
  []
 
 
-Underfull \hbox (badness 1168) in paragraph at lines 318--319
-\T1/qtm/m/n/12 LI-DAR mo-g¡ mie-rzy¢ od-le-gªo-±ci
+
+[17]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 461--475
+[][] 
  []
 
 
-Underfull \hbox (badness 1584) in paragraph at lines 322--323
-[]\T1/qtm/m/n/12 Wysoka cz¦-sto-tli-wo±¢ po-mia-ru ^^U
- []
 
-
-Underfull \hbox (badness 2027) in paragraph at lines 331--332
-\T1/qtm/m/n/12 ni-cza ich za-sto-so-wa-nie w ta-nich
- []
-
-
-Underfull \hbox (badness 1694) in paragraph at lines 333--334
-[]\T1/qtm/m/n/12 Wra»liwo±¢ na wa-run-ki at-mos-fe-
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[15 <./images/LIDAR.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[16]
-<images/light.png, id=72, 401.5pt x 274.02374pt>
-File: images/light.png Graphic file (type png)
-<use images/light.png>
-Package pdftex.def Info: images/light.png  used on input line 356.
-(pdftex.def)             Requested size: 220.50887pt x 150.50027pt.
-
-
-[17 <./images/light.png>]
-<images/pinhole.png, id=77, 315.42844pt x 130.23656pt>
-File: images/pinhole.png Graphic file (type png)
-<use images/pinhole.png>
-Package pdftex.def Info: images/pinhole.png  used on input line 390.
-(pdftex.def)             Requested size: 220.50887pt x 91.04573pt.
-<images/barrel.png, id=78, 1027.84pt x 1027.84pt>
-File: images/barrel.png Graphic file (type png)
-<use images/barrel.png>
-Package pdftex.def Info: images/barrel.png  used on input line 421.
-(pdftex.def)             Requested size: 132.30666pt x 132.30647pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-
-[18 <./images/pinhole.png>]
-
-[19 <./images/barrel.png>]
-<images/triangulation.png, id=91, 227.34938pt x 216.81pt>
+[18]
+<images/triangulation.png, id=86, 227.34938pt x 216.81pt>
 File: images/triangulation.png Graphic file (type png)
 <use images/triangulation.png>
-Package pdftex.def Info: images/triangulation.png  used on input line 473.
+Package pdftex.def Info: images/triangulation.png  used on input line 501.
 (pdftex.def)             Requested size: 220.50887pt x 210.2889pt.
 
 
-[20 <./images/triangulation.png>]
-<images/epipolar.png, id=96, 295.1025pt x 184.43906pt>
+[19 <./images/triangulation.png>]
+<images/epipolar.png, id=92, 295.1025pt x 184.43906pt>
 File: images/epipolar.png Graphic file (type png)
 <use images/epipolar.png>
-Package pdftex.def Info: images/epipolar.png  used on input line 507.
+Package pdftex.def Info: images/epipolar.png  used on input line 535.
 (pdftex.def)             Requested size: 308.71106pt x 192.94907pt.
 
-Overfull \hbox (3.83109pt too wide) in paragraph at lines 513--518
+Overfull \hbox (3.83109pt too wide) in paragraph at lines 541--546
 []\T1/qtm/m/n/12 Powy»szy ob-ra-zek przed-sta-wia mo-del nie-do-sko-na-ªej ka-m
 e-ry ste-reo skªa-da-j¡-cej si¦ z dwóch
  []
 
 
 
-[21 <./images/epipolar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 549--551
+[20 <./images/epipolar.png>]
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 577--579
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--553
+Underfull \hbox (badness 10000) in paragraph at lines 579--581
 
  []
 
@@ -613,47 +500,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 551--553
 
 [23]
 
-[24]
+[24
+
+]
 Rozdzia\PlPrIeC {\l } 4.
-<images/RPI.jpg, id=110, 385.44pt x 252.945pt>
+<images/RPI.jpg, id=109, 385.44pt x 252.945pt>
 File: images/RPI.jpg Graphic file (type jpg)
 <use images/RPI.jpg>
-Package pdftex.def Info: images/RPI.jpg  used on input line 628.
+Package pdftex.def Info: images/RPI.jpg  used on input line 653.
 (pdftex.def)             Requested size: 220.50887pt x 144.70891pt.
-<images/RPI-SPEC.jpg, id=111, 385.44pt x 203.76125pt>
+<images/RPI-SPEC.jpg, id=110, 385.44pt x 203.76125pt>
 File: images/RPI-SPEC.jpg Graphic file (type jpg)
 <use images/RPI-SPEC.jpg>
-Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 636.
+Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 661.
 (pdftex.def)             Requested size: 308.71106pt x 163.19887pt.
-<images/RPI-PIN.jpg, id=112, 1214.5375pt x 644.4075pt>
+<images/RPI-PIN.jpg, id=111, 1214.5375pt x 644.4075pt>
 File: images/RPI-PIN.jpg Graphic file (type jpg)
 <use images/RPI-PIN.jpg>
-Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 644.
+Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 669.
 (pdftex.def)             Requested size: 220.50887pt x 116.99129pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 652.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 677.
 (pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-[25
+[25 <./images/RPI.jpg> <./images/RPI-SPEC.jpg>]
+Underfull \vbox (badness 1721) has occurred while \output is active []
 
- <./images/RPI.jpg> <./images/RPI-SPEC.jpg>]
+
 
 [26 <./images/RPI-PIN.jpg>]
-Overfull \hbox (38.56227pt too wide) in paragraph at lines 692--696
-\T1/qtm/m/n/12 two-rzo-ne s¡ dwa obiek-ty ko-rzy-sta-j¡-ce z me-tod kla-sy cv2.
-VideoCapture()). kla-sy cv2.VideoCapture()). 
- []
-
-
-Overfull \hbox (34.74306pt too wide) in paragraph at lines 726--737
+Overfull \hbox (34.74306pt too wide) in paragraph at lines 712--723
 []\T1/qtm/m/n/12 Program do ro-bie-nia zdj¦¢ do pó¹-niej-szej ka-li-bra-cji no-
 si na-zw¦ ^^RTake-images-for-calibration.py^^Q.
  []
@@ -661,33 +545,26 @@ si na-zw¦ ^^RTake-images-for-calibration.py^^Q.
 
 
 [27]
-Underfull \vbox (badness 4739) has occurred while \output is active []
-
-
 
 [28]
+Rozdzia\PlPrIeC {\l } 5.
 
-[29]
+
+[29
+
+]
 
 [30
 
 ]
-Rozdzia\PlPrIeC {\l } 5.
-
-
-[31]
-
-[32
-
-]
-Overfull \hbox (90.3002pt too wide) in paragraph at lines 794--796
+Overfull \hbox (90.3002pt too wide) in paragraph at lines 780--782
 []\T1/qtm/m/n/12 Stereo and 3D Vi-sion, Ra-jesh Rao, \T1/qtm/m/it/12 https://co
 urses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qtm/m/n/12 . 
  []
 
 
 
-[33] (wzor.aux)
+[31] (wzor.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
@@ -701,13 +578,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5771 strings out of 473898
- 92230 string characters out of 5726479
- 480141 words of memory out of 5000000
- 28579 multiletter control sequences out of 15000+600000
+ 5764 strings out of 473898
+ 92063 string characters out of 5726479
+ 476141 words of memory out of 5000000
+ 28572 multiletter control sequences out of 15000+600000
  602671 words of font info for 79 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,11n,65p,751b,389s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,11n,65p,751b,387s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmmi12.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -719,9 +596,9 @@ al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gab-o/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o
 /AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/g
 ab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
-Output written on wzor.pdf (33 pages, 1676639 bytes).
+Output written on wzor.pdf (31 pages, 1484632 bytes).
 PDF statistics:
- 188 PDF objects out of 1000 (max. 8388607)
+ 181 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 71 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
 
