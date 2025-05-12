@@ -1,0 +1,98 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{geometry}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{multicol}
+\usepackage{tocloft}
+\usepackage{setspace}
+\usepackage{csquotes}
+
+\geometry{a4paper, margin=2.5cm}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+\begin{document}
+
+\tableofcontents
+
+\newpage
+
+\section{LATEX}
+
+\subsubsection{System składu}
+
+\TeX{} to system składu drukarskiego, dostępny w każdym używanym współcześnie systemie operacyjnym. Cechuje go m.in.: wysoka jakość składu, możliwość dopasowywania do specjalizowanych zadań, łatwa współpraca z innymi aplikacjami, przenośność (na każdej platformie systemowej działa identycznie). Rozpowszechniany jest na licencji typu Open Source.
+
+Za pomocą dowolnego edytora lub w inny sposób tworzony jest plik tekstowy, zawierający treść wymieszaną z poleceniami języka \TeX{}. Plik ten jest interpretowany przez program \texttt{tex} i tworzony jest plik pośredni opisujący dokument wynikowy strona po stronie (plik \texttt{.dvi}). Plik \texttt{.dvi} zawiera tylko opis, nie zawiera wielu zasobów niezbędnych do reprodukcji na urządzeniu wyjściowym, takich jak fonty (kształty znaków) i pliki graficzne. Sterownik zamienia plik \texttt{.dvi}, korzystając z niezbędnych zasobów na dokument docelowy możliwy do reprodukcji na określonym urządzeniu.
+
+Informacje zamieszczone w tym dokumencie zaczerpnięte zostały ze strony \texttt{www.gust.org.pl}
+
+\section{Odstępy}
+
+\subsection{Odstępy między liniami, podział na akapity i wyrównania}
+
+Ile równań niezależnych, ile jest szeregów zbieżnych, ile całek niewłaściwych,\\
+ile na płaszczyźnie krzywych, ile funkcji kwadratowych, co nie mają miejsc zerowych,\\
+ile krzywe mają siecznych, ile jest układów sprzecznych, ile różnych jest symetrii,\\
+ile twierdzeń w geometrii, ile przestrzeń ma wektorów, co nie tworzą pustych zbiorów,\\
+Tyle szczęścia i radości\\
+w Twoim domu,\\
+razem z Gwiazdką, niech zagości.
+
+\begin{flushright}
+Ból jest świętym aniołem – on to bardziej aniżeli wszystkie inne radości tego świata sprawił, iż wielu osiągnęło dojrzałość.
+
+\hfill -- A. Stifter
+
+Trzeba ukochać życie, aby je dobrze przeżyć – ukochać je nie tylko w wielkich porywach i szczytnych uniesieniach, ale w powszednim wysiłku i codziennym mozole.
+
+\hfill -- H. Bordeaux
+
+W dzisiejszych czasach nie można znać wszystkiego na pamięć.\\
+Człowiek wykształcony nie jest tym,\\
+który wszystko wie;\\
+jest on takim człowiekiem, który wie, gdzie należy szukać wiadomości.
+
+\hfill -- J. Arsac
+\end{flushright}
+
+\begin{center}
+Przechodź spokojnie, przez hałas i pośpiech i pamiętaj jaki spokój, można znaleźć w ciszy.
+
+O ile to możliwe, bez wyrzekania się siebie, bądź na dobrej stopie ze wszystkimi.
+
+Wypowiadaj swą prawdę jasno i spokojnie i wysłuchuj innych, nawet tępych i nieświadomych, oni też mają swoją opowieść.(...)
+
+Anonimowy tekst z 1692 znaleziony w starym kościele św. Pawła w Baltimore
+\end{center}
+
+\subsection{Odstępy między literami i wyrazami}
+
+\begin{quote}
+\enquote{W tajemnicy każdego człowieka\\
+istnieje wewnętrzny krajobraz:\\
+z nietkniętymi równinami,\\
+z wąwozami milczenia,\\
+z niedostępnymi górami,\\
+z ukrytymi ogrodami.}
+
+\hfill -- Antoine de Saint-Exupéry
+\end{quote}
+
+\begin{quote}
+Spotykamy trzy \hfill rodzaje ludzi:\\
+Tych, \dotfill którzy mnie potrzebują\\
+tych, \leavevmode\leaders\hrule height 0.4pt\hfill\kern0pt których ja potrzebuję\\
+i\hspace{1em}przyjaciół, \dotfill\ z którymi lubię\hspace{1em}%
+\rule{1cm}{0.4pt} \dotfill\ przebywać. \dotfill
+
+\hfill -- Ewa Lewandowska
+\end{quote}
+
+\end{document}
+

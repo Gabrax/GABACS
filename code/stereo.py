@@ -8,10 +8,6 @@ from concurrent.futures import ThreadPoolExecutor
 # Filtering
 kernel= np.ones((3,3),np.uint8)
 
-def estimate_distance(disparity_value):
-    distance = -593.97 * disparity_value**3 + 1506.8 * disparity_value**2 - 1373.1 * disparity_value + 522.06
-    return np.around(distance * 0.01, decimals=2)  # Convert to meters
-
 # Termination criteria
 criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)

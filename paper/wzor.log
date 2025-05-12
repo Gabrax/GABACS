@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  5 MAY 2025 21:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  6 MAY 2025 21:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -364,225 +364,177 @@ LaTeX Warning: Citation `Lang' on page 7 undefined on input line 99.
 
 ]
 Rozdzia\PlPrIeC {\l } 3.
-<images/MONO.jpg, id=37, 344.78813pt x 344.78813pt>
-File: images/MONO.jpg Graphic file (type jpg)
-<use images/MONO.jpg>
-Package pdftex.def Info: images/MONO.jpg  used on input line 135.
-(pdftex.def)             Requested size: 132.30666pt x 132.30453pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 142--143
-
- []
+<images/MONO.png, id=37, 359.3425pt x 313.17pt>
+File: images/MONO.png Graphic file (type png)
+<use images/MONO.png>
+Package pdftex.def Info: images/MONO.png  used on input line 135.
+(pdftex.def)             Requested size: 88.2022pt x 76.86829pt.
 
 
-
-[9 <./images/MONO.jpg>]
+[9 <./images/MONO.png>]
 LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
-47.
+48.
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 )
-Underfull \hbox (badness 1048) in paragraph at lines 149--150
-\T1/qtm/m/n/12 dla urz¡-dze« mo-bil-nych, dro-nów,
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 168--180
+[][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 155--156
-[]\T1/qtm/m/n/12 Mo»liwo±¢ dzia-ªa-nia w cza-sie
- []
-
-
-Underfull \hbox (badness 7116) in paragraph at lines 166--167
-[]\T1/qtm/m/n/12 Trudno±ci w sce-nach jed-no-rod-
- []
-
-
-Underfull \hbox (badness 6625) in paragraph at lines 168--169
-[]\T1/qtm/m/n/12 Potrzeba ru-chu ka-me-ry (np. w
- []
-
-<images/STEREO.jpg, id=41, 1284.8pt x 1284.8pt>
-File: images/STEREO.jpg Graphic file (type jpg)
-<use images/STEREO.jpg>
-Package pdftex.def Info: images/STEREO.jpg  used on input line 176.
-(pdftex.def)             Requested size: 220.50887pt x 220.49118pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Underfull \hbox (badness 6893) in paragraph at lines 196--197
-[]\T1/qtm/m/n/12 Nadaje si¦ do za-sto-so-wa« mo-
- []
-
-
-Underfull \hbox (badness 5245) in paragraph at lines 205--206
-[]\T1/qtm/m/n/12 Potrzebna ka-li-bra-cja ^^V ka-me-ry
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2426) has occurred while \output is active []
 
 
 
 [10{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
 .enc}]
-<images/SFM.png, id=46, 474.77374pt x 408.52625pt>
-File: images/SFM.png Graphic file (type png)
-<use images/SFM.png>
-Package pdftex.def Info: images/SFM.png  used on input line 217.
-(pdftex.def)             Requested size: 220.50887pt x 189.73833pt.
+<images/MAINSTEREO.png, id=46, 788.9475pt x 207.77625pt>
+File: images/MAINSTEREO.png Graphic file (type png)
+<use images/MAINSTEREO.png>
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 186.
+(pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-
-[11 <./images/STEREO.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 252--253
-[]\T1/qtm/m/n/12 Czasochªonno±¢ ob-li-cze-nio-wa ^^U
+Overfull \hbox (8.93008pt too wide) in paragraph at lines 196--197
+[]\T1/qtm/m/n/12 W sys-te-mie ste-reo-wi-zyj-nym wy-ko-rzy-stu-je si¦ dwa ob-ra
+-zy uchwy-co-ne przez ka-me-ry umiesz-
  []
 
 
-Underfull \hbox (badness 1960) in paragraph at lines 252--253
-\T1/qtm/m/n/12 re-kon-struk-cja mo-»e trwa¢ dªu-go,
+Overfull \hbox (20.11821pt too wide) in paragraph at lines 196--197
+\T1/qtm/m/n/12 prze-su-ni¦-cie ob-ra-zu te-go sa-me-go punk-tu sce-ny po-mi¦-dz
+y ob-ra-za-mi le-we-go i pra-we-go oka/kamery. 
  []
 
 
-Underfull \hbox (badness 4531) in paragraph at lines 252--253
-\T1/qtm/m/n/12 szcze-gól-nie dla du-»ych zbio-rów
+
+[11 <./images/MAINSTEREO.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 210--224
+[][] 
  []
 
-<images/TOF-IR.jpg, id=50, 2569.6pt x 1713.40125pt>
+<images/TOF-IR.jpg, id=51, 2569.6pt x 1713.40125pt>
 File: images/TOF-IR.jpg Graphic file (type jpg)
 <use images/TOF-IR.jpg>
-Package pdftex.def Info: images/TOF-IR.jpg  used on input line 264.
+Package pdftex.def Info: images/TOF-IR.jpg  used on input line 229.
 (pdftex.def)             Requested size: 220.50887pt x 147.00975pt.
 
-Underfull \vbox (badness 1888) has occurred while \output is active []
-
-
-
-[12 <./images/SFM.png (PNG copy)>]
-Underfull \hbox (badness 2334) in paragraph at lines 279--280
+Underfull \hbox (badness 2334) in paragraph at lines 244--245
 []\T1/qtm/m/n/12 Wielozadaniowo±¢ ^^U Dzi¦-ki ToF
  []
 
 
-Underfull \hbox (badness 3000) in paragraph at lines 281--282
+Underfull \hbox (badness 3000) in paragraph at lines 246--247
 []\T1/qtm/m/n/12 Wydajno±¢ przy ró»-nych wa-run-
  []
 
 
-Underfull \hbox (badness 1337) in paragraph at lines 292--293
+Underfull \hbox (badness 1337) in paragraph at lines 257--258
 \T1/qtm/m/n/12 vision, szcze-gól-nie w wa-run-kach
  []
 
 
-Underfull \hbox (badness 3838) in paragraph at lines 294--295
+Underfull \hbox (badness 3838) in paragraph at lines 259--260
 []\T1/qtm/m/n/12 Koszt ^^U Za-awan-so-wa-ne czuj-ni-ki
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-
-[13 <./images/TOF-IR.jpg>]
-<images/POINTCLOUD.png, id=58, 2441.12pt x 722.7pt>
+[12 <./images/TOF-IR.jpg>]
+<images/POINTCLOUD.png, id=55, 2441.12pt x 722.7pt>
 File: images/POINTCLOUD.png Graphic file (type png)
 <use images/POINTCLOUD.png>
-Package pdftex.def Info: images/POINTCLOUD.png  used on input line 302.
+Package pdftex.def Info: images/POINTCLOUD.png  used on input line 267.
 (pdftex.def)             Requested size: 220.50887pt x 65.27176pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 313--314
+Underfull \hbox (badness 10000) in paragraph at lines 278--279
 []\T1/qtm/m/n/12 Wysoka do-kªad-no±¢ ^^U Dzi¦-ki
  []
 
 
-Underfull \hbox (badness 3088) in paragraph at lines 313--314
+Underfull \hbox (badness 3088) in paragraph at lines 278--279
 \T1/qtm/m/n/12 pro-jek-cji spe-cy-ficz-nych wzor-ców
  []
 
 
-Underfull \hbox (badness 2884) in paragraph at lines 313--314
+Underfull \hbox (badness 2884) in paragraph at lines 278--279
 \T1/qtm/m/n/12 ±wietl-nych, ta me-to-da mo-»e za-
  []
 
 
-Underfull \hbox (badness 1502) in paragraph at lines 313--314
+Underfull \hbox (badness 1502) in paragraph at lines 278--279
 \T1/qtm/m/n/12 gª¦-bi, szcze-gól-nie w po-rów-na-niu
  []
 
 
-Underfull \hbox (badness 1028) in paragraph at lines 315--316
+Underfull \hbox (badness 1028) in paragraph at lines 280--281
 []\T1/qtm/m/n/12 Szybko±¢ po-mia-rów ^^U Struc-tu-red
  []
 
 
-Underfull \hbox (badness 3919) in paragraph at lines 315--316
+Underfull \hbox (badness 3919) in paragraph at lines 280--281
 \T1/qtm/m/n/12 np. w sys-te-mach roz-po-zna-wa-nia
  []
 
 
-Underfull \hbox (badness 3323) in paragraph at lines 326--327
+Underfull \hbox (badness 3323) in paragraph at lines 291--292
 \T1/qtm/m/n/12 nia-j¡-ce si¦ wa-run-ki o±wie-tle-nio-
  []
 
 
-Underfull \hbox (badness 2435) in paragraph at lines 326--327
+Underfull \hbox (badness 2435) in paragraph at lines 291--292
 \T1/qtm/m/n/12 we, zwªasz-cza w przy-pad-ku sil-
  []
 
 
-Underfull \hbox (badness 2495) in paragraph at lines 328--329
+Underfull \hbox (badness 2495) in paragraph at lines 293--294
 []\T1/qtm/m/n/12 Ograniczona sku-tecz-no±¢ na du-
  []
 
 
-Underfull \hbox (badness 1755) in paragraph at lines 330--331
+Underfull \hbox (badness 1755) in paragraph at lines 295--296
 \T1/qtm/m/n/12 brak wy-ra¹-nych cech do ana-li-zy
  []
 
 
 
-[14]
+[13]
 Overfull \vbox (4.6728pt too high) has occurred while \output is active []
 
 
 
-[15 <./images/POINTCLOUD.png>]
-<images/LIDAR.png, id=66, 290.08376pt x 290.08376pt>
+[14 <./images/POINTCLOUD.png>]
+<images/LIDAR.png, id=64, 290.08376pt x 290.08376pt>
 File: images/LIDAR.png Graphic file (type png)
 <use images/LIDAR.png>
-Package pdftex.def Info: images/LIDAR.png  used on input line 340.
+Package pdftex.def Info: images/LIDAR.png  used on input line 305.
 (pdftex.def)             Requested size: 220.50887pt x 220.5102pt.
 
-Underfull \hbox (badness 1082) in paragraph at lines 353--354
+Underfull \hbox (badness 1082) in paragraph at lines 318--319
 []\T1/qtm/m/n/12 Dªugi za-si¦g ^^U Nie-któ-re sys-te-my
  []
 
 
-Underfull \hbox (badness 1168) in paragraph at lines 353--354
+Underfull \hbox (badness 1168) in paragraph at lines 318--319
 \T1/qtm/m/n/12 LI-DAR mo-g¡ mie-rzy¢ od-le-gªo-±ci
  []
 
 
-Underfull \hbox (badness 1584) in paragraph at lines 357--358
+Underfull \hbox (badness 1584) in paragraph at lines 322--323
 []\T1/qtm/m/n/12 Wysoka cz¦-sto-tli-wo±¢ po-mia-ru ^^U
  []
 
 
-Underfull \hbox (badness 2027) in paragraph at lines 366--367
+Underfull \hbox (badness 2027) in paragraph at lines 331--332
 \T1/qtm/m/n/12 ni-cza ich za-sto-so-wa-nie w ta-nich
  []
 
 
-Underfull \hbox (badness 1694) in paragraph at lines 368--369
+Underfull \hbox (badness 1694) in paragraph at lines 333--334
 []\T1/qtm/m/n/12 Wra»liwo±¢ na wa-run-ki at-mos-fe-
  []
 
@@ -591,29 +543,29 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[16 <./images/LIDAR.png>]
+[15 <./images/LIDAR.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[17]
-<images/light.png, id=74, 401.5pt x 274.02374pt>
+[16]
+<images/light.png, id=72, 401.5pt x 274.02374pt>
 File: images/light.png Graphic file (type png)
 <use images/light.png>
-Package pdftex.def Info: images/light.png  used on input line 391.
+Package pdftex.def Info: images/light.png  used on input line 356.
 (pdftex.def)             Requested size: 220.50887pt x 150.50027pt.
 
 
-[18 <./images/light.png>]
-<images/pinhole.png, id=79, 315.42844pt x 130.23656pt>
+[17 <./images/light.png>]
+<images/pinhole.png, id=77, 315.42844pt x 130.23656pt>
 File: images/pinhole.png Graphic file (type png)
 <use images/pinhole.png>
-Package pdftex.def Info: images/pinhole.png  used on input line 425.
+Package pdftex.def Info: images/pinhole.png  used on input line 390.
 (pdftex.def)             Requested size: 220.50887pt x 91.04573pt.
-<images/barrel.png, id=80, 1027.84pt x 1027.84pt>
+<images/barrel.png, id=78, 1027.84pt x 1027.84pt>
 File: images/barrel.png Graphic file (type png)
 <use images/barrel.png>
-Package pdftex.def Info: images/barrel.png  used on input line 456.
+Package pdftex.def Info: images/barrel.png  used on input line 421.
 (pdftex.def)             Requested size: 132.30666pt x 132.30647pt.
 
 
@@ -621,124 +573,121 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-[19 <./images/pinhole.png>]
+[18 <./images/pinhole.png>]
 
-[20 <./images/barrel.png>]
-<images/triangulation.png, id=93, 227.34938pt x 216.81pt>
+[19 <./images/barrel.png>]
+<images/triangulation.png, id=91, 227.34938pt x 216.81pt>
 File: images/triangulation.png Graphic file (type png)
 <use images/triangulation.png>
-Package pdftex.def Info: images/triangulation.png  used on input line 508.
+Package pdftex.def Info: images/triangulation.png  used on input line 473.
 (pdftex.def)             Requested size: 220.50887pt x 210.2889pt.
 
 
-[21 <./images/triangulation.png>]
-<images/epipolar.png, id=98, 295.1025pt x 184.43906pt>
+[20 <./images/triangulation.png>]
+<images/epipolar.png, id=96, 295.1025pt x 184.43906pt>
 File: images/epipolar.png Graphic file (type png)
 <use images/epipolar.png>
-Package pdftex.def Info: images/epipolar.png  used on input line 542.
+Package pdftex.def Info: images/epipolar.png  used on input line 507.
 (pdftex.def)             Requested size: 308.71106pt x 192.94907pt.
 
-Overfull \hbox (3.83109pt too wide) in paragraph at lines 548--553
+Overfull \hbox (3.83109pt too wide) in paragraph at lines 513--518
 []\T1/qtm/m/n/12 Powy»szy ob-ra-zek przed-sta-wia mo-del nie-do-sko-na-ªej ka-m
 e-ry ste-reo skªa-da-j¡-cej si¦ z dwóch
  []
 
 
 
-[22 <./images/epipolar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 584--586
+[21 <./images/epipolar.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 549--551
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 586--588
+Underfull \hbox (badness 10000) in paragraph at lines 551--553
 
  []
 
 
+
+[22]
 
 [23]
 
 [24]
-
-[25]
-
-[26
-
-]
 Rozdzia\PlPrIeC {\l } 4.
-<images/RPI.jpg, id=116, 385.44pt x 252.945pt>
+<images/RPI.jpg, id=110, 385.44pt x 252.945pt>
 File: images/RPI.jpg Graphic file (type jpg)
 <use images/RPI.jpg>
-Package pdftex.def Info: images/RPI.jpg  used on input line 663.
+Package pdftex.def Info: images/RPI.jpg  used on input line 628.
 (pdftex.def)             Requested size: 220.50887pt x 144.70891pt.
-<images/RPI-SPEC.jpg, id=117, 385.44pt x 203.76125pt>
+<images/RPI-SPEC.jpg, id=111, 385.44pt x 203.76125pt>
 File: images/RPI-SPEC.jpg Graphic file (type jpg)
 <use images/RPI-SPEC.jpg>
-Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 671.
+Package pdftex.def Info: images/RPI-SPEC.jpg  used on input line 636.
 (pdftex.def)             Requested size: 308.71106pt x 163.19887pt.
-<images/RPI-PIN.jpg, id=118, 1214.5375pt x 644.4075pt>
+<images/RPI-PIN.jpg, id=112, 1214.5375pt x 644.4075pt>
 File: images/RPI-PIN.jpg Graphic file (type jpg)
 <use images/RPI-PIN.jpg>
-Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 679.
+Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 644.
 (pdftex.def)             Requested size: 220.50887pt x 116.99129pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/MAINSTEREO.png, id=119, 963.6pt x 963.6pt>
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 687.
-(pdftex.def)             Requested size: 220.50887pt x 220.50589pt.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 652.
+(pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-[27 <./images/RPI.jpg> <./images/RPI-SPEC.jpg>]
-Underfull \vbox (badness 2818) has occurred while \output is active []
+[25
 
+ <./images/RPI.jpg> <./images/RPI-SPEC.jpg>]
 
-
-[28 <./images/RPI-PIN.jpg> <./images/MAINSTEREO.png>]
-Overfull \hbox (38.56227pt too wide) in paragraph at lines 727--731
+[26 <./images/RPI-PIN.jpg>]
+Overfull \hbox (38.56227pt too wide) in paragraph at lines 692--696
 \T1/qtm/m/n/12 two-rzo-ne s¡ dwa obiek-ty ko-rzy-sta-j¡-ce z me-tod kla-sy cv2.
 VideoCapture()). kla-sy cv2.VideoCapture()). 
  []
 
 
-
-[29]
-Overfull \hbox (34.74306pt too wide) in paragraph at lines 761--772
+Overfull \hbox (34.74306pt too wide) in paragraph at lines 726--737
 []\T1/qtm/m/n/12 Program do ro-bie-nia zdj¦¢ do pó¹-niej-szej ka-li-bra-cji no-
 si na-zw¦ ^^RTake-images-for-calibration.py^^Q.
  []
 
 
 
-[30]
+[27]
+Underfull \vbox (badness 4739) has occurred while \output is active []
+
+
+
+[28]
+
+[29]
+
+[30
+
+]
+Rozdzia\PlPrIeC {\l } 5.
+
 
 [31]
 
 [32
 
 ]
-Rozdzia\PlPrIeC {\l } 5.
-
-
-[33]
-
-[34
-
-]
-Overfull \hbox (90.3002pt too wide) in paragraph at lines 829--831
+Overfull \hbox (90.3002pt too wide) in paragraph at lines 794--796
 []\T1/qtm/m/n/12 Stereo and 3D Vi-sion, Ra-jesh Rao, \T1/qtm/m/it/12 https://co
 urses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qtm/m/n/12 . 
  []
 
 
 
-[35] (wzor.aux)
+[33] (wzor.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
@@ -752,10 +701,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5785 strings out of 473898
- 92543 string characters out of 5726479
+ 5771 strings out of 473898
+ 92230 string characters out of 5726479
  480141 words of memory out of 5000000
- 28593 multiletter control sequences out of 15000+600000
+ 28579 multiletter control sequences out of 15000+600000
  602671 words of font info for 79 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  57i,11n,65p,751b,389s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -770,9 +719,9 @@ al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gab-o/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/gab-o
 /AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/g
 ab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb>
-Output written on wzor.pdf (35 pages, 1834839 bytes).
+Output written on wzor.pdf (33 pages, 1676639 bytes).
 PDF statistics:
- 194 PDF objects out of 1000 (max. 8388607)
+ 188 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 

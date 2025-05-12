@@ -126,134 +126,99 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się analizą, modyfikacją i interpretacją obrazów cyfrowych za pomocą metod numerycznych i algorytmów komputerowych. Jej celem jest poprawa jakości obrazów, ekstrakcja informacji, segmentacja obiektów lub ich klasyfikacja. Przetwarzanie obrazu znajduje zastosowanie w wielu obszarach, takich jak medycyna (np. analiza zdjęć RTG), przemysł (np. kontrola jakości), bezpieczeństwo (np. rozpoznawanie twarzy), robotyka oraz systemy wizyjne pojazdów autonomicznych. Dzięki połączeniu technik matematycznych, statystycznych i sztucznej inteligencji możliwe jest coraz bardziej precyzyjne i automatyczne rozumienie zawartości obrazów.
 
-\subsection{Rodzaje kamer i techniki używane do estymacji głębi}
+\subsection{Rodzaje kamer i technik używane do estymacji głębi}
 
 \subsubsection{Monocular Vision}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.3\textwidth]{images/MONO.jpg}  % Adjust the path and width as necessary
+    \includegraphics[width=0.2\textwidth]{images/MONO.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
     \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
 
-Monocular vision (widzenie monokularne) to technika pozyskiwania informacji wizualnych przy użyciu tylko jednejkamery, czyli takiej, która rejestruje obraz z pojedynczego punktu widzenia — podobnie jak jedno oko u człowieka.\\
+Monocular vision (widzenie monokularne) to technika pozyskiwania informacji wizualnych przy użyciu tylko jednej kamery, czyli takiej, która rejestruje obraz z pojedynczego punktu widzenia — podobnie jak jedno oko u człowieka.
+W przypadku obrazu monokularnego, każdy piksel dostarcza jedynie informacji o jasności i kolorze w płaszczyźnie 2D. Brakuje natomiast bezpośredniej informacji o głębokości, czyli odległości od kamery. Z tego względu estymacja głębi z pojedynczego obrazu jest niedookreślonym problemem inwersyjnym – wiele różnych trójwymiarowych scen może prowadzić do identycznej projekcji 2D.
 
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Zalety:}
+Aby rozwiązać ten problem, konieczne jest wprowadzenie priorytetów – dodatkowych założeń na temat struktury świata, geometrii sceny lub charakterystyki obiektów. Przykładowe priorytety to:
+
 \begin{itemize}
-  \item Niska cena: Wymaga tylko jednej kamery – tańsze niż systemy stereo lub LiDAR.
+  \item Zakładanie horyzontalności podłoża i pionowości ścian.
 
-  \item Mniejsze zużycie energii: Idealne dla urządzeń mobilnych, dronów, robotów.
+  \item Regularność obiektów (np. ludzie mają podobną wysokość).
 
-  \item Prosta instalacja: Nie trzeba kalibrować dwóch kamer ani martwić się synchronizacją.
+  \item Perspektywa (linie zbiegające się w punkcie zbiegu sugerują głębię).
 
-  \item Łatwo dostępne dane: Każdy smartfon lub laptop może być źródłem obrazu.
+  \item Znajomość statystycznych regularności obrazów.
+\end{itemize}
 
-  \item Możliwość działania w czasie rzeczywistym: Przy odpowiedniej optymalizacji algorytmu.
+Z matematycznego punktu widzenia, obraz monokularny powstaje na skutek rzutowania sceny trójwymiarowej na płaszczyznę dwuwymiarową za pomocą rzutowania perspektywicznego. Każdy punkt $P = (X,Y,Z)$ w przestrzeni 3D odwzorowany jest na punkt $p = (x,y)$ w obrazie 2D zgodnie z wzorami:
+
+\[
+x = f \cdot \frac{X}{Z}, \quad
+y = f \cdot \frac{Y}{Z}
+\]
+
+gdzie $f$ to ogniskowa kamery, a $Z$ to głębokość. Zauważmy, że głębokość $Z$ znajduje się w mianowniku, co oznacza, że jej zmiany mają kluczowy wpływ na rozmiar i położenie obiektów na obrazie.
+
+W kontekście wizji monokularnej, głębokie uczenie odgrywa kluczową rolę, umożliwiając estymację głębi, rekonstrukcję scen 3D czy detekcję obiektów na podstawie pojedynczego obrazu. Zamiast polegać na klasycznych metodach geometrycznych, takich jak triangulacja czy analiza ruchu, sieci neuronowe uczą się z dużych zbiorów danych, wychwytując złożone wzorce i zależności przestrzenne. Mimo wysokiej skuteczności, tego typu podejścia mają swoje ograniczenia – wymagają dużej mocy obliczeniowej, są podatne na błędy przy nietypowych danych wejściowych, a ich efektywność jest ściśle związana z jakością i zakresem danych użytych do treningu.
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
+\begin{itemize}
+  \item Brak absolutnej skali – z jednego obrazu nie można jednoznacznie wywnioskować rzeczywistej odległości.
+
+  \item Trudności w teksturowo jednorodnych obszarach – gdzie brak cech uniemożliwia dobre przewidywanie.
+
+  \item Problemy z generalizacją – modele trenowane na jednej dziedzinie mogą słabo działać na innych.
+
+  \item Dynamiczne sceny i obiekty poruszające się niezależnie od kamery – zaburzają proces estymacji.
 \end{itemize}
 \end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Wady:}
-\begin{itemize}
-  \item Brak skali bezwzględnej: Nie wiadomo, czy obiekt jest 1 metr czy 10 metrów od kamery bez dodatkowej informacji (np. IMU, GPS).
 
-  \item Słabsza dokładność głębokości: W porównaniu do stereowizji lub sensorów ToF/LiDAR.
-
-  \item Trudności w scenach jednorodnych: Powtarzalne tekstury lub słabe oświetlenie utrudniają analizę.
-
-  \item Potrzeba ruchu kamery (np. w SLAM): Dla bardziej precyzyjnej rekonstrukcji sceny.
-\end{itemize}
-\end{minipage}
 
 \subsubsection{Stereo Vision}
 
 \begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/STEREO.jpg}  % Adjust the path and width as necessary
+    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
     \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Stereo vision (widzenie stereoskopowe) to technika komputerowego przetwarzania obrazu, która umożliwia określenie głębokości i kształtu obiektów w scenie poprzez analizę dwóch obrazów zarejestrowanych przez dwie kamery umieszczone w pewnej odległości od siebie (zwykle poziomej — jak oczy u człowieka).
+Wizja stereoskopowa (lub stereowizja) to technika polegająca na wykorzystaniu dwóch (lub więcej) obrazów tej samej sceny, uchwyconych z nieco innych punktów widzenia, do wyodrębnienia informacji przestrzennych. Jest to jedno z najstarszych i najintensywniej badanych podejść do estymacji głębi, inspirowane sposobem, w jaki ludzkie oczy – jako dwa przesunięte względem siebie punkty obserwacyjne – postrzegają świat trójwymiarowy.
 
-Porównując różnice (czyli dysparycje) w położeniu tych samych punktów na lewym i prawym obrazie, można obliczyć odległość obiektów od kamer — dzięki znanym wzorom geometrycznym (triangulacja).
+W odróżnieniu od wizji monokularnej, stereowizja oferuje geometrycznie uzasadnioną możliwość bezpośredniego obliczenia głębokości, co czyni ją bardzo atrakcyjną w aplikacjach wymagających wysokiej dokładności. W tym rozdziale przedstawiono podstawy matematyczne wizji stereo, klasyczne i współczesne metody obliczania głębi, a także omówiono praktyczne zastosowania i ograniczenia tej technologii.
 
+W systemie stereowizyjnym wykorzystuje się dwa obrazy uchwycone przez kamery umieszczone w znanej odległości od siebie (baza stereo). Podstawowym pojęciem jest paralaksa – przesunięcie obrazu tego samego punktu sceny pomiędzy obrazami lewego i prawego oka/kamery.
 
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Zalety:}
+Zakładając idealną konfigurację (kamery wyrównane, płaszczyzny obrazu równoległe), głębokość $Z$ danego punktu sceny można obliczyć ze wzoru:
+\[
+z = \frac{f \cdot B}{d}
+\]
 \begin{itemize}
-  \item Prawdziwa głębokość geometryczna — możliwa do przeliczenia na metry.
-
-  \item Działa w czasie rzeczywistym — przy użyciu odpowiedniego sprzętu (np. ZED Camera, Intel RealSense).
-
-  \item Nie wymaga poruszania kamerą — wystarczą dwa obrazy z dwóch stałych punktów.
-
-  \item Nadaje się do zastosowań mobilnych i przemysłowych (robotyka, autonomiczne pojazdy, pomiary 3D).
+  \item $f$ - ogniskowa kamery.
+  \item $B$ - odległość między kamerami.
+  \item $d$ - przesunięcie danego punktu w obrazie lewym względem prawego.
 \end{itemize}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Wady:}
+
+Im większe $d$, tym mniejsza głębokość – obiekty bliżej kamery mają większe przesunięcie między obrazami.
+
+\begin{minipage}[t]{\textwidth}
+\textbf{Wady i ograniczenia:}
 \begin{itemize}
-  \item Wrażliwość na warunki oświetleniowe — słabe światło, odbicia lub brak tekstury mogą uniemożliwić porównanie obrazów.
+  \item Wymóg kalibracji i synchronizacji kamer – błędy w tym zakresie przekładają się bezpośrednio na błędną głębokość.
 
-  \item Potrzebna kalibracja — kamery muszą być dokładnie skalibrowane (ustalenie ich pozycji i parametrów).
+  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
 
-  \item Złożoność obliczeniowa — dopasowanie punktów między obrazami może być kosztowne.
+  \item Problemy przy silnym oświetleniu i odbiciach – zmienność intensywności zaburza dopasowanie.
 
-  \item Martwe strefy — obiekty o jednolitej teksturze (np. ściana) mogą nie dawać użytecznych danych.
-\end{itemize}
-\end{minipage}
+  \item Duży koszt obliczeniowy – szczególnie w przypadku metod globalnych lub opartych na deep learningu.
 
-\subsubsection{Structure from Motion (SfM)}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/SFM.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-Structure from Motion (SfM) to technika wizyjna, która pozwala zrekonstruować strukturę trójwymiarową sceny oraz trajektorię ruchu kamery na podstawie zwykłych zdjęć lub klatek wideo wykonanych jedną lub wieloma kamerami, które poruszają się względem sceny.
-
-SfM działa tak:
-Wykrywa punkty charakterystyczne (np. rogi, krawędzie) na zdjęciach.
-Śledzi ich pozycje na kolejnych ujęciach.
-Oblicza względne pozycje kamer i 3D współrzędne punktów w scenie – czyli rekonstruuje kształt i ruch.
-
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Zalety:}
-\begin{itemize}
-  \item Umożliwia 3D rekonstrukcję z pojedynczej kamery – wystarczy poruszać kamerą wokół obiektu.
-
-  \item Niski koszt sprzętowy – można wykorzystać zwykły aparat lub smartfon.
-
-  \item Brak potrzeby kalibracji sprzętu z góry – SfM może działać nawet na niekalibrowanych zdjęciach.
-
-  \item Wysoka dokładność w scenach z dobrą teksturą.
-
-  \item Zastosowania w wielu dziedzinach: archeologia, kartografia, VR, robotyka, fotogrametria.
-\end{itemize}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\textbf{Wady:}
-\begin{itemize}
-  \item Wymaga wielu zdjęć z różnych perspektyw – nie działa dobrze, jeśli kamera stoi w miejscu.
-
-  \item Problemy w scenach z małą teksturą – np. gładkie ściany, powierzchnie bez szczegółów.
-
-  \item Czasochłonność obliczeniowa – rekonstrukcja może trwać długo, szczególnie dla dużych zbiorów zdjęć.
-
-  \item Brak skali bezwzględnej – SfM daje model „w skali względnej”, czyli np. 1 m może być 1 cm, jeśli nie ma referencji.
-
-  \item Wrażliwe na rozmycie, szum, ruch obiektów w tle.
+  \item Widzenie tylko z jednej perspektywy – martwe strefy między kamerami lub poza polem widzenia jednej z nich.
 \end{itemize}
 \end{minipage}
 
