@@ -477,7 +477,23 @@ Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komerc
 
 \section{Opis projektu}
 
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.7\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
+    \label{fig:rpi-gpio}  % Optional: use to refer to this image later in the text
+\end{figure}
+
 \section{Obrazowanie stereoskopowe}
+
+\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
+    \captionsetup{labelformat=empty, font=footnotesize}
+    \caption{Źródło: https://pl.aliexpress.com/i/1005006618001887.html}
+    \label{fig:mono}  % Optional: use to refer to this image later in the text
+\end{figure}
 
 Stereo Vision umożliwia rozpoznawanie głębi na obrazie, wykonywanie pomiarów na obrazie
 i przeprowadzanie lokalizacji 3D. Między innymi należy znaleźć punkty, które pasują do siebie między dwiema kamerami. Można to następnie wykorzystać do odległość między kamerą a punktem. Wykorzystywana jest geometria systemu w celu uproszczenia obliczeń.
@@ -646,40 +662,6 @@ W projekcie wykorzystaliśmy algorytm Bougueta.
 
 \chapter{Rozdział badawczy}
 
-\section{Opis projektu}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/RPI.jpg}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2023/11/Raspberry-5-pi-.jpg}
-    \label{fig:rpi}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.7\textwidth]{images/RPI-SPEC.jpg}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
-    \label{fig:rpi-spec}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
-    \label{fig:rpi-gpio}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://pl.aliexpress.com/i/1005006618001887.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
 \section{Funkcjonalność programu do obrazowania stereo}
 
 Jak już wspomniano, program jest kodowany w Pythonie i wykorzystywana jest biblioteka OpenCV.
@@ -697,13 +679,11 @@ równania, które zostało znalezione eksperymentalnie, możemy zmierzyć odleg�
 pomiar. Na końcu używany jest filtr WLS, aby lepiej rozpoznawać krawędzie obiektów.
 rozpoznać krawędzie obiektów.
 
-\subsection{Kalibracja kamery}
-
 Po uruchomieniu tego programu obie kamery stają się aktywne i otwierane są dwa okna.
 aby użytkownik mógł zobaczyć, gdzie na obrazach znajduje się szachownica.
 
 
-\subsubsection{Kalibracja za pomocą OpenCV}
+\subsection{Kalibracja za pomocą OpenCV}
 
 Biblioteka OpenCV pozwala nam obliczyć parametry wewnętrzne za pomocą określonych funkcji.
 Proces ten nazywany jest kalibracją. Jest to możliwe dzięki różnym
@@ -740,7 +720,7 @@ Matryca M bez rektyfikacji (lewa kamera):
 
 Matryca M wyprostowana (lewa kamera):
 
-\subsubsection{Wektory kalibracyjne}
+\subsection{Wektory kalibracyjne}
 
 Funkcja cv2.findChessboardCorners() wyszuka określoną liczbę narożników szachownicy
 i wygenerowane zostaną następujące wektory:
@@ -754,14 +734,95 @@ i wygenerowane zostaną następujące wektory:
 Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
 cv2.cornerSubPix().
 
-\subsubsection{Pozyskiwanie obrazów do kalibracji}
-\subsection{Główny algorytm}
-\subsubsection{Kalibracja zniekształceń}
-\subsubsection{Kalibracja kamery stereo}
-\subsubsection{Obliczanie mapy rozbieżności}
-\subsubsection{Zastosowanie filtra WLS (ważonych najmniejszych kwadratów)}
-\subsubsection{Pomiar odległości}
-\subsubsection{Możliwe ulepszenia}
+\subsection{Kalibracja zniekształceń}
+
+Do korekcji dystorsji kamer używane są obrazy zarejestrowane za pomocą programu „Take-images-for-calibration.py”. Kalibracja ta opiera się na „Take-images-for-calibration.py”, gdzie w zmiennych imgpoints i objpoints zapisywane są pozycje narożników szachownicy.
+
+Funkcja cv2.calibrateCamera() jest wykorzystywana do uzyskania nowych macierzy kamer (macierz kamery opisuje projekcję punktu ze świata 3D na obraz 2D), współczynników dystorsji, wektorów rotacji oraz translacji dla każdej z kamer. Dane te są później używane do usunięcia zniekształceń dla każdej kamery.
+
+Aby uzyskać optymalne macierze kamer dla każdej z nich, używana jest funkcja cv2.getOptimalNewCameraMatrix() (w celu zwiększenia precyzji).
+
+\subsection{Kalibracja kamery stereo}
+
+Do kalibracji stereo używana jest funkcja cv2.StereoCalibrate(), która oblicza transformację pomiędzy dwiema kamerami (jedna kamera służy jako odniesienie dla drugiej).
+
+Funkcja cv2.stereoRectify() umożliwia sprowadzenie linii epipolarnych obu kamer do tej samej płaszczyzny. Taka transformacja ułatwia działanie funkcji generującej mapę dysparycji, ponieważ dopasowywanie bloków musi być wtedy wykonywane tylko w jednym wymiarze.
+
+Za pomocą tej funkcji uzyskuje się również macierz esencjalną oraz macierz fundamentalną, które są wykorzystywane w kolejnej funkcji.
+
+Funkcja cv2.initUndistortRectifyMap() generuje obraz bez zniekształceń (dystorsji). Obrazy te są następnie wykorzystywane przy obliczaniu mapy dysparycji.
+
+\subsection{Obliczanie mapy rozbieżności}
+
+Aby obliczyć mapę dysparycji, tworzony jest obiekt StereoSGBM za pomocą funkcji cv2.StereoSGBM-create(). Klasa ta wykorzystuje algorytm dopasowania półglobalnego (semi-global matching) (Hirschmüller, 2008), aby uzyskać dopasowanie stereo pomiędzy obrazami z prawej i lewej kamery.
+
+W parametrach wejściowych definiuje się rozmiar bloków. Bloki te zastępują piksele, gdy rozmiar (Block Size) jest większy niż 1. Utworzony obiekt SGBM porównuje bloki z obrazu referencyjnego z blokami z obrazu dopasowywanego (Match-Bild).
+
+Jeśli kalibracja stereo została dobrze przeprowadzona, to na przykład blok z czwartego wiersza obrazu referencyjnego powinien być porównywany tylko z blokami z czwartego wiersza obrazu dopasowywanego. W ten sposób obliczanie mapy dysparycji staje się bardziej efektywne.
+
+Weźmy wcześniejszy przykład z blokami z czwartego wiersza, aby wyjaśnić, jak tworzona jest mapa dysparycji.
+
+Na poniższym rysunku należy porównać blok (4,7) z czwartego wiersza, siódmej kolumny obrazu bazowego ze wszystkimi innymi blokami (4,i) z czwartego wiersza (tej samej linii epipolarnej) obrazu dopasowywanego.
+
+Im większe dopasowanie między blokiem referencyjnym a blokiem dopasowywanym, tym bardziej prawdopodobne, że odpowiadają one temu samemu punktowi w rzeczywistości.
+
+W tym przykładzie można zauważyć, że blok referencyjny (4,7) ma najwyższy stopień dopasowania z blokiem dopasowywanym (4,4).
+
+W teorii proces powinien przebiegać w ten sposób, jednak w praktyce OpenCV domyślnie analizuje jeszcze 4 inne kierunki, aby uzyskać większą precyzję — stosując tę samą metodę co dla jednego kierunku.
+
+Aby znaleźć dysparycję, odejmuje się współrzędne bloku dopasowywanego od współrzędnych bloku referencyjnego, następnie oblicza się wartość bezwzględną wyniku — im większa ta wartość, tym bliżej kamery stereo znajduje się obiekt.
+
+Program używa skalibrowanych obrazów czarno-białych do obliczania mapy dysparycji. Można też pracować z obrazami w formacie BGR, ale wiązałoby się to z większym obciążeniem obliczeniowym dla komputera. Obliczenie mapy odbywa się za pomocą metody obiektu stereo utworzonego wcześniej: cv2.StereoSGBM-create().compute().
+
+Dzięki parametrom ustalonym podczas inicjalizacji otrzymujemy następujący wynik dla mapy dysparycji.
+
+Na tej mapie dysparycji występuje jeszcze sporo szumu. Aby go wyeliminować, stosowany jest filtr morfologiczny. Używany jest filtr typu „Closing” (zamykanie) za pomocą funkcji OpenCV cv2.morphologyEx(cv2.MORPH-CLOSE), aby usunąć małe czarne punkty.
+
+Poniżej inny przykład tej samej sceny, aby lepiej zobaczyć różnicę.
+
+\subsection{Zastosowanie filtra WLS (ważonych najmniejszych kwadratów)}
+
+Wynik nie jest zły, ale wciąż bardzo trudno jest rozpoznać krawędzie obiektów z powodu szumu, dlatego stosowany jest filtr WLS. Na początku należy ustalić parametry filtra podczas inicjalizacji.
+
+Lambda jest zazwyczaj ustawiana na 8000, im wyższa ta wartość, tym bardziej kształty mapy dysparycji będą przypominały kształty obrazu referencyjnego. Ustawiliśmy ją na 80000, ponieważ dawało to lepsze wyniki. Sigma opisuje, jak precyzyjny musi być nasz filtr na krawędziach obiektów.
+
+Tworzony jest inny obiekt stereo za pomocą cv2.ximgproc.createRightMatcher(), który opiera się na pierwszym obiekcie. Te dwie instancje są następnie używane w filtrze WLS do generowania mapy dysparycji. Instancja filtra jest tworzona za pomocą funkcji cv2.ximgproc.createDisparityWLSFilter().
+
+Aby zastosować instancję filtra WLS, wywoływana jest następująca metoda: cv2.ximgproc.createRightMatcher().filter(), a wartości naszego filtra są następnie normalizowane za pomocą cv2.normalize().
+
+Zastosowano mapę kolorów Ocean, aby uzyskać lepszą wizualizację, za pomocą cv2.applyColorMap(). Im ciemniejszy kolor, tym dalej znajduje się obiekt od kamery stereo.
+
+W ten sposób otrzymujemy obraz, który dobrze pokazuje krawędzie, ale nie jest już wystarczająco precyzyjny i nie zawiera już dobrych wartości dysparycji (mapa dysparycji jest zakodowana w formacie float32, ale wynik WLS jest zakodowany w uint8).
+
+Aby wykorzystać dobre wartości do późniejszego mierzenia odległości do obiektów, współrzędne x i y obrazu po filtrze WLS są pobierane za pomocą podwójnego kliknięcia. Te współrzędne (x, y) są następnie używane do uzyskania wartości dysparycji z mapy dysparycji, aby następnie zmierzyć odległość. Zwrócona wartość to średnia dysparycji z macierzy 9x9 pikseli.
+
+\subsection{Pomiar odległości}
+
+Po wygenerowaniu mapy dysparycji należy określić odległość. Zadanie polega na znalezieniu zależności między wartością dysparycji a odległością. Aby to zrobić, eksperymentalnie zmierzyliśmy wartości dysparycji w kilku miejscach, aby na tej podstawie określić regresję.
+
+Aby uzyskać równanie prostej regresji, użyta została biblioteka openpyxl, aby zapisać wartości dysparycji w pliku Excel. Linie w programie, które odpowiadały za zapisanie tych wartości, zostały skomentowane, ale można je odkomentować, jeśli potrzebna jest nowa równość prostej.
+
+Pomiar odległości dotyczy tylko odległości od 67 cm do 203 cm, aby uzyskać dobre wyniki. Precyzja pomiaru zależy również od jakości kalibracji. Nasze kamery stereo były w stanie zmierzyć odległość do obiektu z precyzją ± 5 cm.
+
+\subsection{Wnioski i możliwe ulepszenia}
+
+Możliwe ulepszenia dla programu:
+
+Należy wziąć kształt filtra WLS i projkować go na mapie dysparycji. Ta projekcja zostanie następnie użyta do pobrania wszystkich wartości dysparycji, które znajdują się w tym kształcie, a wartość, która występuje najczęściej, zostanie ustawiona jako wartość dla całej powierzchni.
+
+Użycie filtra bilateralnego na skalibrowanych obrazach przed wygenerowaniem mapy dysparycji, w ten sposób mogłoby być możliwe, aby nie stosować filtra WLS. Należy to sprawdzić, ale filtr WLS służy głównie do dobrego rozpoznawania krawędzi obiektów, być może istnieje lepsza metoda.
+
+Aby skrócić czas obliczeń przy generowaniu mapy dysparycji, należy zmniejszyć skalibrowane obrazy za pomocą funkcji cv2.resize(cv2.INTER-AREA). Należy przy tym pamiętać, że wartości macierzy esencjalnych i fundamentalnych również muszą być proporcjonalnie zmniejszone.
+
+Generowanie mapy głębokości mogłoby również być korzystne.
+
+Kamera, która jest stabilniejsza od naszej, gdzie rotacja głowic może być rzeczywiście zablokowana, w ten sposób wystarczyłoby zapisać wartości macierzy z kalibracji stereo, aby móc je ponownie wykorzystać. Dużo czasu mogłoby to zaoszczędzić w trakcie inicjalizacji.
+
+Uruchomienie programu na GPU pozwoliłoby również uzyskać gładsze obrazy, gdy kamera stereo jest w ruchu.
+
+Istnieją również inne metody pomiaru odległości za pomocą przetwarzania obrazu, np. kamery Time of Flight (TOF), które są jednak drogie i mają bardzo mało dokumentacji. Zdecydowaliśmy się również używać prostszych kamer ze względu na cenę.
+
+Aby wartości odległości były zawsze poprawne, należałoby opracować nowy system dla kamer, który zapobiegnie wszelkim swobodnym ruchom kamer. W ten sposób wykorzystywane byłyby tylko wartości macierzy, co przyspieszyłoby proces kalibracji. Używana równość prosta zawsze zwracałaby dokładną odległość do obiektu z większą precyzją i mniejszym nakładem pracy.
 
 \chapter{Zakończenie}
 
