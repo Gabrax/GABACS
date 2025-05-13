@@ -18,6 +18,7 @@
 \usepackage{titlesec}
 \usepackage{color}
 \usepackage{xcolor}
+\usepackage{float}
 \bibliographystyle{plain}
 
 \def\mgr{magisterska}
@@ -124,13 +125,13 @@ Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się anal
 
 \chapter{Część główna}
 
-\section{Natura kamery}
+\section{+Natura kamery}
 
-Kamery rejestrują promienie świetlne z naszego otoczenia. Zasadniczo kamera działa jak
-nasze oko, odbite promienie światła z naszego otoczenia docierają do naszego oka i są zbierane na siatkówce.
-„Kamera otworkowa” jest najprostszym modelem. Jest to dobry uproszczony model do zrozumienia, jak działa kamera. W tym modelu wszystkie promienie światła są zatrzymywane przez powierzchnię. Tylko promienie przechodzące przez otwór są przechwytywane i rzutowane w odwrotnej kolejności na powierzchnię w kamerze. Poniższa ilustracja wyjaśnia tę zasadę
+Kamery rejestrują promienie świetlne z otoczenia. Zasadniczo kamera działa podobnie jak ludzkie oko — odbite promienie światła trafiają do oka i są skupiane na siatkówce.
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+Najprostszym modelem kamery jest tzw. „kamera otworkowa”. To dobre uproszczenie pozwalające zrozumieć podstawy działania kamery. W tym modelu wszystkie promienie świetlne są blokowane przez ścianki, a tylko te przechodzące przez mały otwór trafiają na powierzchnię światłoczułą wewnątrz kamery, tworząc odwrócony obraz. Poniższa ilustracja przedstawia tę zasadę.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/light.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -138,24 +139,44 @@ nasze oko, odbite promienie światła z naszego otoczenia docierają do naszego 
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Zasada ta jest bardzo prosta, ale nie jest to dobry sposób na uchwycenie wystarczającej ilości światła przy szybkiej ekspozycji.
-Dlatego soczewki są używane do zbierania promieni światła w jednym miejscu. Problem polega na tym, że taki obiektyw powoduje zniekształcenia.
-Istnieją dwa różne rodzaje zniekształceń:
+Choć ten model jest prosty, nie nadaje się dobrze do rejestrowania wystarczającej ilości światła przy krótkim czasie naświetlania. Dlatego w kamerach stosuje się soczewki, które skupiają promienie świetlne w jednym punkcie. Niestety, powoduje to powstawanie zniekształceń.
+
+Istnieją dwa główne rodzaje zniekształceń:
+
 \begin{itemize}
-  \item zniekształcenie promieniowe
-  \item zniekształcenie styczne
+  \item Zniekształcenie promieniowe — spowodowane kształtem soczewki,
+
+  \item Zniekształcenie styczne — wynikające z niedoskonałości montażu lub geometrii kamery.
 \end{itemize}
-Zniekształcenie promieniowe wynika z kształtu samego obiektywu, a zniekształcenie styczne
-wynika z geometrii kamery. Obrazy można następnie skorygować za pomocą metod matematycznych.
-Proces kalibracji umożliwia stworzenie modelu geometrii kamery i modelu zniekształceń obiektywu.
-Modele te tworzą parametry wewnętrzne kamery.
+
+Obrazy zniekształcone w ten sposób można skorygować za pomocą metod matematycznych. Proces kalibracji pozwala stworzyć model geometrii kamery oraz model zniekształceń obiektywu. Te modele określają tzw. parametry wewnętrzne kamery.
 
 \subsection{Ogniskowa obiektywu}
 
 Względny rozmiar obrazu rzutowanego na powierzchnię w kamerze zależy od ogniskowej.
-W modelu otworkowym ogniskowa to odległość między otworem
-a obszarem, na który rzutowany jest obraz.
-Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
+
+W modelu otworkowym ogniskowa to odległość między otworem, przez który przechodzi światło, a obszarem, na który rzutowany jest obraz.
+
+Aby wyznaczyć, jak duży będzie obraz obiektu na płaszczyźnie projekcji, korzystamy z \textbf{twierdzenia Talesa}.  
+Dlaczego?
+
+Obiekt znajdujący się w przestrzeni oraz jego rzut w kamerze tworzą dwa \textbf{podobne trójkąty}:
+\begin{itemize}
+    \item Jeden utworzony przez obiekt o wysokości \( X \), znajdujący się w odległości \( Z \) od kamery.
+    \item Drugi utworzony przez obraz tego obiektu na płaszczyźnie znajdującej się w odległości \( f \) od otworu kamery, którego wysokość to \( x \).
+\end{itemize}
+
+Ponieważ kąty tych trójkątów są identyczne (wierzchołek kąta w otworze kamery) i odpowiadające sobie boki są proporcjonalne, możemy zastosować twierdzenie Talesa:
+
+\[
+\frac{x}{f} = \frac{X}{Z} \Rightarrow x = f \cdot \frac{X}{Z}
+\]
+
+Obraz na matrycy jest odwrócony, dlatego często w literaturze pojawia się wersja ze znakiem minus:
+
+\[
+-x = f \cdot \frac{X}{Z}
+\]
 
 \begin{itemize}
   \item \textbf{$x$}: obraz obiektu (znak minus wynika z tego, że obraz jest odwrócony)
@@ -164,7 +185,7 @@ Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
   \item \textbf{$f$}: ogniskowa, odległość od otworu do obrazu
 \end{itemize}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/pinhole.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -173,7 +194,7 @@ Twierdzenie Talesa daje zatem: $-x = f * (X / Z)$
 \end{figure}
 
 Ponieważ soczewka nie jest idealnie wyśrodkowana, wprowadzono dwa parametry, $C_x$ i $C_y$, oznaczające odpowiednio poziome i pionowe przemieszczenie soczewki.
-Ogniskowa na osiach $X$ i $Y$ są również różne, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór na położenie obiektu na powierzchni.
+Ogniskowa na osiach $X$ i $Y$ są również różna, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór na położenie obiektu na powierzchni.
 
 \[
 x_{\text{screen}} = f_x \left( \frac{X}{Z} \right) + c_x, \quad
@@ -182,20 +203,60 @@ y_{\text{screen}} = f_y \left( \frac{Y}{Z} \right) + c_y
 
 Rzutowane punkty świata rzeczywistego na powierzchnię obrazu można zatem modelować w następujący sposób. $M$ jest tutaj macierzą wewnętrzną.
 
+Punkt w przestrzeni 3D:
 \[
-q = MQ, \quad \text{gdzie} \quad
-q = \begin{bmatrix} x \\ y \\ w \end{bmatrix}, \quad
+Q = \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
+\]
+
+Po rzutowaniu za pomocą macierzy kamery $M$:
+\[
 M = \begin{bmatrix}
 f_x & 0 & c_x \\
 0 & f_y & c_y \\
 0 & 0 & 1
-\end{bmatrix}, \quad
-Q = \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
+\end{bmatrix}
 \]
+
+otrzymujemy punkt obrazu w jednorodnych współrzędnych:
+\[
+q = M \cdot \begin{bmatrix}
+\frac{X}{Z} \\
+\frac{Y}{Z} \\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+f_x \cdot \frac{X}{Z} + c_x \\
+f_y \cdot \frac{Y}{Z} + c_y \\
+1
+\end{bmatrix}
+\]
+
+Po normalizacji współrzędnych jednorodnych:
+\[
+x = \frac{q_x}{q_w} = f_x \cdot \frac{X}{Z} + c_x
+\quad , \quad
+y = \frac{q_y}{q_w} = f_y \cdot \frac{Y}{Z} + c_y
+\]
+
+Dla ogólnej macierzy projekcji:
+\[
+P = M \cdot [R \;|\; t]
+\]
+
+Macierz \( P = M[R | t] \) nazywana jest macierzą projekcji kamery i zawiera zarówno informacje o parametrach wewnętrznych kamery (macierz \( M \)), jak i jej położeniu i orientacji w przestrzeni (macierze \( R \) i \( t \)).
+
+Rzut punktu \( Q_h = \begin{bmatrix} X \\ Y \\ Z \\ 1 \end{bmatrix} \) przy pomocy tej macierzy daje nam współrzędne punktu\\ \( q = \begin{bmatrix} x' \\ y' \\ w \end{bmatrix} \) w jednorodnych współrzędnych, które po znormalizowaniu (\( x = \frac{x'}{w} \)) dają końcowe położenie punktu na obrazie.
+
+\[
+x = \frac{x'}{w}, \quad y = \frac{y'}{w}
+\]
+
+Współrzędne \( x, y \) po normalizacji są współrzędnymi piksela na płaszczyźnie obrazu, czyli miejscem, gdzie dany punkt 3D zostanie odwzorowany na zdjęciu lub klatce z kamery. Uwzględniają one zarówno parametry geometryczne obiektywu (ogniskowe \( f_x, f_y \)) jak i przesunięcia optycznego środka obrazu (\( c_x, c_y \)).
 
 \subsection{Zniekształcenie obiektywu}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.3\textwidth]{images/barrel.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -231,7 +292,7 @@ y_{\text{corrected}} &= y + \left[p_1 (r^2 + 2y^2) + 2p_2 x\right]
 
 \subsection{Monocular Vision}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.2\textwidth]{images/MONO.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -280,7 +341,7 @@ W kontekście wizji monokularnej, głębokie uczenie odgrywa kluczową rolę, um
 
 \subsection{Stereo Vision}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -323,7 +384,7 @@ Im większe $d$, tym mniejsza głębokość – obiekty bliżej kamery mają wi�
 
 \subsection{Structured Light}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/POINTCLOUD.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -372,7 +433,7 @@ Proces działa następująco:
 
 \subsection{LIDAR (Light Detection and Ranging)}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/LIDAR.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -383,14 +444,6 @@ Proces działa następująco:
 LIDAR (Light Detection and Ranging) to technologia zdalnego pomiaru odległości, która działa poprzez wysyłanie impulsów laserowych i mierzenie czasu, jaki upływa od ich odbicia od obiektu do powrotu do sensora. Na tej podstawie LIDAR tworzy bardzo dokładne mapy 3D otoczenia.
 
 Podstawowy mechanizm działania LiDAR opiera się na bardzo prostej zasadzie:
-
-Sensor emituje impuls laserowy w kierunku otoczenia.
-
-Światło odbija się od powierzchni obiektów i wraca do detektora.
-
-System mierzy czas, jaki upłynął od wysłania do odebrania sygnału (Time-of-Flight, ToF).
-
-Znając prędkość światła, obliczana jest dokładna odległość:
 
 \begin{itemize}
   \item Sensor emituje impuls laserowy w kierunku otoczenia.
@@ -477,7 +530,7 @@ Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komerc
 
 \section{Opis projektu}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.7\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -487,7 +540,7 @@ Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komerc
 
 \section{Obrazowanie stereoskopowe}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -512,7 +565,7 @@ obrazy współpłaszczyznowe na osi $Y$, co ułatwia wyszukiwanie korespondencji
 
 \subsection{Triangulacja}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/triangulation.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
@@ -546,7 +599,7 @@ Zanim zostanie wyjaśniona metoda matematycznego wyrównywania obrazów, trzeba 
 
 \subsection{Geometria epipolarna}
 
-\begin{figure}[h]  % 'h' means "here", it places the figure at the current location in the document
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.7\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
     \captionsetup{labelformat=empty, font=footnotesize}
