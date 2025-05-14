@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  13 MAY 2025 23:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  14 MAY 2025 22:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -373,6 +373,12 @@ LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 )
+Overfull \hbox (14.09293pt too wide) in paragraph at lines 147--148
+[]\T1/qtm/m/n/12 Znieksztaªcenie pro-mie-nio-we(radialne) ^^V spo-wo-do-wa-ne k
+sztaª-tem so-czew-ki,wyst¦puj¡ce
+ []
+
+
 
 [9 <./images/light.png>]
 <images/pinhole.png, id=42, 315.42844pt x 130.23656pt>
@@ -394,191 +400,169 @@ Package pdftex.def Info: images/barrel.png  used on input line 261.
 
 
 [12 <./images/barrel.png>]
-<images/MONO.png, id=59, 359.3425pt x 313.17pt>
+
+[13]
+Overfull \hbox (10.15405pt too wide) in paragraph at lines 330--331
+[]\T1/qtm/m/n/12 W ten spo-sób otrzy-mu-je-my osta-tecz-n¡, sko-ry-go-wa-n¡ po-
+zy-cj¦ punk-tu ob-ra-zu, któ-ra uwzgl¦d-
+ []
+
+<images/MONO.png, id=64, 359.3425pt x 313.17pt>
 File: images/MONO.png Graphic file (type png)
 <use images/MONO.png>
-Package pdftex.def Info: images/MONO.png  used on input line 297.
+Package pdftex.def Info: images/MONO.png  used on input line 342.
 (pdftex.def)             Requested size: 88.2022pt x 76.86829pt.
 
 
-[13 <./images/MONO.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 329--341
+[14 <./images/MONO.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 374--386
 [][] 
  []
 
-<images/MAINSTEREO.png, id=66, 788.9475pt x 207.77625pt>
+
+
+[15]
+<images/MAINSTEREO.png, id=72, 788.9475pt x 207.77625pt>
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 346.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 391.
 (pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
-
-[14]
-Overfull \hbox (8.93008pt too wide) in paragraph at lines 356--357
+Overfull \hbox (8.93008pt too wide) in paragraph at lines 401--402
 []\T1/qtm/m/n/12 W sys-te-mie ste-reo-wi-zyj-nym wy-ko-rzy-stu-je si¦ dwa ob-ra
 -zy uchwy-co-ne przez ka-me-ry umiesz-
  []
 
 
-Overfull \hbox (20.11821pt too wide) in paragraph at lines 356--357
+Overfull \hbox (20.11821pt too wide) in paragraph at lines 401--402
 \T1/qtm/m/n/12 prze-su-ni¦-cie ob-ra-zu te-go sa-me-go punk-tu sce-ny po-mi¦-dz
 y ob-ra-za-mi le-we-go i pra-we-go oka/kamery. 
  []
 
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 370--384
+
+[16 <./images/MAINSTEREO.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 415--429
 [][] 
  []
 
-
-Underfull \vbox (badness 1460) has occurred while \output is active []
-
-
-
-[15 <./images/MAINSTEREO.png>]
-<images/POINTCLOUD.png, id=74, 2441.12pt x 722.7pt>
+<images/POINTCLOUD.png, id=77, 2441.12pt x 722.7pt>
 File: images/POINTCLOUD.png Graphic file (type png)
 <use images/POINTCLOUD.png>
-Package pdftex.def Info: images/POINTCLOUD.png  used on input line 389.
+Package pdftex.def Info: images/POINTCLOUD.png  used on input line 434.
 (pdftex.def)             Requested size: 220.50887pt x 65.27176pt.
 
 
-[16 <./images/POINTCLOUD.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 419--433
+[17 <./images/POINTCLOUD.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 464--478
 [][] 
  []
 
-<images/LIDAR.png, id=79, 290.08376pt x 290.08376pt>
+<images/LIDAR.png, id=82, 290.08376pt x 290.08376pt>
 File: images/LIDAR.png Graphic file (type png)
 <use images/LIDAR.png>
-Package pdftex.def Info: images/LIDAR.png  used on input line 438.
-(pdftex.def)             Requested size: 220.50887pt x 220.5102pt.
+Package pdftex.def Info: images/LIDAR.png  used on input line 483.
+(pdftex.def)             Requested size: 132.30666pt x 132.307pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2529) has occurred while \output is active []
 
 
 
-[17]
-
-[18 <./images/LIDAR.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 467--481
+[18]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 512--526
 [][] 
  []
 
 
 
-[19]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 514--528
+[19 <./images/LIDAR.png>]
+
+[20]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 559--573
 [][] 
  []
 
-<images/RPI-PIN.jpg, id=91, 1214.5375pt x 644.4075pt>
+<images/RPI-PIN.jpg, id=94, 1214.5375pt x 644.4075pt>
 File: images/RPI-PIN.jpg Graphic file (type jpg)
 <use images/RPI-PIN.jpg>
-Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 535.
+Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 580.
 (pdftex.def)             Requested size: 308.71106pt x 163.79567pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[20]
+[21]
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 545.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 590.
 (pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
 
-[21 <./images/RPI-PIN.jpg>]
-<images/triangulation.png, id=98, 227.34938pt x 216.81pt>
+[22 <./images/RPI-PIN.jpg>]
+<images/triangulation.png, id=101, 227.34938pt x 216.81pt>
 File: images/triangulation.png Graphic file (type png)
 <use images/triangulation.png>
-Package pdftex.def Info: images/triangulation.png  used on input line 570.
+Package pdftex.def Info: images/triangulation.png  used on input line 615.
 (pdftex.def)             Requested size: 220.50887pt x 210.2889pt.
 
 
-[22 <./images/triangulation.png>]
-<images/epipolar.png, id=103, 295.1025pt x 184.43906pt>
+[23 <./images/triangulation.png>]
+<images/epipolar.png, id=106, 295.1025pt x 184.43906pt>
 File: images/epipolar.png Graphic file (type png)
 <use images/epipolar.png>
-Package pdftex.def Info: images/epipolar.png  used on input line 604.
+Package pdftex.def Info: images/epipolar.png  used on input line 649.
 (pdftex.def)             Requested size: 308.71106pt x 192.94907pt.
 
 
-[23 <./images/epipolar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 646--648
+[24 <./images/epipolar.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 691--693
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 648--650
+Underfull \hbox (badness 10000) in paragraph at lines 693--695
 
  []
 
 
-
-[24]
 
 [25]
 
 [26]
+
+[27]
+
+[28
+
+]
 Rozdzia\PlPrIeC {\l } 4.
 
-Overfull \hbox (34.74306pt too wide) in paragraph at lines 745--756
+Overfull \hbox (34.74306pt too wide) in paragraph at lines 790--801
 []\T1/qtm/m/n/12 Program do ro-bie-nia zdj¦¢ do pó¹-niej-szej ka-li-bra-cji no-
 si na-zw¦ ^^RTake-images-for-calibration.py^^Q.
  []
 
 
 
-[27
-
-]
-Overfull \hbox (1.65025pt too wide) in paragraph at lines 792--793
+[29]
+Overfull \hbox (1.65025pt too wide) in paragraph at lines 837--838
 \T1/qtm/m/n/12 images-for-calibration.py^^Q. Ka-li-bra-cja ta opie-ra si¦ na ^^
 RTake-images-for-calibration.py^^Q, gdzie
  []
 
 
 
-[28]
-Overfull \hbox (127.01111pt too wide) in paragraph at lines 796--797
+[30]
+Overfull \hbox (127.01111pt too wide) in paragraph at lines 841--842
 []\T1/qtm/m/n/12 Aby uzy-ska¢ opty-mal-ne ma-cie-rze ka-mer dla ka»-dej z nich,
  u»y-wa-na jest funk-cja cv2.getOptimalNewCameraMatrix()
  []
 
 
-Overfull \hbox (46.6852pt too wide) in paragraph at lines 810--811
+Overfull \hbox (46.6852pt too wide) in paragraph at lines 855--856
 \T1/qtm/m/n/12 Aby ob-li-czy¢ ma-p¦ dys-pa-ry-cji, two-rzo-ny jest obiekt Ste-r
 eo-SGBM za po-mo-c¡ funk-cji cv2.StereoSGBM-
- []
-
-
-
-[29]
-
-[30]
-Overfull \hbox (132.31825pt too wide) in paragraph at lines 842--843
-\T1/qtm/m/n/12 ge-ne-ro-wa-nia ma-py dys-pa-ry-cji. In-stan-cja fil-tra jest tw
-o-rzo-na za po-mo-c¡ funk-cji cv2.ximgproc.createDisparityWLSFilter(). 
- []
-
-
-Overfull \hbox (144.95111pt too wide) in paragraph at lines 844--845
-[]\T1/qtm/m/n/12 Aby za-sto-so-wa¢ in-stan-cj¦ fil-tra WLS, wy-wo-ªy-wa-na jest
- na-st¦-pu-j¡-ca me-to-da: cv2.ximgproc.createRightMatcher().filter(),
- []
-
-
-Overfull \hbox (62.29509pt too wide) in paragraph at lines 846--847
-[]\T1/qtm/m/n/12 Zastosowano ma-p¦ ko-lo-rów Oce-an, aby uzy-ska¢ lep-sz¡ wi-zu
--ali-za-cj¦, za po-mo-c¡ cv2.applyColorMap().
- []
-
-
-Overfull \hbox (7.04706pt too wide) in paragraph at lines 850--851
-[]\T1/qtm/m/n/12 Aby wy-ko-rzy-sta¢ do-bre war-to-±ci do pó¹-niej-sze-go mie-rz
-e-nia od-le-gªo-±ci do obiek-tów, wspóª-
  []
 
 
@@ -586,24 +570,52 @@ e-nia od-le-gªo-±ci do obiek-tów, wspóª-
 [31]
 
 [32]
+Overfull \hbox (132.31825pt too wide) in paragraph at lines 887--888
+\T1/qtm/m/n/12 ge-ne-ro-wa-nia ma-py dys-pa-ry-cji. In-stan-cja fil-tra jest tw
+o-rzo-na za po-mo-c¡ funk-cji cv2.ximgproc.createDisparityWLSFilter(). 
+ []
+
+
+Overfull \hbox (144.95111pt too wide) in paragraph at lines 889--890
+[]\T1/qtm/m/n/12 Aby za-sto-so-wa¢ in-stan-cj¦ fil-tra WLS, wy-wo-ªy-wa-na jest
+ na-st¦-pu-j¡-ca me-to-da: cv2.ximgproc.createRightMatcher().filter(),
+ []
+
+
+Overfull \hbox (62.29509pt too wide) in paragraph at lines 891--892
+[]\T1/qtm/m/n/12 Zastosowano ma-p¦ ko-lo-rów Oce-an, aby uzy-ska¢ lep-sz¡ wi-zu
+-ali-za-cj¦, za po-mo-c¡ cv2.applyColorMap().
+ []
+
+
+Overfull \hbox (7.04706pt too wide) in paragraph at lines 895--896
+[]\T1/qtm/m/n/12 Aby wy-ko-rzy-sta¢ do-bre war-to-±ci do pó¹-niej-sze-go mie-rz
+e-nia od-le-gªo-±ci do obiek-tów, wspóª-
+ []
+
+
+
+[33]
+
+[34]
 Rozdzia\PlPrIeC {\l } 5.
 
 
-[33
+[35
 
 ]
 
-[34
+[36
 
 ]
-Overfull \hbox (90.3002pt too wide) in paragraph at lines 894--896
+Overfull \hbox (90.3002pt too wide) in paragraph at lines 939--941
 []\T1/qtm/m/n/12 Stereo and 3D Vi-sion, Ra-jesh Rao, \T1/qtm/m/it/12 https://co
 urses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qtm/m/n/12 . 
  []
 
 
 
-[35] (wzor.aux)
+[37] (wzor.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
@@ -637,9 +649,9 @@ ab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Use
 rs/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:
 /Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pf
 b>
-Output written on wzor.pdf (35 pages, 1351743 bytes).
+Output written on wzor.pdf (37 pages, 1355989 bytes).
 PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
+ 205 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  56 words of extra memory for PDF output out of 10000 (max. 10000000)
 
