@@ -21,6 +21,8 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage{xcolor} % optional, for color
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
 \bibliographystyle{plain}
 
 \def\mgr{magisterska}
@@ -43,8 +45,8 @@
 %kierunek studiów
 \kierunek{Informatyka}
 %promotor w dopełniaczu
-\opiekun{prof. dr hab. Paweł Zajączkowski}
-\katedra{Katedra Opiekuna}
+\opiekun{dr Paweł Zajączkowski}
+\katedra{Katedra Informatyki Stosowanej}
 %rok
 \date{2025}
 %Słowa kluczowe:
@@ -104,35 +106,6 @@ We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego stud
 
 Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się analizą, modyfikacją i interpretacją obrazów cyfrowych za pomocą metod numerycznych i algorytmów komputerowych. Jej celem jest poprawa jakości obrazów, ekstrakcja informacji, segmentacja obiektów lub ich klasyfikacja. Przetwarzanie obrazu znajduje zastosowanie w wielu obszarach, takich jak medycyna (np. analiza zdjęć RTG), przemysł (np. kontrola jakości), bezpieczeństwo (np. rozpoznawanie twarzy), robotyka oraz systemy wizyjne pojazdów autonomicznych. Dzięki połączeniu technik matematycznych, statystycznych i sztucznej inteligencji możliwe jest coraz bardziej precyzyjne i automatyczne rozumienie zawartości obrazów.
 
-
-\chapter{Podstawowe pojęcia}
-
-  \section{Definicje i własności}
-
-  W niniejszej części pracy podane zostaną pojęcia niezbędne w późniejszych rozważaniach (patrz \cite{Kostrykin} lub \cite{Lang}).
-  \begin{defi}
-  Niech $G$ będzie niepustym zbiorem. Działaniem w $G$ nazywamy dowolne odwzorowanie $\circ:G\times G\to G$.
-  \end{defi}
-
-  \begin{defi}
-  Niech $G$ będzie niepustym zbiorem, $\circ$ działaniem w $G$. Element $e\in G$ nazywamy neutralnym (działania $\circ$), jeśli dla każdego $a\in G$ mamy $a\circ e=e\circ a=a$.
-  \end{defi}
-
-  \begin{lem}\label{lem:element_neutralny}
-  Jeśli działanie $\circ$ w $G$ posiada element neutralny, to jest on jeden.
-  \end{lem}
-  \pd Niech $e,e'\in G$ będą dwoma elementami neutralnymi. Wtedy
-  \begin{equation}\label{eq:element_neutralny}
-  e=e'\circ e=e'.
-  \end{equation}
-  Zatem element neutralny jest jeden. \kd
-
-
-  \section{Przykłady}
-
-  Działaniem w zbiorze liczb naturalnych jest dodawanie, natomiast działaniem w tym zbiorze nie jest odejmowanie.
-
-
 \chapter{Część główna}
 
 \section{+Natura kamery}
@@ -141,12 +114,12 @@ Kamery rejestrują promienie świetlne z otoczenia. Zasadniczo kamera działa po
 
 Najprostszym modelem kamery jest tzw. „kamera otworkowa”. To dobre uproszczenie pozwalające zrozumieć podstawy działania kamery. W tym modelu wszystkie promienie świetlne są blokowane przez ścianki, a tylko te przechodzące przez mały otwór trafiają na powierzchnię światłoczułą wewnątrz kamery, tworząc odwrócony obraz. Poniższa ilustracja przedstawia tę zasadę.
 
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/light.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://funsizephysics.com/use-light-turn-world-upside/}
-    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/light.png}
+    \captionsetup{font=footnotesize}
+    \caption[Odwrócenie obrazu przez soczewkę. https://funsizephysics.com/use-light-turn-world-upside/]{Odwrócenie obrazu przez soczewkę}
+    \label{fig:rpi}
 \end{figure}
 
 Choć ten model jest prosty, nie nadaje się dobrze do rejestrowania wystarczającej ilości światła przy krótkim czasie naświetlania. Dlatego w kamerach stosuje się soczewki, które skupiają promienie świetlne w jednym punkcie. Niestety, powoduje to powstawanie zniekształceń.
@@ -198,8 +171,8 @@ Obraz na matrycy jest odwrócony, dlatego często w literaturze pojawia się wer
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/pinhole.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 639}
+    \captionsetup{font=footnotesize}
+    \caption[Model kamery otworkowej. Learning OpenCV 3, O'Reilly, Str. 639]{Model kamery otworkowej}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -212,6 +185,8 @@ y_{\text{screen}} = f_y \left( \frac{Y}{Z} \right) + c_y
 \]
 
 Rzutowane punkty świata rzeczywistego na powierzchnię obrazu można zatem modelować w następujący sposób. $M$ jest tutaj macierzą wewnętrzną.
+
+\bigskip
 
 Punkt w przestrzeni 3D:
 \[
@@ -264,13 +239,13 @@ x = \frac{x'}{w}, \quad y = \frac{y'}{w}
 
 Współrzędne \( x, y \) po normalizacji są współrzędnymi piksela na płaszczyźnie obrazu, czyli miejscem, gdzie dany punkt 3D zostanie odwzorowany na zdjęciu lub klatce z kamery. Uwzględniają one zarówno parametry geometryczne obiektywu (ogniskowe \( f_x, f_y \)) jak i przesunięcia optycznego środka obrazu (\( c_x, c_y \)).
 
-\subsection{Zniekształcenie obiektywu}
+\subsection{Dystorsja obrazu}
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.3\textwidth]{images/barrel.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: Wikipedia}
+    \includegraphics[width=0.5\textwidth]{images/dystorsje.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Rodzaje dystorsji. https://beafoto.pl/dystorsja]{Rodzaje dystorsji}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -350,8 +325,8 @@ Znormalizowane współrzędne $(x, y)$ oraz współrzędne pikselowe $(u, v)$ s�
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.2\textwidth]{images/MONO.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \captionsetup{font=footnotesize}
+    \caption[Kamerka internetowa. https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html]{Kamerka internetowa.}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -399,8 +374,8 @@ W kontekście wizji monokularnej, głębokie uczenie odgrywa kluczową rolę, um
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \captionsetup{font=footnotesize}
+    \caption[Kamera stereowizyjna. https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html]{Kamera stereowizyjna}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -442,12 +417,14 @@ Im większe $d$, tym mniejsza głębokość – obiekty bliżej kamery mają wi�
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/POINTCLOUD.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
+    \captionsetup{font=footnotesize}
+    \caption[Kamera Xbox 360 Kinect. https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html]{Kamera Xbox 360 Kinect}
+    \label{fig:kinect}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Structured Light (pol. światło strukturalne) to technika aktywnej wizji komputerowej wykorzystywana do precyzyjnego pomiaru kształtu i głębokości obiektów. Polega na projekcji znanego wzorca świetlnego (np. siatki, kropek, pasków) na powierzchnię sceny, a następnie analizie deformacji tego wzorca za pomocą kamery. Technologia ta jest szeroko stosowana w systemach 3D skanowania, rozpoznawania gestów, robotyce, a także w popularnych urządzeniach konsumenckich, takich jak Kinect v1
+Structured Light (pol. światło strukturalne) to technika aktywnej wizji komputerowej wykorzystywana do precyzyjnego pomiaru kształtu i głębokości obiektów. Polega na projekcji znanego wzorca świetlnego (np. siatki, kropek, pasków) na powierzchnię sceny, a następnie analizie deformacji tego wzorca za pomocą kamery.
+
+\bigskip
 
 System Structured Light składa się zazwyczaj z dwóch komponentów:
 
@@ -491,8 +468,8 @@ Proces działa następująco:
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.3\textwidth]{images/LIDAR.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html}
+    \captionsetup{font=footnotesize}
+    \caption[Kamera Intel RealSense L515 z technologią LIDAR. https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html]{Kamera Intel RealSense z technologią LIDAR.}
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -588,20 +565,12 @@ Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komerc
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.7\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg}
+    \captionsetup{font=footnotesize}
+    \caption[Płytka Raspberry Pi 5 i jej schemat pinów GPIO. https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg]{Płytka Raspberry Pi 5 i jej schemat pinów GPIO.}
     \label{fig:rpi-gpio}  % Optional: use to refer to this image later in the text
 \end{figure}
 
 \section{Obrazowanie stereoskopowe}
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/MAINSTEREO.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: https://pl.aliexpress.com/i/1005006618001887.html}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
 
 Stereo Vision umożliwia rozpoznawanie głębi na obrazie, wykonywanie pomiarów na obrazie
 i przeprowadzanie lokalizacji 3D. Między innymi należy znaleźć punkty, które pasują do siebie między dwiema kamerami. Można to następnie wykorzystać do odległość między kamerą a punktem. Wykorzystywana jest geometria systemu w celu uproszczenia obliczeń.
@@ -623,8 +592,8 @@ obrazy współpłaszczyznowe na osi $Y$, co ułatwia wyszukiwanie korespondencji
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.5\textwidth]{images/triangulation.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 705}
+    \captionsetup{font=footnotesize}
+    \caption[Schemat triangulacji. Learning OpenCV 3, O'Reilly, Str. 705]{Schemat triangulacji.}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -657,8 +626,8 @@ Zanim zostanie wyjaśniona metoda matematycznego wyrównywania obrazów, trzeba 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
     \includegraphics[width=0.7\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
-    \captionsetup{labelformat=empty, font=footnotesize}
-    \caption{Źródło: Learning OpenCV 3, O'Reilly, Str. 709}
+    \captionsetup{font=footnotesize}
+    \caption[Model kamery stereo. Learning OpenCV 3, O'Reilly, Str. 709]{Model kamery stereo.}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -733,9 +702,7 @@ R = R_r R_l^T & \quad T = T_r - R T_l
 
 \subsection{Rektyfikacja stereo}
 
-Dotychczas zajmowaliśmy się tematem „kalibracji stereo”. Chodziło o
-opis geometrycznego rozmieszczenia obu kamer. Zadaniem
-rektyfikacji jest rzutowanie dwóch obrazów tak, aby leżały dokładnie w tej samej płaszczyźnie i precyzyjne wyrównanie rzędów pikseli tak, aby linie epipolarne stały się poziome w celu zapewnienia zgodności punktu na dwóch obrazach.
+Zadaniem rektyfikacji jest rzutowanie dwóch obrazów tak, aby leżały dokładnie w tej samej płaszczyźnie i precyzyjne wyrównanie rzędów pikseli tak, aby linie epipolarne stały się poziome w celu zapewnienia zgodności punktu na dwóch obrazach.
 aby znaleźć zgodność punktu na dwóch obrazach w sposób bardziej losowy.
 W wyniku procesu wyrównywania obu obrazów uzyskuje się 8 wyrażeń, po 4 dla każdej kamery:
 
@@ -794,61 +761,16 @@ aby użytkownik mógł zobaczyć, gdzie na obrazach znajduje się szachownica.
 
 \subsubsection{Kalibracja}
 
-Biblioteka OpenCV pozwala nam obliczyć parametry wewnętrzne za pomocą określonych funkcji.
-Proces ten nazywany jest kalibracją. Jest to możliwe dzięki różnym
-widoków szachownicy.
-
-Jeśli rogi szachownicy zostaną rozpoznane na obu kamerach, otworzą się dwa okna z rozpoznanym obrazem dla każdej kamery.
-z rozpoznanym obrazem dla każdej kamery. Obrazy są następnie zapisywane lub usuwane
-zapisywane lub usuwane. Można rozpoznać dobre obrazy, na których narożniki
-są bardzo wyraźnie rozpoznawalne. Obrazy te są później używane do kalibracji w głównym programie
-programie „Main-Stereo-Vision-Prog.py”. OpenCV zaleca posiadanie co najmniej 10
-obrazów dla każdej kamery, aby uzyskać dobrą kalibrację. My uzyskaliśmy dobre wyniki przy 50
-obrazów dla każdej kamery.
-Aby skalibrować kamery, kod Pythona wyszukuje narożniki szachownicy na każdym
-obrazie dla każdej kamery przy użyciu funkcji OpenCV: cv2.findChesssboardCorners()
-
-Pozycja narożników dla każdego obrazu jest następnie zapisywana w wektorze obrazu, a punkty obiektu dla sceny 3D są zapisywane w innym wektorze.
-dla sceny 3D są zapisywane w innym wektorze. Następnie należy użyć
-następnie użyć tych Imgpoints i Objpoints w funkcji cv2.calibeCamera(), której wynikiem jest
-macierz kamery, współczynniki zniekształceń, wektory obrotu i translacji
-są zwracane.
-
-Funkcja cv2.getOptimalNewCameraMatrix() umożliwia nam uzyskanie dokładnych macierzy kamer.
-które później wykorzystamy w funkcji cv2.stereoRectify().
-
-Po kalibracji za pomocą OpenCV otrzymujemy następującą macierz M dla naszej kamery:\\
-
-Matryca M bez rektyfikacji (prawa kamera):
-
-Matrix Mrekt Rectified (prawa kamera):
-
-Matryca M bez rektyfikacji (lewa kamera):
-
-Matryca M wyprostowana (lewa kamera):
-
-Funkcja cv2.findChessboardCorners() wyszuka określoną liczbę narożników szachownicy
-i wygenerowane zostaną następujące wektory:
-
-\begin{itemize}
-  \item imgpointsR: zawiera współrzędne narożników na prawym obrazie (w przestrzeni obrazu)
-  \item imgpointsL: zawiera współrzędne narożników na lewym obrazie (w przestrzeni obrazu)
-  \item objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
-\end{itemize}
-
-Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
-cv2.cornerSubPix().
-
 \begin{lstlisting}[style=mypython]
 # Termination criteria
 criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-# Prepare object points
+# Przygotowanie punktow obiektu
 objp = np.zeros((9*6,3), np.float32)
 objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 
-# Arrays to store object points and image points from all images
+# Tablice do przechowywania punktow obiektu i punktow obrazu ze wszystkich obrazow
 objpoints= []   # 3d points in real world space
 imgpointsR= []   # 2d points in image plane
 imgpointsL= []
@@ -868,14 +790,26 @@ for i in range(0, 64):
         imgpointsR.append(cornersR)
         imgpointsL.append(cornersL)
 
-# Calibration
-retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR, ChessImgR.shape[::-1], None, None)
-retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, ChessImgL.shape[::-1], None, None)
-OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImgR.shape[::-1], 1, ChessImgR.shape[::-1])
-OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImgL.shape[::-1], 1, ChessImgL.shape[::-1])
+# Kalibracja
+retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR,
+                                                        ChessImgR.shape[::-1], None, None)
+retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, 
+                                                        ChessImgL.shape[::-1], None, None)
+OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, 
+                                            ChessImgR.shape[::-1], 1, ChessImgR.shape[::-1])
+OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, 
+                                            ChessImgL.shape[::-1], 1, ChessImgL.shape[::-1])
 \end{lstlisting}
 
-\subsubsection{Rektyfikacja}
+Biblioteka OpenCV pozwala nam obliczyć parametry wewnętrzne za pomocą określonych funkcji.
+Proces ten nazywany jest kalibracją. Jest to możliwe dzięki zdjęciom szachownicy wykonanym pod różnymi kątami.
+
+Można rozpoznać dobre obrazy, na których narożniki są bardzo wyraźnie rozpoznawalne za pomocą funkcji cv2.findChesssboardCorners(). OpenCV zaleca posiadanie co najmniej 10
+zdjęcia dla każdej kamery, aby uzyskać dobrą kalibrację. Do projektu zostało pobrane 32 zdjęcia dla każdej kamery.
+
+Pozycja narożników dla każdego obrazu jest następnie zapisywana w wektorze obrazu, a punkty obiektu dla sceny 3D są zapisywane w innym wektorze. Następnie należy użyć Imgpoints i Objpoints w funkcji cv2.calibrateCamera(), której wynikiem jest macierz kamery, współczynniki zniekształceń, wektory obrotu i translacji.
+
+Funkcja cv2.getOptimalNewCameraMatrix() umożliwia uzyskanie dokładnych macierzy kamer, które później będą wykorzystane w rektyfikacji.
 
 Do korekcji dystorsji kamer używane są obrazy zarejestrowane za pomocą programu „Take-images-for-calibration.py”, gdzie w zmiennych imgpoints i objpoints zapisywane są pozycje narożników szachownicy.
 
@@ -884,6 +818,30 @@ Funkcja cv2.calibrateCamera() jest wykorzystywana do uzyskania nowych macierzy k
 Aby uzyskać optymalne macierze kamer dla każdej z nich, używana jest funkcja cv2.getOptimalNewCameraMatrix() (w celu zwiększenia precyzji).
 
 Do kalibracji stereo używana jest funkcja cv2.StereoCalibrate(), która oblicza transformację pomiędzy dwiema kamerami (jedna kamera służy jako odniesienie dla drugiej).
+
+Po kalibracji otrzymywana jest następującą macierz $M$ dla użytej kamery:\\
+
+Matryca $M$ bez rektyfikacji (prawa kamera):
+
+Matrix $M_{rekt}$ Rectified (prawa kamera):
+
+Matryca $M$ bez rektyfikacji (lewa kamera):
+
+Matryca $M$ wyprostowana (lewa kamera):
+
+Funkcja cv2.findChessboardCorners() wyszuka określoną liczbę narożników szachownicy
+i wygenerowane zostaną następujące wektory:
+
+\begin{itemize}
+  \item imgpointsR: zawiera współrzędne narożników na prawym obrazie (w przestrzeni obrazu)
+  \item imgpointsL: zawiera współrzędne narożników na lewym obrazie (w przestrzeni obrazu)
+  \item objpoints: zawiera współrzędne narożników w przestrzeni obiektu.
+\end{itemize}
+
+Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
+cv2.cornerSubPix().
+
+\subsubsection{Rektyfikacja}
 
 Funkcja cv2.stereoRectify() umożliwia sprowadzenie linii epipolarnych obu kamer do tej samej płaszczyzny. Taka transformacja ułatwia działanie funkcji generującej mapę dysparycji, ponieważ dopasowywanie bloków musi być wtedy wykonywane tylko w jednym wymiarze.
 
@@ -940,7 +898,7 @@ Na tej mapie dysparycji występuje jeszcze sporo szumu. Aby go wyeliminować, st
 
 Poniżej inny przykład tej samej sceny, aby lepiej zobaczyć różnicę.
 
-\subsubsection{Zastosowanie filtra WLS (ważonych najmniejszych kwadratów)}
+\subsubsection{filtr WLS (ważonych najmniejszych kwadratów)}
 
 \begin{lstlisting}[style=mypython]
 # WLS FILTER Parameters
@@ -951,7 +909,7 @@ wls_filter.setSigmaColor(1.8)
 
 Wynik nie jest zły, ale wciąż bardzo trudno jest rozpoznać krawędzie obiektów z powodu szumu, dlatego stosowany jest filtr WLS. Na początku należy ustalić parametry filtra podczas inicjalizacji.
 
-Lambda jest zazwyczaj ustawiana na 8000, im wyższa ta wartość, tym bardziej kształty mapy dysparycji będą przypominały kształty obrazu referencyjnego. Ustawiliśmy ją na 80000, ponieważ dawało to lepsze wyniki. Sigma opisuje, jak precyzyjny musi być nasz filtr na krawędziach obiektów.
+Lambda jest zazwyczaj ustawiana na 8000, im wyższa ta wartość, tym bardziej kształty mapy dysparycji będą przypominały kształty obrazu referencyjnego. Ustawiona została wartość na 80000, ponieważ dawało to lepsze wyniki. Sigma opisuje, jak precyzyjny musi być filtr na krawędziach obiektów.
 
 Tworzony jest inny obiekt stereo za pomocą cv2.ximgproc.createRightMatcher(), który opiera się na pierwszym obiekcie. Te dwie instancje są następnie używane w filtrze WLS do generowania mapy dysparycji. Instancja filtra jest tworzona za pomocą funkcji cv2.ximgproc.createDisparityWLSFilter().
 
@@ -961,7 +919,6 @@ Zastosowano mapę kolorów Ocean, aby uzyskać lepszą wizualizację, za pomocą
 
 W ten sposób otrzymujemy obraz, który dobrze pokazuje krawędzie, ale nie jest już wystarczająco precyzyjny i nie zawiera już dobrych wartości dysparycji (mapa dysparycji jest zakodowana w formacie float32, ale wynik WLS jest zakodowany w uint8).
 
-Aby wykorzystać dobre wartości do późniejszego mierzenia odległości do obiektów, współrzędne x i y obrazu po filtrze WLS są pobierane za pomocą podwójnego kliknięcia. Te współrzędne (x, y) są następnie używane do uzyskania wartości dysparycji z mapy dysparycji, aby następnie zmierzyć odległość. Zwrócona wartość to średnia dysparycji z macierzy 9x9 pikseli.
 
 \subsection{Główna pętla}
 
@@ -1002,7 +959,8 @@ while True:
     disp = ((DispL.astype(np.float32) / 16) - min_disp) / num_disp
 
     filteredImg = wls_filter.filter(DispL, Gray_left, None, DispR)
-    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
+    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, 
+                                alpha=255, norm_type=cv2.NORM_MINMAX)
     filteredImg = np.uint8(filteredImg)
 
     filt_Color = cv2.applyColorMap(filteredImg, cv2.COLORMAP_OCEAN)
@@ -1043,45 +1001,40 @@ for cnt in contours:
 
 Pomiar odległości dotyczy tylko odległości od 67 cm do 203 cm, aby uzyskać dobre wyniki. Precyzja pomiaru zależy również od jakości kalibracji. Nasze kamery stereo były w stanie zmierzyć odległość do obiektu z precyzją ± 5 cm.
 
+Zwrócona wartość to średnia dysparycji z macierzy 9x9 pikseli.
+
 \subsection{Wnioski i możliwe ulepszenia}
 
 Możliwe ulepszenia dla programu:
 
-Należy wziąć kształt filtra WLS i projkować go na mapie dysparycji. Ta projekcja zostanie następnie użyta do pobrania wszystkich wartości dysparycji, które znajdują się w tym kształcie, a wartość, która występuje najczęściej, zostanie ustawiona jako wartość dla całej powierzchni.
+Należy wziąć kształt filtra WLS i projkować go na mapie dysparycji \cite{rao}. Ta projekcja zostanie następnie użyta do pobrania wszystkich wartości dysparycji, które znajdują się w tym kształcie, a wartość, która występuje najczęściej, zostanie ustawiona jako wartość dla całej powierzchni.
 
 Użycie filtra bilateralnego na skalibrowanych obrazach przed wygenerowaniem mapy dysparycji, w ten sposób mogłoby być możliwe, aby nie stosować filtra WLS. Należy to sprawdzić, ale filtr WLS służy głównie do dobrego rozpoznawania krawędzi obiektów, być może istnieje lepsza metoda.
 
-Aby skrócić czas obliczeń przy generowaniu mapy dysparycji, należy zmniejszyć skalibrowane obrazy za pomocą funkcji cv2.resize(cv2.INTER-AREA). Należy przy tym pamiętać, że wartości macierzy esencjalnych i fundamentalnych również muszą być proporcjonalnie zmniejszone.
+Aby skrócić czas obliczeń przy generowaniu mapy dysparycji, należy zmniejszyć skalibrowane obrazy za pomocą funkcji cv2.resize(cv2.INTER-AbyREA). Należy przy tym pamiętać, że wartości macierzy esencjalnych i fundamentalnych również muszą być proporcjonalnie zmniejszone.
 
 Generowanie mapy głębokości mogłoby również być korzystne.
 
-Kamera, która jest stabilniejsza od naszej, gdzie rotacja głowic może być rzeczywiście zablokowana, w ten sposób wystarczyłoby zapisać wartości macierzy z kalibracji stereo, aby móc je ponownie wykorzystać. Dużo czasu mogłoby to zaoszczędzić w trakcie inicjalizacji.
+Wystarczyłoby zapisać wartości macierzy z kalibracji stereo, aby móc je ponownie wykorzystać. Dużo czasu mogłoby to zaoszczędzić w trakcie inicjalizacji.
 
 Uruchomienie programu na GPU pozwoliłoby również uzyskać gładsze obrazy, gdy kamera stereo jest w ruchu.
-
-Istnieją również inne metody pomiaru odległości za pomocą przetwarzania obrazu, np. kamery Time of Flight (TOF), które są jednak drogie i mają bardzo mało dokumentacji. Zdecydowaliśmy się również używać prostszych kamer ze względu na cenę.
 
 Aby wartości odległości były zawsze poprawne, należałoby opracować nowy system dla kamer, który zapobiegnie wszelkim swobodnym ruchom kamer. W ten sposób wykorzystywane byłyby tylko wartości macierzy, co przyspieszyłoby proces kalibracji. Używana równość prosta zawsze zwracałaby dokładną odległość do obiektu z większą precyzją i mniejszym nakładem pracy.
 
 \chapter{Zakończenie}
 
+\listoffigures
+
 \begin{thebibliography}{7}
 \addcontentsline{toc}{chapter}{Bibliografia}
 
-\bibitem{opencv}
-OpenCV, 
-\textit{https://opencv.org}.
+\bibitem{lambert} John Lambert, Stereo and Disparity, \textit{https://johnwlambert.github.io/stereo/}.
 
-\bibitem{Lambert} 
-Stereo and Disparity, John Lambert,  
-\textit{https://johnwlambert.github.io/stereo/}.
+\bibitem{rao} Rajesh Rao, Stereo and 3D Vision, \textit{https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf}.
 
-\bibitem{rao} 
-Stereo and 3D Vision, Rajesh Rao, 
-\textit{https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf}.
+\bibitem{reilly} Adrian Kaehler, Gary Bradski, Learning OpenCV 3, O'Reilly, 2017-11.
 
-\bibitem{reilly} 
-Learning OpenCV 3, O'Reilly. 
+\bibitem{dystorsja} Dystorsja obrazu w fotografii, https://beafoto.pl/dystorsja, 2021-01.
 
 \end{thebibliography}
 \end{document}

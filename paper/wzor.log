@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  16 MAY 2025 23:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  19 MAY 2025 22:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -248,6 +248,11 @@ File: lstmisc.sty 2024/05/25 1.10b (Carsten Heinz)
 File: listings.cfg 2024/05/25 1.10b listings configuration
 ))
 Package: listings 2024/05/25 1.10b (Carsten Heinz)
+(C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/chngcntr\chngcntr.sty
+Package: chngcntr 2018/04/09 v1.1a change counter resetting
+Package chngcntr Info: \counterwithout already defined.
+(chngcntr)             Quitting chngcntr on input line 21.
+)
 \c@defi=\count292
 \c@uwaga=\count293
 \c@tw=\count294
@@ -273,12 +278,6 @@ LaTeX Warning: Label `fig:mono' multiply defined.
 LaTeX Warning: Label `fig:mono' multiply defined.
 
 
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
-LaTeX Warning: Label `fig:mono' multiply defined.
-
-
 LaTeX Warning: Label `fig:rpi' multiply defined.
 
 
@@ -287,20 +286,20 @@ LaTeX Warning: Label `fig:rpi' multiply defined.
 )
 \openout1 = `wzor.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 93.
-LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
@@ -336,14 +335,14 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 File: images/logo_math_ul_h_pl_rgb.png Graphic file (type png)
 <use images/logo_math_ul_h_pl_rgb.png>
 Package pdftex.def Info: images/logo_math_ul_h_pl_rgb.png  used on input line 9
-5.
+7.
 (pdftex.def)             Requested size: 378.66376pt x 146.79808pt.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 95.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 97.
 
  (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 95.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 97.
 
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -378,430 +377,450 @@ Rozdzia\PlPrIeC {\l } 1.
 
 ]
 Rozdzia\PlPrIeC {\l } 2.
-
-LaTeX Warning: Citation `Kostrykin' on page 7 undefined on input line 112.
-
-
-LaTeX Warning: Citation `Lang' on page 7 undefined on input line 112.
-
-
-
-[7]
-
-[8
-
-]
-Rozdzia\PlPrIeC {\l } 3.
-<images/light.png, id=37, 401.5pt x 274.02374pt>
+<images/light.png, id=25, 401.5pt x 274.02374pt>
 File: images/light.png Graphic file (type png)
 <use images/light.png>
-Package pdftex.def Info: images/light.png  used on input line 146.
+Package pdftex.def Info: images/light.png  used on input line 119.
 (pdftex.def)             Requested size: 220.50887pt x 150.50027pt.
 LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
-57.
+30.
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 )
-Overfull \hbox (14.09293pt too wide) in paragraph at lines 157--158
+Overfull \hbox (14.09293pt too wide) in paragraph at lines 130--131
 []\T1/qtm/m/n/12 Znieksztaªcenie pro-mie-nio-we(radialne) ^^V spo-wo-do-wa-ne k
 sztaª-tem so-czew-ki,wyst¦puj¡ce
  []
 
 
 
-[9 <./images/light.png>]
-<images/pinhole.png, id=42, 315.42844pt x 130.23656pt>
+[7 <./images/light.png>]
+<images/pinhole.png, id=31, 315.42844pt x 130.23656pt>
 File: images/pinhole.png Graphic file (type png)
 <use images/pinhole.png>
-Package pdftex.def Info: images/pinhole.png  used on input line 200.
+Package pdftex.def Info: images/pinhole.png  used on input line 173.
 (pdftex.def)             Requested size: 220.50887pt x 91.04573pt.
 
 
-[10{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
-.enc}]
+[8{C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.
+enc}]
 
-[11 <./images/pinhole.png>]
-<images/barrel.png, id=53, 1027.84pt x 1027.84pt>
-File: images/barrel.png Graphic file (type png)
-<use images/barrel.png>
-Package pdftex.def Info: images/barrel.png  used on input line 271.
-(pdftex.def)             Requested size: 132.30666pt x 132.30647pt.
+[9 <./images/pinhole.png>]
+<images/dystorsje.png, id=45, 627.34375pt x 313.17pt>
+File: images/dystorsje.png Graphic file (type png)
+<use images/dystorsje.png>
+Package pdftex.def Info: images/dystorsje.png  used on input line 246.
+(pdftex.def)             Requested size: 220.50887pt x 110.07944pt.
 
 
-[12 <./images/barrel.png>]
+[10 <./images/dystorsje.png>]
 
-[13]
-Overfull \hbox (10.15405pt too wide) in paragraph at lines 340--341
+[11]
+Overfull \hbox (10.15405pt too wide) in paragraph at lines 315--316
 []\T1/qtm/m/n/12 W ten spo-sób otrzy-mu-je-my osta-tecz-n¡, sko-ry-go-wa-n¡ po-
 zy-cj¦ punk-tu ob-ra-zu, któ-ra uwzgl¦d-
  []
 
-<images/MONO.png, id=64, 359.3425pt x 313.17pt>
+<images/MONO.png, id=57, 359.3425pt x 313.17pt>
 File: images/MONO.png Graphic file (type png)
 <use images/MONO.png>
-Package pdftex.def Info: images/MONO.png  used on input line 352.
+Package pdftex.def Info: images/MONO.png  used on input line 327.
 (pdftex.def)             Requested size: 88.2022pt x 76.86829pt.
 
+Underfull \vbox (badness 4353) has occurred while \output is active []
 
-[14 <./images/MONO.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 384--396
+
+
+[12]
+
+[13 <./images/MONO.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 359--371
 [][] 
  []
 
-
-
-[15]
-<images/MAINSTEREO.png, id=72, 788.9475pt x 207.77625pt>
+<images/MAINSTEREO.png, id=66, 788.9475pt x 207.77625pt>
 File: images/MAINSTEREO.png Graphic file (type png)
 <use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 401.
+Package pdftex.def Info: images/MAINSTEREO.png  used on input line 376.
 (pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
 
-Overfull \hbox (8.93008pt too wide) in paragraph at lines 411--412
+
+[14 <./images/MAINSTEREO.png>]
+Overfull \hbox (8.93008pt too wide) in paragraph at lines 386--387
 []\T1/qtm/m/n/12 W sys-te-mie ste-reo-wi-zyj-nym wy-ko-rzy-stu-je si¦ dwa ob-ra
 -zy uchwy-co-ne przez ka-me-ry umiesz-
  []
 
 
-
-[16 <./images/MAINSTEREO.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 425--439
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 400--414
 [][] 
  []
 
-<images/POINTCLOUD.png, id=77, 2441.12pt x 722.7pt>
+<images/POINTCLOUD.png, id=71, 2441.12pt x 722.7pt>
 File: images/POINTCLOUD.png Graphic file (type png)
 <use images/POINTCLOUD.png>
-Package pdftex.def Info: images/POINTCLOUD.png  used on input line 444.
+Package pdftex.def Info: images/POINTCLOUD.png  used on input line 419.
 (pdftex.def)             Requested size: 220.50887pt x 65.27176pt.
-
-
-[17 <./images/POINTCLOUD.png>]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 474--488
-[][] 
- []
-
-<images/LIDAR.png, id=82, 290.08376pt x 290.08376pt>
-File: images/LIDAR.png Graphic file (type png)
-<use images/LIDAR.png>
-Package pdftex.def Info: images/LIDAR.png  used on input line 493.
-(pdftex.def)             Requested size: 132.30666pt x 132.307pt.
-
-
-[18]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 522--536
-[][] 
- []
-
-
-
-[19 <./images/LIDAR.png>]
-
-[20]
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 569--583
-[][] 
- []
-
-<images/RPI-PIN.jpg, id=94, 1214.5375pt x 644.4075pt>
-File: images/RPI-PIN.jpg Graphic file (type jpg)
-<use images/RPI-PIN.jpg>
-Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 590.
-(pdftex.def)             Requested size: 308.71106pt x 163.79567pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[21]
-File: images/MAINSTEREO.png Graphic file (type png)
-<use images/MAINSTEREO.png>
-Package pdftex.def Info: images/MAINSTEREO.png  used on input line 600.
-(pdftex.def)             Requested size: 220.50887pt x 58.07231pt.
+[15]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 451--465
+[][] 
+ []
 
 
-[22 <./images/RPI-PIN.jpg>]
-<images/triangulation.png, id=101, 227.34938pt x 216.81pt>
+
+[16 <./images/POINTCLOUD.png>]
+<images/LIDAR.png, id=79, 290.08376pt x 290.08376pt>
+File: images/LIDAR.png Graphic file (type png)
+<use images/LIDAR.png>
+Package pdftex.def Info: images/LIDAR.png  used on input line 470.
+(pdftex.def)             Requested size: 132.30666pt x 132.307pt.
+
+
+[17 <./images/LIDAR.png>]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 499--513
+[][] 
+ []
+
+
+
+[18]
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 546--560
+[][] 
+ []
+
+<images/RPI-PIN.jpg, id=87, 1214.5375pt x 644.4075pt>
+File: images/RPI-PIN.jpg Graphic file (type jpg)
+<use images/RPI-PIN.jpg>
+Package pdftex.def Info: images/RPI-PIN.jpg  used on input line 567.
+(pdftex.def)             Requested size: 308.71106pt x 163.79567pt.
+
+
+[19]
+<images/triangulation.png, id=92, 227.34938pt x 216.81pt>
 File: images/triangulation.png Graphic file (type png)
 <use images/triangulation.png>
-Package pdftex.def Info: images/triangulation.png  used on input line 625.
+Package pdftex.def Info: images/triangulation.png  used on input line 594.
 (pdftex.def)             Requested size: 220.50887pt x 210.2889pt.
 
 
-[23 <./images/triangulation.png>]
-<images/epipolar.png, id=106, 295.1025pt x 184.43906pt>
+[20 <./images/RPI-PIN.jpg>]
+
+[21 <./images/triangulation.png>]
+<images/epipolar.png, id=100, 295.1025pt x 184.43906pt>
 File: images/epipolar.png Graphic file (type png)
 <use images/epipolar.png>
-Package pdftex.def Info: images/epipolar.png  used on input line 659.
+Package pdftex.def Info: images/epipolar.png  used on input line 628.
 (pdftex.def)             Requested size: 308.71106pt x 192.94907pt.
 
 
-[24 <./images/epipolar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 701--703
+[22 <./images/epipolar.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 670--672
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 703--705
+Underfull \hbox (badness 10000) in paragraph at lines 672--674
 
  []
 
 
+
+[23]
+
+[24]
 
 [25]
 
-[26]
-
-[27]
-
-[28
+[26
 
 ]
-Rozdzia\PlPrIeC {\l } 4.
-
-
-[29]
-Underfull \hbox (badness 10000) in paragraph at lines 820--821
-
- []
-
+Rozdzia\PlPrIeC {\l } 3.
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2024/05/25 1.10b listings language file
 )
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 8
-42.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 7
+64.
 
 (C:\Users\gab-o\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 
-[30]
+[27]
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 856.
+(Font)              using `T1/cmtt/bx/n' instead on input line 778.
 
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 856.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 778.
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 856.
-
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 856.
+(Font)              using `T1/cmtt/bx/n' instead on input line 778.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 857.
+(Font)              using `T1/cmtt/bx/n' instead on input line 778.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 860.
+(Font)              using `T1/cmtt/bx/n' instead on input line 779.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 860.
+(Font)              using `T1/cmtt/bx/n' instead on input line 782.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 860.
+(Font)              using `T1/cmtt/bx/n' instead on input line 782.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 860.
+(Font)              using `T1/cmtt/bx/n' instead on input line 782.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 861.
+(Font)              using `T1/cmtt/bx/n' instead on input line 782.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 864.
+(Font)              using `T1/cmtt/bx/n' instead on input line 783.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 864.
+(Font)              using `T1/cmtt/bx/n' instead on input line 786.
 
 
-Overfull \hbox (135.14674pt too wide) in paragraph at lines 872--873
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 786.
+
+
+Overfull \hbox (17.87433pt too wide) in paragraph at lines 795--796
+[][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (135.14674pt too wide) in paragraph at lines 873--874
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (17.87433pt too wide) in paragraph at lines 797--798
+[][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (94.35634pt too wide) in paragraph at lines 874--875
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (28.07193pt too wide) in paragraph at lines 799--800
+[][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (94.35634pt too wide) in paragraph at lines 875--876
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (28.07193pt too wide) in paragraph at lines 801--802
+[][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (127.01111pt too wide) in paragraph at lines 884--885
+
+[28]
+Overfull \hbox (127.01111pt too wide) in paragraph at lines 818--819
 []\T1/qtm/m/n/12 Aby uzy-ska¢ opty-mal-ne ma-cie-rze ka-mer dla ka»-dej z nich,
  u»y-wa-na jest funk-cja cv2.getOptimalNewCameraMatrix()
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 822--823
 
-[31]
-Overfull \hbox (109.65274pt too wide) in paragraph at lines 896--897
+ []
+
+
+Overfull \hbox (109.65274pt too wide) in paragraph at lines 854--855
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][]
  []
 
 
-Overfull \hbox (79.05994pt too wide) in paragraph at lines 898--899
+
+[29]
+Overfull \hbox (79.05994pt too wide) in paragraph at lines 856--857
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
  []
 
 
-Overfull \hbox (68.86234pt too wide) in paragraph at lines 899--900
+Overfull \hbox (68.86234pt too wide) in paragraph at lines 857--858
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (507.35919pt too wide) in paragraph at lines 909--910
+Overfull \hbox (507.35919pt too wide) in paragraph at lines 867--868
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][] 
  []
 
 
-Overfull \hbox (22.97313pt too wide) in paragraph at lines 914--915
+Overfull \hbox (22.97313pt too wide) in paragraph at lines 872--873
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (6.03026pt too wide) in paragraph at lines 917--918
+Overfull \hbox (6.03026pt too wide) in paragraph at lines 875--876
 \T1/qtm/m/n/12 cv2.StereoSGBM-create(). Kla-sa ta wy-ko-rzy-stu-je al-go-rytm d
 o-pa-so-wa-nia póª-glo-bal-ne-go (semi-
  []
 
 
 
-[32]
-Overfull \hbox (132.31825pt too wide) in paragraph at lines 956--957
+[30]
+Overfull \hbox (132.31825pt too wide) in paragraph at lines 914--915
 \T1/qtm/m/n/12 ge-ne-ro-wa-nia ma-py dys-pa-ry-cji. In-stan-cja fil-tra jest tw
 o-rzo-na za po-mo-c¡ funk-cji cv2.ximgproc.createDisparityWLSFilter(). 
  []
 
 
-Overfull \hbox (144.95111pt too wide) in paragraph at lines 958--959
+Overfull \hbox (144.95111pt too wide) in paragraph at lines 916--917
 []\T1/qtm/m/n/12 Aby za-sto-so-wa¢ in-stan-cj¦ fil-tra WLS, wy-wo-ªy-wa-na jest
  na-st¦-pu-j¡-ca me-to-da: cv2.ximgproc.createRightMatcher().filter(),
  []
 
 
-
-[33]
-Overfull \hbox (62.29509pt too wide) in paragraph at lines 960--961
+Overfull \hbox (62.29509pt too wide) in paragraph at lines 918--919
 []\T1/qtm/m/n/12 Zastosowano ma-p¦ ko-lo-rów Oce-an, aby uzy-ska¢ lep-sz¡ wi-zu
 -ali-za-cj¦, za po-mo-c¡ cv2.applyColorMap().
  []
 
 
-Overfull \hbox (7.04706pt too wide) in paragraph at lines 964--965
-[]\T1/qtm/m/n/12 Aby wy-ko-rzy-sta¢ do-bre war-to-±ci do pó¹-niej-sze-go mie-rz
-e-nia od-le-gªo-±ci do obiek-tów, wspóª-
+
+[31]
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 926.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 929.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 929.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 931.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 936.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 937.
+
+
+Overfull \hbox (390.08678pt too wide) in paragraph at lines 942--943
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (405.38318pt too wide) in paragraph at lines 943--944
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 969.
+(Font)              using `T1/cmtt/bx/n' instead on input line 961.
 
 
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 972.
 
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 972.
-
+[32]
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 974.
-
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 979.
+(Font)              using `T1/cmtt/bx/n' instead on input line 980.
 
 
 LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
 (Font)              using `T1/cmtt/bx/n' instead on input line 980.
 
 
-Overfull \hbox (390.08678pt too wide) in paragraph at lines 985--986
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 981.
 
 
-Overfull \hbox (405.38318pt too wide) in paragraph at lines 986--987
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 989.
 
 
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 995.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 996.
+
+
+LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
+(Font)              using `T1/cmtt/bx/n' instead on input line 996.
+
+
+
+[33]
 
 [34]
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1004.
+Rozdzia\PlPrIeC {\l } 4.
 
 
-Overfull \hbox (124.94914pt too wide) in paragraph at lines 1005--1006
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+[35
+
+]
+
+[36
+
+] (wzor.lof
+Overfull \hbox (9.42633pt too wide) in paragraph at lines 3--3
+ [][] []\T1/qtm/m/n/12 Odwrócenie ob-ra-zu przez so-czew-k¦. https://funsizephy
+sics.com/use-light-turn- 
  []
 
 
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1022.
+Overfull \hbox (2.46631pt too wide) in paragraph at lines 6--6
+ [][] []\T1/qtm/m/n/12 Kamerka in-ter-ne-to-wa. https://cell-kom.com/inne/21454
+-kamera-internetowa- 
+ []
 
 
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1022.
+Overfull \hbox (6.34233pt too wide) in paragraph at lines 7--7
+ [][] []\T1/qtm/m/n/12 Kamera ste-reo-wi-zyj-na. https://cell-kom.com/inne/2145
+4-kamera-internetowa- 
+ []
 
 
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1023.
+Overfull \hbox (20.53831pt too wide) in paragraph at lines 8--8
+ [][] []\T1/qtm/m/n/12 Kamera Xbox 360 Ki-nect. https://cell-kom.com/inne/21454
+-kamera-internetowa- 
+ []
 
 
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1031.
+Overfull \hbox (44.87434pt too wide) in paragraph at lines 9--9
+ [][] []\T1/qtm/m/n/12 Kamera In-tel Re-al-Sen-se L515 z tech-no-lo-gi¡ LI-DAR.
+ https://cell-kom.com/inne/21454- 
+ []
 
 
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1037.
+Overfull \hbox (27.83432pt too wide) in paragraph at lines 10--10
+ [][] []\T1/qtm/m/n/12 Pªytka Ra-sp-ber-ry Pi 5 i jej sche-mat pi-nów GPIO. htt
+ps://www.hackatronic.com/wp- 
+ []
 
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1038.
-
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/bx/n' instead on input line 1038.
+)
+\tf@lof=\write4
+\openout4 = `wzor.lof'.
 
 
 
-[35]
-
-[36]
-Rozdzia\PlPrIeC {\l } 5.
-
-
-[37
-
-]
+[37]
 
 [38
 
 ]
-Overfull \hbox (90.3002pt too wide) in paragraph at lines 1080--1082
-[]\T1/qtm/m/n/12 Stereo and 3D Vi-sion, Ra-jesh Rao, \T1/qtm/m/it/12 https://co
+Overfull \hbox (90.3002pt too wide) in paragraph at lines 1033--1034
+[]\T1/qtm/m/n/12 Rajesh Rao, Ste-reo and 3D Vi-sion, \T1/qtm/m/it/12 https://co
 urses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf\T1/qtm/m/n/12 . 
  []
 
@@ -814,20 +833,17 @@ L3 programming layer <2024-08-30>
  ***********
 
 
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 7713 strings out of 473898
- 118828 string characters out of 5726479
- 726350 words of memory out of 5000000
- 30497 multiletter control sequences out of 15000+600000
+ 7732 strings out of 473898
+ 119405 string characters out of 5726479
+ 731267 words of memory out of 5000000
+ 30509 multiletter control sequences out of 15000+600000
  603297 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,11n,65p,751b,1799s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,11n,65p,751b,1803s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\gab-o\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt
 0800.pk><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmex10.pfb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/publ
@@ -842,9 +858,9 @@ sers/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><
 C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.p
 fb><C:/Users/gab-o/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qt
 mri.pfb>
-Output written on wzor.pdf (39 pages, 1388671 bytes).
+Output written on wzor.pdf (39 pages, 1454514 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
+ 297 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  56 words of extra memory for PDF output out of 10000 (max. 10000000)
 
