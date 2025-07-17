@@ -20,6 +20,7 @@
 \usepackage{xcolor}
 \usepackage{float}
 \usepackage{listings}
+\usepackage{parskip}
 \usepackage{xcolor} % optional, for color
 \usepackage{chngcntr}
 \counterwithout{figure}{chapter}
@@ -87,9 +88,9 @@
 \lstdefinestyle{mypython}{
     language=Python,
     basicstyle=\ttfamily\scriptsize,
-    keywordstyle=\color{blue}\bfseries,
-    stringstyle=\color{red},
-    commentstyle=\color{gray},
+    keywordstyle=\color{red}\bfseries,
+    stringstyle=\color{green},
+    commentstyle=\color{blue},
 }
 
 \begin{document}
@@ -98,11 +99,7 @@
 \tableofcontents
 \newpage
 
-
-
 \chapter{Wstęp}
-
-We wstępie pracy dyplomowej powinien znaleźć się opis wkładu własnego studenta w uzyskanie przedstawianych wyników a także informacje o podstawowych źródłach, na podstawie których student przygotował pracę.
 
 Przetwarzanie obrazu to dziedzina informatyki i inżynierii zajmująca się analizą, modyfikacją i interpretacją obrazów cyfrowych za pomocą metod numerycznych i algorytmów komputerowych. Jej celem jest poprawa jakości obrazów, ekstrakcja informacji, segmentacja obiektów lub ich klasyfikacja. Przetwarzanie obrazu znajduje zastosowanie w wielu obszarach, takich jak medycyna (np. analiza zdjęć RTG), przemysł (np. kontrola jakości), bezpieczeństwo (np. rozpoznawanie twarzy), robotyka oraz systemy wizyjne pojazdów autonomicznych. Dzięki połączeniu technik matematycznych, statystycznych i sztucznej inteligencji możliwe jest coraz bardziej precyzyjne i automatyczne rozumienie zawartości obrazów.
 
@@ -379,7 +376,7 @@ W kontekście wizji monokularnej, głębokie uczenie odgrywa kluczową rolę, um
     \label{fig:mono}  % Optional: use to refer to this image later in the text
 \end{figure}
 
-Wizja stereoskopowa (lub stereowizja) to technika polegająca na wykorzystaniu dwóch (lub więcej) obrazów tej samej sceny, uchwyconych z nieco innych punktów widzenia, do wyodrębnienia informacji przestrzennych. Jest to jedno z najstarszych i najintensywniej badanych podejść do estymacji głębi, inspirowane sposobem, w jaki ludzkie oczy – jako dwa przesunięte względem siebie punkty obserwacyjne – postrzegają świat trójwymiarowy.
+Stereowizja (lub Wizja stereoskopowa) to technika polegająca na wykorzystaniu dwóch (lub więcej) obrazów tej samej sceny, uchwyconych z nieco innych punktów widzenia, do wyodrębnienia informacji przestrzennych. Jest to jedno z najstarszych i najintensywniej badanych podejść do estymacji głębi, inspirowane sposobem, w jaki ludzkie oczy – jako dwa przesunięte względem siebie punkty obserwacyjne – postrzegają świat trójwymiarowy.
 
 W odróżnieniu od wizji monokularnej, stereowizja oferuje geometrycznie uzasadnioną możliwość bezpośredniego obliczenia głębokości, co czyni ją bardzo atrakcyjną w aplikacjach wymagających wysokiej dokładności. W tym rozdziale przedstawiono podstawy matematyczne wizji stereo, klasyczne i współczesne metody obliczania głębi, a także omówiono praktyczne zastosowania i ograniczenia tej technologii.
 
@@ -564,11 +561,73 @@ Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komerc
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.7\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
+    \includegraphics[width=0.6\textwidth]{images/RPI-PIN.jpg}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
     \caption[Płytka Raspberry Pi 5 i jej schemat pinów GPIO. https://www.hackatronic.com/wp-content/uploads/2024/03/Raspberry-Pi-5-Pinout--1210x642.jpg]{Płytka Raspberry Pi 5 i jej schemat pinów GPIO.}
-    \label{fig:rpi-gpio}  % Optional: use to refer to this image later in the text
 \end{figure}
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.6\textwidth]{images/ups-hat.jpg}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Moduł zasilający. https://www.waveshare.com/wiki/UPS-HAT-(B)]{Moduł zasilający.}
+\end{figure}
+
+Umowżliwia bezpośrednie podpięcie zasilania pod Raspberry Pi (3/4/5) poprzez Pogo piny, nie wykorzystując GPIO.
+
+Moduł posiada również: ochronę przed przeładowaniem, nadmiernym rozładowaniem, zbyt dużym poborem prądu, zwarciem oraz odwrotną polaryzacją
+
+\textbf{Napięcie wyjściowe:} 5~V \\
+\textbf{Maksymalny prąd wyjściowy:} do 5~A \\
+\textbf{Obsługiwane ogniwa:} 2 × akumulatory 18650, 3{,}7~V (7{,}4~V nominalnie)
+
+\textbf{Obliczenia czasu pracy dwóch akumulatorów 18650}
+
+\textbf{Dane:}
+\begin{itemize}
+  \item Napięcie nominalne akumulatora: $U = 3{,}7\,\mathrm{V}$
+  \item Pojemność jednego akumulatora: $C = 8800\,\mathrm{mAh} = 8{,}8\,\mathrm{Ah}$
+  \item Ilość akumulatorów: 2 (założenie: połączone równolegle lub przez przetwornicę)
+  \item Całkowita pojemność: $C_{\text{total}} = 2 \cdot 8{,}8 = 17{,}6\,\mathrm{Ah}$
+  \item Maksymalny pobór prądu przez urządzenie: $I = 5\,\mathrm{A}$
+  \item Napięcie wyjściowe: $U_{\text{out}} = 5\,\mathrm{V}$
+  \item Sprawność przetwornicy (założenie): $\eta = 0{,}85$ (czyli 85\%)
+\end{itemize}
+
+\textbf{Krok 1: Obliczenie energii dostępnej z akumulatorów:}
+
+\[
+E = U \cdot C_{\text{total}} = 3{,}7\,\mathrm{V} \cdot 17{,}6\,\mathrm{Ah} = 65{,}12\,\mathrm{Wh}
+\]
+
+\textbf{Krok 2: Obliczenie mocy pobieranej przez urządzenie:}
+
+\[
+P = U_{\text{out}} \cdot I = 5\,\mathrm{V} \cdot 5\,\mathrm{A} = 25\,\mathrm{W}
+\]
+
+\textbf{Krok 3: Uwzględnienie sprawności przetwornicy:}
+
+\[
+P_{\text{real}} = \frac{P}{\eta} = \frac{25\,\mathrm{W}}{0{,}85} \approx 29{,}41\,\mathrm{W}
+\]
+
+\textbf{Krok 4: Obliczenie czasu pracy:}
+
+\[
+t = \frac{E}{P_{\text{real}}} = \frac{65{,}12\,\mathrm{Wh}}{29{,}41\,\mathrm{W}} \approx 2{,}21\,\mathrm{h}
+\]
+
+\textbf{Odpowiedź:} Przy maksymalnym poborze prądu $5\,\mathrm{A}$ moduł będzie działać około $2{,}2$ godziny.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.4\textwidth]{images/relay.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Moduł przekaźnika. https://botland.com.pl/przekazniki-przekazniki-arduino/1997-modul-przekaznika-1-kanal-z-optoizolacja-styki-10a-250vac-cewka-5v-5904422359096.html]{Moduł przekaźnika.}
+\end{figure}
+
+Układ pozwala na sterowanie elementami wykonawczymi przy pomocy portów mikrokontrolera lub dowolnego zestawu uruchomieniowego.
 
 \section{Obrazowanie stereoskopowe}
 
@@ -603,14 +662,9 @@ Poniższy obraz można teraz skonstruować przy użyciu poprzednich hipotez.
 
 Punkt $P$ leży w środowisku i jest pokazany na
 lewym i prawym obrazie na $P_l$ i $P_r$, z odpowiadającymi im współrzędnymi
-odpowiadającymi współrzędnymi $X_l$ i $X_r$. To
-pozwala nam wprowadzić nową wielkość
-$d = X_l - X_r$. Można zauważyć, że im dalej punkt
-punkt $P$, tym mniejsza staje się wielkość $d$. Dysproporcja
-jest zatem odwrotnie proporcjonalna do odległości.
-odległości.\\
-Do obliczenia odległości można użyć następującego wzoru
-można obliczyć: \[Z=f*T/(xl-xr)\]
+odpowiadającymi współrzędnymi $X_l$ i $X_r$. To pozwala nam wprowadzić nową wielkość $d = X_l - X_r$.
+Można zauważyć, że im dalej punkt $P$, tym mniejsza staje się wielkość $d$. Dysproporcja jest zatem odwrotnie proporcjonalna do odległości.\\
+Do obliczenia odległości można użyć następującego wzoru można obliczyć: \[Z=f*T/(xl-xr)\]
 
 Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością a odległością.
 Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
@@ -625,7 +679,7 @@ Zanim zostanie wyjaśniona metoda matematycznego wyrównywania obrazów, trzeba 
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.7\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.5\textwidth]{images/epipolar.png}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
     \caption[Model kamery stereo. Learning OpenCV 3, O'Reilly, Str. 709]{Model kamery stereo.}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
@@ -718,22 +772,45 @@ i algorytmu Bouguet'a.
 
 \subsubsection{Algorytm Hartley'a}
 
-Algorytm Hartleya wyszukuje te same punkty na obu obrazach. Próbuje on
-stara się zminimalizować rozbieżności i znaleźć homografie, które ustawiają epipole w nieskończoności.
-nieskończoność. Dzięki tej metodzie nie jest więc konieczne obliczanie parametrów wewnętrznych dla każdej kamery.
-dla każdej kamery.
-Zaletą tej metody jest to, że kalibracja jest możliwa tylko dzięki obserwacji punktów w scenie.
-punktów na scenie. Główną wadą jest jednak brak skalowania obrazu
-Masz tylko informacje o względnej odległości. Nie można dokładnie zmierzyć
-jak daleko obiekt znajduje się od kamer.
+Algorytm Hartley’a jest metodą rektyfikacji niekalibrowanej, czyli nie wymaga znajomości parametrów wewnętrznych kamer (np. ogniskowej, współrzędnych środka obrazu, współczynników zniekształceń soczewek). Jest to istotne w zastosowaniach, gdzie dostępne są tylko obrazy, bez wcześniejszej kalibracji sprzętu.
+
+\bigskip
+
+Kluczowe kroki:
+
+\begin{itemize}
+\item Najpierw algorytm odnajduje zestawy punktów, które występują na obu obrazach — tzw. korespondencje punktowe. W praktyce mogą to być np. punkty narożne, cechy SIFT, SURF czy ORB.
+
+\item Z punktów odpowiadających estymowana jest macierz fundamentalna, która opisuje geometryczne powiązania pomiędzy dwoma obrazami.
+
+\item Za pomocą macierzy F obliczane są transformacje projekcyjne (homografie) dla obu obrazów, które przekształcają je w taki sposób, aby epipole zostały przekształcone w nieskończoność, co oznacza, że linie epipolowe stają się poziome i równoległe.
+
+Dzięki temu poszukiwanie dopasowań między obrazami można sprowadzić do jednej osi (najczęściej poziomej), co znacząco upraszcza dalszą analizę.
+\end{itemize}
+
+Główną wadą tej metody jest jednak to, że nie dostarcza informacji o rzeczywistej skali sceny. Oznacza to, że uzyskane dane dotyczą jedynie względnego położenia obiektów, bez możliwości dokładnego określenia ich odległości od kamery. W rezultacie, mimo że algorytm umożliwia uzyskanie rektyfikowanych obrazów, jego precyzja jest niższa w porównaniu do metod opartych na pełnej kalibracji kamer.
 
 \subsubsection{Algorytm Bouguet'a}
 
-Algorytm Bougueta wykorzystuje obliczoną macierz obrotu i wektor translacji
-aby obrócić obie rzutowane płaszczyzny o pół obrotu, tak aby znalazły się w tej samej płaszczyźnie.
-tej samej płaszczyźnie. Sprawia to, że główne promienie są równoległe, a płaszczyzny współpłaszczyznowe.
-ale nie są jeszcze wyrównane w rzędach. Zostanie to zrobione później.
-W projekcie wykorzystaliśmy algorytm Bougueta.
+Algorytm Bouguet’a (opracowany m.in. w ramach narzędzia Camera Calibration Toolbox do MATLABa) to metoda rektyfikacji kalibrowanej, czyli wykorzystująca uprzednio wyznaczone parametry wewnętrzne i zewnętrzne kamer.
+
+\bigskip
+
+Kluczowe kroki:
+
+\begin{itemize}
+  \item Na podstawie obrazów wzorca (np. szachownicy) określane są parametry wewnętrzne każdej kamery (ogniskowa, środek obrazu, zniekształcenia) oraz parametry zewnętrzne (rotacja i translacja między kamerami).
+
+  \item Obrazy są odwzorowywane do wspólnej przestrzeni trójwymiarowej, w której określona jest pozycja i orientacja obu kamer.
+
+
+  \item Płaszczyzny obrazów są obracane w taki sposób, by ich główne osie optyczne stały się równoległe (tzn. skierowane w tym samym kierunku), a obrazy znajdowały się w tej samej płaszczyźnie. Dzięki temu linie epipolowe stają się poziome i równoległe — jak w przypadku metody Hartley’a, ale z większą precyzją.
+
+
+  \item Na podstawie wyliczonych rzutów generowane są nowe obrazy zrektyfikowane, w których każdy piksel z jednej kamery można bezpośrednio porównać z pikselem z drugiej kamery w tej samej linii poziomej.
+\end{itemize}
+
+Algorytm Bouguet’a wymaga wcześniejszej kalibracji kamer, co wiąże się z koniecznością poświęcenia dodatkowego czasu oraz użycia odpowiednich narzędzi, takich jak wzorce kalibracyjne (np. szachownica) i oprogramowanie do analizy obrazów. Choć taka kalibracja pozwala uzyskać bardzo precyzyjne wyniki, metoda ta jest wrażliwa na błędy kalibracji — na przykład niedokładne wykrycie wzorca kalibracyjnego lub jego niewłaściwe ujęcie na zdjęciach może znacząco pogorszyć jakość rektyfikacji, prowadząc do błędów w dalszym przetwarzaniu obrazów.
 
 \chapter{Rozdział badawczy}
 
@@ -757,9 +834,8 @@ rozpoznać krawędzie obiektów.
 Po uruchomieniu tego programu obie kamery stają się aktywne i otwierane są dwa okna.
 aby użytkownik mógł zobaczyć, gdzie na obrazach znajduje się szachownica.
 
-\subsection{Inicjalizacja}
 
-\subsubsection{Kalibracja}
+\subsection{Kalibracja}
 
 \begin{lstlisting}[style=mypython]
 # Termination criteria
@@ -771,8 +847,8 @@ objp = np.zeros((9*6,3), np.float32)
 objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 
 # Tablice do przechowywania punktow obiektu i punktow obrazu ze wszystkich obrazow
-objpoints= []   # 3d points in real world space
-imgpointsR= []   # 2d points in image plane
+objpoints= []   # Punkty 3D w przestrzeni swiata rzeczywistego
+imgpointsR= []   # Punkty 2D na plaszczyznie obrazu
 imgpointsL= []
 
 for i in range(0, 64):
@@ -811,7 +887,14 @@ Pozycja narożników dla każdego obrazu jest następnie zapisywana w wektorze o
 
 Funkcja cv2.getOptimalNewCameraMatrix() umożliwia uzyskanie dokładnych macierzy kamer, które później będą wykorzystane w rektyfikacji.
 
-Do korekcji dystorsji kamer używane są obrazy zarejestrowane za pomocą programu „Take-images-for-calibration.py”, gdzie w zmiennych imgpoints i objpoints zapisywane są pozycje narożników szachownicy.
+Do korekcji dystorsji kamer używane są obrazy zarejestrowane za pomocą programu „calibration.py”, gdzie w zmiennych imgpoints i objpoints zapisywane są pozycje narożników szachownicy.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.8\textwidth]{images/calib.jpg}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Widok wykrytych wierzchołków szachownic. https://learnopencv.com/making-a-low-cost-stereo-camera-using-opencv/.]{Widok wykrytych wierzchołków szachownic.}
+\end{figure}
 
 Funkcja cv2.calibrateCamera() jest wykorzystywana do uzyskania nowych macierzy kamer (macierz kamery opisuje projekcję punktu ze świata 3D na obraz 2D), współczynników dystorsji, wektorów rotacji oraz translacji dla każdej z kamer. Dane te są później używane do usunięcia zniekształceń dla każdej kamery.
 
@@ -841,7 +924,7 @@ i wygenerowane zostaną następujące wektory:
 Precyzja współrzędnych znalezionych narożników jest zwiększana za pomocą funkcji
 cv2.cornerSubPix().
 
-\subsubsection{Rektyfikacja}
+\subsection{Rektyfikacja}
 
 Funkcja cv2.stereoRectify() umożliwia sprowadzenie linii epipolarnych obu kamer do tej samej płaszczyzny. Taka transformacja ułatwia działanie funkcji generującej mapę dysparycji, ponieważ dopasowywanie bloków musi być wtedy wykonywane tylko w jednym wymiarze.
 
@@ -857,7 +940,7 @@ Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImgR.shape[:
 Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImgR.shape[::-1], cv2.CV_16SC2)
 \end{lstlisting}
 
-\subsubsection{Mapa rozbieżności}
+\subsection{Mapa rozbieżności}
 
 \begin{lstlisting}[style=mypython]
 # Create StereoSGBM and prepare all parameters
@@ -882,11 +965,25 @@ Weźmy wcześniejszy przykład z blokami z czwartego wiersza, aby wyjaśnić, ja
 
 Na poniższym rysunku należy porównać blok (4,7) z czwartego wiersza, siódmej kolumny obrazu bazowego ze wszystkimi innymi blokami (4,i) z czwartego wiersza (tej samej linii epipolarnej) obrazu dopasowywanego.
 
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.8\textwidth]{images/dopracy1.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Wyszukiwanie pasujących bloków za pomocą StereoSGBM. Opracowanie własne. ]{Wyszukiwanie pasujących bloków za pomocą StereoSGBM.}
+\end{figure}
+
 Im większe dopasowanie między blokiem referencyjnym a blokiem dopasowywanym, tym bardziej prawdopodobne, że odpowiadają one temu samemu punktowi w rzeczywistości.
 
 W tym przykładzie można zauważyć, że blok referencyjny (4,7) ma najwyższy stopień dopasowania z blokiem dopasowywanym (4,4).
 
 W teorii proces powinien przebiegać w ten sposób, jednak w praktyce OpenCV domyślnie analizuje jeszcze 4 inne kierunki, aby uzyskać większą precyzję — stosując tę samą metodę co dla jednego kierunku.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/dopracy2.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Przykład pięciu kierunków algorytmu StereoSGBM w OpenCV. Opracowanie własne. ]{Przykład pięciu kierunków algorytmu StereoSGBM w OpenCV.}
+\end{figure}
 
 Aby znaleźć dysparycję, odejmuje się współrzędne bloku dopasowywanego od współrzędnych bloku referencyjnego, następnie oblicza się wartość bezwzględną wyniku — im większa ta wartość, tym bliżej kamery stereo znajduje się obiekt.
 
@@ -896,9 +993,16 @@ Dzięki parametrom ustalonym podczas inicjalizacji otrzymujemy następujący wyn
 
 Na tej mapie dysparycji występuje jeszcze sporo szumu. Aby go wyeliminować, stosowany jest filtr morfologiczny. Używany jest filtr typu „Closing” (zamykanie) za pomocą funkcji OpenCV cv2.morphologyEx(cv2.MORPH-CLOSE), aby usunąć małe czarne punkty.
 
+%\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+%    \centering  % Centers the image
+%    \includegraphics[width=0.5\textwidth]{images/closing.png}  % Adjust the path and width as necessary
+%    \captionsetup{font=footnotesize}
+%    \caption[Przykład filtra zamykającego. https://docs.opencv.org/3.4/d9/d61/tutorial-py-morphological-ops.html]{Przykład filtra zamykającego.}
+%\end{figure}
+
 Poniżej inny przykład tej samej sceny, aby lepiej zobaczyć różnicę.
 
-\subsubsection{filtr WLS (ważonych najmniejszych kwadratów)}
+\subsection{filtr WLS (ważonych najmniejszych kwadratów)}
 
 \begin{lstlisting}[style=mypython]
 # WLS FILTER Parameters
@@ -966,8 +1070,6 @@ while True:
     filt_Color = cv2.applyColorMap(filteredImg, cv2.COLORMAP_OCEAN)
 \end{lstlisting}
 
-\subsubsection{Pomiar odległości}
-
 Po wygenerowaniu mapy dysparycji należy określić odległość. Zadanie polega na znalezieniu zależności między wartością dysparycji a odległością. Aby to zrobić, eksperymentalnie zmierzyliśmy wartości dysparycji w kilku miejscach, aby na tej podstawie określić regresję.
 
 Aby uzyskać równanie prostej regresji, użyta została biblioteka openpyxl, aby zapisać wartości dysparycji w pliku Excel. Linie w programie, które odpowiadały za zapisanie tych wartości, zostały skomentowane, ale można je odkomentować, jeśli potrzebna jest nowa równość prostej.
@@ -1029,12 +1131,10 @@ Aby wartości odległości były zawsze poprawne, należałoby opracować nowy s
 \addcontentsline{toc}{chapter}{Bibliografia}
 
 \bibitem{lambert} John Lambert, Stereo and Disparity, \textit{https://johnwlambert.github.io/stereo/}.
-
 \bibitem{rao} Rajesh Rao, Stereo and 3D Vision, \textit{https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect16.pdf}.
-
 \bibitem{reilly} Adrian Kaehler, Gary Bradski, Learning OpenCV 3, O'Reilly, 2017-11.
-
 \bibitem{dystorsja} Dystorsja obrazu w fotografii, https://beafoto.pl/dystorsja, 2021-01.
+\bibitem{calib} Making A Low-Cost Stereo Camera Using OpenCV, https://learnopencv.com/making-a-low-cost-stereo-camera-using-opencv/, 2021-01-11.
 
 \end{thebibliography}
 \end{document}

@@ -5,9 +5,6 @@ import time
 from sklearn.preprocessing import normalize
 from concurrent.futures import ThreadPoolExecutor
 
-# Filtering
-kernel= np.ones((3,3),np.uint8)
-
 # Termination criteria
 criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -23,60 +20,53 @@ imgpointsL= []
 
 print('Starting stereo calibration ... ')
 
-ChessImaR = None
-ChessImaL = None
-
 for i in range(0, 64):
     t = str(i)
-    ChessImaR = cv2.imread('calib_images/right_chessboard-' + t + '.png', 0)
-    ChessImaL = cv2.imread('calib_images/left_chessboard-' + t + '.png', 0)
-    if ChessImaR is None or ChessImaL is None:
+    ChessImgR = cv2.imread('calib_images/right_chessboard-' + t + '.png', 0)
+    ChessImgL = cv2.imread('calib_images/left_chessboard-' + t + '.png', 0)
+    if ChessImgR is None or ChessImgL is None:
         print(f"⚠️ Warning: Image {t} could not be loaded.")
         continue  # Skip this iteration if loading failed
-    retR, cornersR = cv2.findChessboardCorners(ChessImaR, (9, 6), None)
-    retL, cornersL = cv2.findChessboardCorners(ChessImaL, (9, 6), None)
+    retR, cornersR = cv2.findChessboardCorners(ChessImgR, (9, 6), None)
+    retL, cornersL = cv2.findChessboardCorners(ChessImgL, (9, 6), None)
     if retR and retL:
         objpoints.append(objp)
-        cv2.cornerSubPix(ChessImaR, cornersR, (11, 11), (-1, -1), criteria)
-        cv2.cornerSubPix(ChessImaL, cornersL, (11, 11), (-1, -1), criteria)
+        cv2.cornerSubPix(ChessImgR, cornersR, (11, 11), (-1, -1), criteria)
+        cv2.cornerSubPix(ChessImgL, cornersL, (11, 11), (-1, -1), criteria)
         imgpointsR.append(cornersR)
         imgpointsL.append(cornersL)
 
 # Calibration
-retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR, ChessImaR.shape[::-1], None, None)
-retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, ChessImaL.shape[::-1], None, None)
-OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
-OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
+retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR, ChessImgR.shape[::-1], None, None)
+retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, ChessImgL.shape[::-1], None, None)
+OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImgR.shape[::-1], 1, ChessImgR.shape[::-1])
+OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImgL.shape[::-1], 1, ChessImgL.shape[::-1])
 
 print('Calibration complete')
 
-retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = criteria_stereo,flags = cv2.CALIB_FIX_INTRINSIC)
+retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImgR.shape[::-1],criteria = criteria_stereo,flags = cv2.CALIB_FIX_INTRINSIC)
 
 # StereoRectify function
-rectify_scale= 0 # if 0 image croped, if 1 image nor croped
-RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale,(0,0))  # last paramater is alpha, if 0= croped, if 1= not croped
+RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImgR.shape[::-1], R, T, 0,(0,0))  # last paramater is alpha, if 0= croped, if 1= not croped
 # initUndistortRectifyMap function
-Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)   # cv2.CV_16SC2 this format enables us the programme to work faster
-Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImaR.shape[::-1], cv2.CV_16SC2)
+Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImgR.shape[::-1], cv2.CV_16SC2)   # cv2.CV_16SC2 this format enables us the programme to work faster
+Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImgR.shape[::-1], cv2.CV_16SC2)
 
 # Create StereoSGBM and prepare all parameters
-window_size = 7
+block_size = 7
 min_disp = 2
 num_disp = 130-min_disp
-stereo = cv2.StereoSGBM_create(minDisparity = min_disp,numDisparities = num_disp,blockSize = window_size,uniquenessRatio = 10,speckleWindowSize = 100,speckleRange = 32, disp12MaxDiff = 5,
-    P1 = 8*3*window_size**2,
-    P2 = 32*3*window_size**2)
+stereo = cv2.StereoSGBM_create(minDisparity = min_disp,numDisparities = num_disp,blockSize = block_size,uniquenessRatio = 10,speckleWindowSize = 100,speckleRange = 32, disp12MaxDiff = 5,
+    P1 = 8*3*block_size**2,
+    P2 = 32*3*block_size**2)
 
 # Used for the filtered image
 stereoR=cv2.ximgproc.createRightMatcher(stereo) # Create another stereo for right this time
 
 # WLS FILTER Parameters
-lmbda = 80000
-sigma = 1.8
-visual_multiplier = 1.0
 wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=stereo)
-wls_filter.setLambda(lmbda)
-wls_filter.setSigmaColor(sigma)
+wls_filter.setLambda(80000)
+wls_filter.setSigmaColor(1.8)
 
 Cam = cv2.VideoCapture(0)
 Cam.set(cv2.CAP_PROP_FRAME_WIDTH, 960)  
@@ -84,9 +74,12 @@ Cam.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
 Cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 270)
 Cam.set(cv2.CAP_PROP_FPS, 60)
 
-prev_time = 0
+
+# Filtering
+kernel= np.ones((3,3),np.uint8)
 
 executor = ThreadPoolExecutor(max_workers=4)
+prev_time = 0
 
 while True:
 

@@ -43,3 +43,8 @@ vcpkg/
 CMakeUserPresets.json
 
 #Stereo-Vision/calib_images/*
+
+*.aux
+*.lof
+*.txt
+*.toc
