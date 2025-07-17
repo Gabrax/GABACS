@@ -46,5 +46,6 @@ CMakeUserPresets.json
 
 *.aux
 *.lof
+*.log
 *.txt
 *.toc
