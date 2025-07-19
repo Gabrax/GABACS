@@ -1,7 +1,8 @@
+
 import numpy as np
 import cv2
 
-print('Starting Dual-Lens Camera Calibration. Press ESC to exit.\n')
+print('Starting Dual-Lens Camera Calibration. Press and hold the space bar to exit.\n')
 print('Press (s) to save the images, (c) to continue without saving.')
 
 CHESSBOARD_SIZE = (9, 6)
@@ -56,7 +57,8 @@ while True:
         else:
             print("Chessboard not detected in both cameras. Skipping save.")
 
-    elif cv2.waitKey(1) & 0xFF == 27:  # Spacebar to exit
+    elif cv2.waitKey(1) & 0xFF == ord(' '):  # Spacebar to exit
+        print("Exiting calibration...")
         break
 
 Cam.release()
