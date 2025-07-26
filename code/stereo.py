@@ -57,13 +57,33 @@ retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, C
 OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
 OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
 
-print('Calibration complete')
+print("Macierz kamery samej lewej:")
+print(mtxL)
+print("Macierz kamery samej prawej:")
+print(mtxR)
+
+print("Macierz kamery optimal lewej:")
+print(OmtxL)
+print("Macierz kamery optimal prawej:")
+print(OmtxR)
 
 retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = criteria_stereo,flags = cv2.CALIB_FIX_INTRINSIC)
+print("trans vector:", T)
+print("Macierz kamery lewej:")
+print(MLS)
+print("Macierz kamery prawej:")
+print(MRS)
+
+print('Calibration complete')
 
 # StereoRectify function
 rectify_scale= 0 # if 0 image croped, if 1 image nor croped
 RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale,(0,0))  # last paramater is alpha, if 0= croped, if 1= not croped
+print("Macierz kamery lewej rekt:")
+print(PL[:3,:3])
+print("Macierz kamery prawej rekt:")
+print(PR[:3,:3]) 
+
 # initUndistortRectifyMap function
 Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)   # cv2.CV_16SC2 this format enables us the programme to work faster
 Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImaR.shape[::-1], cv2.CV_16SC2)
@@ -169,7 +189,6 @@ while True:
 
     cv2.putText(filt_Color, f"FPS: {fps:.2f}", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
     cv2.imshow('Filtered Color Depth', filt_Color)
-    cv2.setMouseCallback("Filtered Color Depth", coords_mouse_disp, filt_Color)
 
     if cv2.waitKey(1) & 0xFF == 27:
         lgpio.gpio_write(chip,PIN,1)
