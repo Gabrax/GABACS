@@ -5,6 +5,7 @@ import time
 from sklearn.preprocessing import normalize
 from concurrent.futures import ThreadPoolExecutor
 import lgpio
+from collections import deque
 
 chip = lgpio.gpiochip_open(0)
 PIN = 17
@@ -116,6 +117,18 @@ prev_time = 0
 
 executor = ThreadPoolExecutor(max_workers=4)
 
+focal_length_px = PL[0, 0]  # From stereoRectify
+baseline_m = abs(T[0][0])  / 100  # From stereoCalibrate; convert to meters if needed (likely in mm)
+
+# --- Configurable Parameters --- #
+MIN_DISTANCE_TRIGGER = 0.65
+MAX_DISTANCE_RELEASE = 0.7
+DISPARITY_RANGE = (1.0, 150.0)
+CONTOUR_AREA_THRESHOLD = 500
+DISP_AVG_HISTORY = 5
+
+distance_history = deque(maxlen=DISP_AVG_HISTORY)
+
 while True:
     current_time = time.time()
     ret, frame = Cam.read()
@@ -125,70 +138,77 @@ while True:
 
     height, width, _ = frame.shape
     mid = width // 2
-    v_mid = height // 2
 
     left_frame = frame[:, :mid]
     right_frame = frame[:, mid:]
 
-    # Start remap operations in parallel
-    future_Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
-    future_Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
-    Left_nice = future_Left_nice.result()
-    Right_nice = future_Right_nice.result()
+    # Remap using stereo rectification maps
+    Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],
+                                interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+    Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],
+                                 interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
 
-    # Start grayscale conversion in parallel
-    future_gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY)
-    future_gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY)
-    gray_left = future_gray_left.result()
-    gray_right = future_gray_right.result()
+    # Convert to grayscale
+    gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY).result()
+    gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY).result()
 
-    # Start disparity computations in parallel
-    future_dispL = executor.submit(stereo.compute, gray_left, gray_right)
-    future_dispR = executor.submit(stereoR.compute, gray_right, gray_left)
-    dispL = np.int16(future_dispL.result())
-    dispR = np.int16(future_dispR.result())
+    # Compute disparity maps
+    dispL = stereo.compute(gray_left, gray_right).astype(np.float32) / 16.0
+    dispR = stereoR.compute(gray_right, gray_left).astype(np.float32) / 16.0
 
-    disp = ((dispL.astype(np.float32) / 16) - min_disp) / num_disp
+    # Apply WLS filter
+    filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
+    disp_vis = cv2.normalize(filtered_disp, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+    color_disp = cv2.applyColorMap(disp_vis, cv2.COLORMAP_OCEAN)
 
-    filteredImg = wls_filter.filter(dispL, gray_left, None, dispR)
-    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
-    filteredImg = np.uint8(filteredImg)
-
-    filt_Color = cv2.applyColorMap(filteredImg, cv2.COLORMAP_OCEAN)
-
-    # ----- Close Object Detection  ----- #
-    _, close_mask = cv2.threshold(filteredImg, 160, 255, cv2.THRESH_BINARY)
+    # Detect close objects via thresholding
+    _, close_mask = cv2.threshold(disp_vis, 160, 255, cv2.THRESH_BINARY)
     close_mask = cv2.morphologyEx(close_mask, cv2.MORPH_CLOSE, kernel)
     contours, _ = cv2.findContours(close_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    current_stop_flag = False
+
     for cnt in contours:
-        if cv2.contourArea(cnt) > 500:
-            x, y, w, h = cv2.boundingRect(cnt)
+        if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
+            continue
 
-            roi_disp = disp[y:y + h, x:x + w].astype(np.float32)
-            cx, cy = x + w // 2, y + h // 2
-            sample_disp = disp[cy - 1:cy + 2, cx - 1:cx + 2].astype(np.float32)
-            average_disp = np.mean(sample_disp[sample_disp > 0])
+        x, y, w, h = cv2.boundingRect(cnt)
+        cx, cy = x + w // 2, y + h // 2
 
-            if average_disp > 0:
-                distance = -593.97 * average_disp**3 + 1506.8 * average_disp**2 - 1373.1 * average_disp + 522.06
-                distance = np.around(distance * 0.01, decimals=2)
+        roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
+        valid_disp = roi_disp[(roi_disp > DISPARITY_RANGE[0]) & (roi_disp < DISPARITY_RANGE[1])]
 
-                if distance < 0.65:
-                    lgpio.gpio_write(chip,PIN,0)
-                    box_color = (0, 0, 255) if distance < 0.5 else (0, 255, 0)
-                    cv2.rectangle(filt_Color, (x, y), (x + w, y + h), box_color, 2)
-                    cv2.putText(filt_Color, f"{distance:.2f} m", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
-                else:
-                    lgpio.gpio_write(chip,PIN,1)
-                    
-    # ----- Close Object Detection  ----- #
+        if valid_disp.size == 0:
+            continue
 
-    fps = 1 / (current_time - prev_time)
+        avg_disp = np.median(valid_disp)
+        distance = (focal_length_px * baseline_m) / avg_disp
+        distance_history.append(distance)
+        smoothed_distance = np.median(distance_history)
+
+        print(f"Distance: {smoothed_distance:.2f} m")
+
+        # Apply hysteresis logic for stability
+        if smoothed_distance < MIN_DISTANCE_TRIGGER:
+            current_stop_flag = True
+            box_color = (0, 0, 255) if smoothed_distance < 0.5 else (0, 255, 0)
+            cv2.rectangle(color_disp, (x, y), (x + w, y + h), box_color, 2)
+            cv2.putText(color_disp, f"{smoothed_distance:.2f} m", (x, y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
+            break
+
+    # Trigger GPIO only once per frame
+    if current_stop_flag:
+        lgpio.gpio_write(chip, PIN, 0)  # Stop
+    elif len(distance_history) == DISP_AVG_HISTORY and smoothed_distance > MAX_DISTANCE_RELEASE:
+        lgpio.gpio_write(chip, PIN, 1)  # Move forward
+
+    current_time = time.time()
+    fps = 1 / (current_time - prev_time + 1e-6)  # avoid div by zero
     prev_time = current_time
 
-    cv2.putText(filt_Color, f"FPS: {fps:.2f}", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-    cv2.imshow('Filtered Color Depth', filt_Color)
+    cv2.putText(color_disp, f"FPS: {fps:.2f}", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+    cv2.imshow('Filtered Color Depth', color_disp)
 
     if cv2.waitKey(1) & 0xFF == 27:
         lgpio.gpio_write(chip,PIN,1)
