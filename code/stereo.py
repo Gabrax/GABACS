@@ -58,32 +58,13 @@ retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, C
 OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
 OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
 
-print("Macierz kamery samej lewej:")
-print(mtxL)
-print("Macierz kamery samej prawej:")
-print(mtxR)
-
-print("Macierz kamery optimal lewej:")
-print(OmtxL)
-print("Macierz kamery optimal prawej:")
-print(OmtxR)
-
 retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = criteria_stereo,flags = cv2.CALIB_FIX_INTRINSIC)
-print("trans vector:", T)
-print("Macierz kamery lewej:")
-print(MLS)
-print("Macierz kamery prawej:")
-print(MRS)
 
 print('Calibration complete')
 
 # StereoRectify function
 rectify_scale= 0 # if 0 image croped, if 1 image nor croped
 RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale,(0,0))  # last paramater is alpha, if 0= croped, if 1= not croped
-print("Macierz kamery lewej rekt:")
-print(PL[:3,:3])
-print("Macierz kamery prawej rekt:")
-print(PR[:3,:3]) 
 
 # initUndistortRectifyMap function
 Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)   # cv2.CV_16SC2 this format enables us the programme to work faster
@@ -98,7 +79,8 @@ stereo = cv2.StereoSGBM_create(minDisparity = min_disp,numDisparities = num_disp
     P2 = 32*3*window_size**2)
 
 # Used for the filtered image
-stereoR=cv2.ximgproc.createRightMatcher(stereo) # Create another stereo for right this time
+# Create another stereo for right this time
+stereoR=cv2.ximgproc.createRightMatcher(stereo)
 
 # WLS FILTER Parameters
 lmbda = 80000
@@ -117,8 +99,8 @@ prev_time = 0
 
 executor = ThreadPoolExecutor(max_workers=4)
 
-focal_length_px = PL[0, 0]  # From stereoRectify
-baseline_m = abs(T[0][0])  / 100  # From stereoCalibrate; convert to meters if needed (likely in mm)
+focal_length_px = PL[0, 0]
+baseline_m = abs(T[0][0]) / 100  
 
 # --- Configurable Parameters --- #
 MIN_DISTANCE_TRIGGER = 0.65
@@ -133,7 +115,7 @@ while True:
     current_time = time.time()
     ret, frame = Cam.read()
     if not ret:
-        print("❌ Failed to capture frame. Exiting...")
+        print("Failed to capture frame. Exiting...")
         break
 
     height, width, _ = frame.shape
@@ -159,56 +141,81 @@ while True:
     # Apply WLS filter
     filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
     disp_vis = cv2.normalize(filtered_disp, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-    color_disp = cv2.applyColorMap(disp_vis, cv2.COLORMAP_OCEAN)
+    
+    disp_closed = cv2.morphologyEx(disp_vis, cv2.MORPH_CLOSE, kernel)
+
+    # # --- Define central region of interest (ROI) ---
+    # disp_height, disp_width = disp_vis.shape
+    # roi_width = disp_width // 3  # 1/3 width
+    # roi_height = disp_height // 2  # 1/2 height
+    # roi_x = (disp_width - roi_width + 150) // 2
+    # roi_y = (disp_height - roi_height) // 2
+    # roi_rect = (roi_x, roi_y, roi_width, roi_height)
+
+    # # Visualize ROI
+    # cv2.rectangle(color_disp, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (0, 255, 255), 2)
 
     # Detect close objects via thresholding
-    _, close_mask = cv2.threshold(disp_vis, 160, 255, cv2.THRESH_BINARY)
-    close_mask = cv2.morphologyEx(close_mask, cv2.MORPH_CLOSE, kernel)
-    contours, _ = cv2.findContours(close_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #_, close_mask = cv2.threshold(disp_vis, 160, 255, cv2.THRESH_BINARY)
+    #close_mask = cv2.morphologyEx(close_mask, cv2.MORPH_CLOSE, kernel)
 
-    current_stop_flag = False
+    # # Restrict mask to ROI only
+    # roi_mask = np.zeros_like(close_mask)
+    # roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
 
-    for cnt in contours:
-        if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
-            continue
+    # # Find contours in restricted region
+    # contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        x, y, w, h = cv2.boundingRect(cnt)
-        cx, cy = x + w // 2, y + h // 2
+    # current_stop_flag = False
 
-        roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
-        valid_disp = roi_disp[(roi_disp > DISPARITY_RANGE[0]) & (roi_disp < DISPARITY_RANGE[1])]
+    # for cnt in contours:
+        # if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
+            # continue
 
-        if valid_disp.size == 0:
-            continue
+        # x, y, w, h = cv2.boundingRect(cnt)
+        # cx, cy = x + w // 2, y + h // 2
 
-        avg_disp = np.median(valid_disp)
-        distance = (focal_length_px * baseline_m) / avg_disp
-        distance_history.append(distance)
-        smoothed_distance = np.median(distance_history)
+        # # Make sure coordinates are within image bounds
+        # if cy - 1 < 0 or cy + 2 > dispL.shape[0] or cx - 1 < 0 or cx + 2 > dispL.shape[1]:
+            # continue
 
-        print(f"Distance: {smoothed_distance:.2f} m")
+        # roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
+        # valid_disp = roi_disp[(roi_disp > DISPARITY_RANGE[0]) & (roi_disp < DISPARITY_RANGE[1])]
 
-        # Apply hysteresis logic for stability
-        if smoothed_distance < MIN_DISTANCE_TRIGGER:
-            current_stop_flag = True
-            box_color = (0, 0, 255) if smoothed_distance < 0.5 else (0, 255, 0)
-            cv2.rectangle(color_disp, (x, y), (x + w, y + h), box_color, 2)
-            cv2.putText(color_disp, f"{smoothed_distance:.2f} m", (x, y - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
-            break
+        # if valid_disp.size == 0:
+            # continue
 
-    # Trigger GPIO only once per frame
-    if current_stop_flag:
-        lgpio.gpio_write(chip, PIN, 0)  # Stop
-    elif len(distance_history) == DISP_AVG_HISTORY and smoothed_distance > MAX_DISTANCE_RELEASE:
-        lgpio.gpio_write(chip, PIN, 1)  # Move forward
+        # avg_disp = np.median(valid_disp)
+        # distance = (focal_length_px * baseline_m) / avg_disp
+        # distance_history.append(distance)
+        # smoothed_distance = np.median(distance_history)
 
-    current_time = time.time()
-    fps = 1 / (current_time - prev_time + 1e-6)  # avoid div by zero
-    prev_time = current_time
+        # print(f"Distance: {smoothed_distance:.2f} m")
 
-    cv2.putText(color_disp, f"FPS: {fps:.2f}", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-    cv2.imshow('Filtered Color Depth', color_disp)
+        # # Apply hysteresis logic for stability
+        # if smoothed_distance < MIN_DISTANCE_TRIGGER:
+            # current_stop_flag = True
+            # box_color = (0, 0, 255) if smoothed_distance < 0.5 else (0, 255, 0)
+            # cv2.rectangle(color_disp, (x, y), (x + w, y + h), box_color, 2)
+            # cv2.putText(color_disp, f"{smoothed_distance:.2f} m", (x, y - 10),
+                        # cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
+            # break
+
+    # # Trigger GPIO only once per frame
+    # if current_stop_flag:
+        # lgpio.gpio_write(chip, PIN, 0)  # Stop
+    # elif len(distance_history) == DISP_AVG_HISTORY and smoothed_distance > MAX_DISTANCE_RELEASE:
+        # lgpio.gpio_write(chip, PIN, 1)  # Move forward
+
+    # current_time = time.time()
+    # fps = 1 / (current_time - prev_time + 1e-6)  # avoid div by zero
+    # prev_time = current_time
+
+    # # Overlay FPS and resolution info
+    # cv2.putText(color_disp, f"FPS: {fps:.2f}", (10, 25),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+    # cv2.putText(color_disp, f"Size: {disp_width}x{disp_height}", (10, 50),cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+
+    cv2.imshow('Filtered Color Depth', disp_vis)
 
     if cv2.waitKey(1) & 0xFF == 27:
         lgpio.gpio_write(chip,PIN,1)
