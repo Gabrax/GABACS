@@ -924,7 +924,9 @@ while True:
     filt_Color = cv2.applyColorMap(filteredImg, cv2.COLORMAP_OCEAN)
 \end{lstlisting}
 
-Po wygenerowaniu mapy dysparycji należy określić odległość. Zadanie polega na znalezieniu zależności między wartością dysparycji, a odległością. Aby to zrobić, eksperymentalnie zmierzyliśmy wartości dysparycji w kilku miejscach, aby na tej podstawie określić regresję.
+Po wygenerowaniu mapy dysparycji należy określić odległość. Zadanie polega na znalezieniu zależności między wartością dysparycji, a odległością.
+
+\section{Estymacja odległości}
 
 \begin{lstlisting}[style=mypython]
 _, close_mask = cv2.threshold(filteredImg, 160, 255, cv2.THRESH_BINARY)
@@ -975,7 +977,7 @@ Pomiar odległości dotyczy tylko odległości od 67 cm do 203 cm, aby uzyskać 
 
 Zwrócona wartość to średnia dysparycji z macierzy 9x9 pikseli.
 
-\section{Triangulacja}
+\subsection{Triangulacja}
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -987,39 +989,50 @@ Zwrócona wartość to średnia dysparycji z macierzy 9x9 pikseli.
 
 W ostatnim kroku, triangulacji, zakłada się, że oba obrazy projekcji są współpłaszczyznowe i że poziomy rząd pikseli lewego obrazu jest wyrównany z odpowiadającym mu obrazem prawego.
 
-Poniższy obraz można teraz skonstruować przy użyciu poprzednich hipotez.
-
 Punkt $P$ leży w środowisku i jest pokazany na
 lewym i prawym obrazie na $P_l$ i $P_r$, z odpowiadającymi im współrzędnymi
-odpowiadającymi współrzędnymi $X_l$ i $X_r$. To pozwala nam wprowadzić nową wielkość $d = X_l - X_r$.
+odpowiadającymi współrzędnymi $x^l$ i $x^r$. To pozwala nam wprowadzić nową wielkość $d = x^l - x^r$.
 Można zauważyć, że im dalej punkt $P$, tym mniejsza staje się wielkość $d$. Dysproporcja jest zatem odwrotnie proporcjonalna do odległości.\\
-Do obliczenia odległości można użyć następującego wzoru można obliczyć: \[Z=f*T/(xl-xr)\]
+Do obliczenia odległości można użyć następującego wzoru można obliczyć: \[Z=f*T/(x^l-x^r)\]
 
-Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością a odległością.
+Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością, a odległością.
 Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
 Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na tej podstawie można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
 
-Metoda ta działa jednak tylko wtedy, gdy konfiguracja kamery stereo jest idealna. W
-rzeczywistości tak nie jest. Właśnie dlatego lewy i prawy obraz są
-matematycznie wyrównane równolegle. Oczywiście kamery muszą być fizycznie ustawione równolegle.
-Zanim zostanie wyjaśniona metoda matematycznego wyrównywania obrazów, trzeba najpierw zrozumieć geometrię epipolarną.
+\chapter{Wnioski i możliwe ulepszenia}
 
-\section{Wnioski i możliwe ulepszenia}
+Z przeprowadzonej analizy uzyskanych obrazów można stwierdzić, że zastosowanie systemu antykolizyjnego opartego wyłącznie na analizie obrazu jest niewystarczające. 
+Stereowizja posiada bowiem szereg ograniczeń, które wpływają na jej niezawodność, m.in.: 
 
-\begin{minipage}[t]{\textwidth}
-\textbf{Wady i ograniczenia STEREO:}
 \begin{itemize}
-  \item Wymóg kalibracji i synchronizacji kamer – błędy w tym zakresie przekładają się bezpośrednio na błędną głębokość.
-
-  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
-
-  \item Problemy przy silnym oświetleniu i odbiciach – zmienność intensywności zaburza dopasowanie.
-
-  \item Duży koszt obliczeniowy – szczególnie w przypadku metod globalnych lub opartych na deep learningu.
-
-  \item Widzenie tylko z jednej perspektywy – martwe strefy między kamerami lub poza polem widzenia jednej z nich.
+    \item problemy przy silnym oświetleniu oraz odbiciach, gdzie zmienność intensywności zakłóca proces dopasowania pikseli,
+    \item brak możliwości dopasowania w obszarach ubogich w teksturę, takich jak białe ściany czy jednolite niebo,
+    \item ograniczenie widzenia do jednej perspektywy, co powoduje występowanie martwych stref pomiędzy kamerami lub poza polem widzenia jednej z nich.
 \end{itemize}
-\end{minipage}
+
+Aby stereowizja mogła funkcjonować w sposób użyteczny w systemach antykolizyjnych, konieczne jest zastosowanie dodatkowych czujników, takich jak wodoodporny czujnik ultradźwiękowy A02YYUW czy laserowy czujnik LiDAR. Należy jednak podkreślić, że również te urządzenia posiadają własne ograniczenia.
+
+Kolejnym istotnym problemem jest liczba klatek na sekundę (ang. \textit{Frames Per Second, FPS}). Analiza wyników wykazała, że osiągnięcie wartości około $4\,\text{FPS}$ jest niewystarczające do zapewnienia pewnej i szybkiej reakcji systemu na wykrycie zagrożenia kolizją. Główną przyczyną tak niskiej wydajności jest fakt, iż obliczenia realizowane są na procesorze centralnym (CPU), który wykonuje instrukcje sekwencyjnie.
+
+Dla porównania, przy zastosowaniu wydajniejszego CPU udało się uzyskać około $16\,\text{FPS}$, co wciąż stanowi wartość niewystarczającą.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/cpu-compare.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Porównanie CPU ARM i x86. https://www.cpubenchmark.net/]{Porównanie CPU ARM i x86}
+\end{figure}
+
+Rozwiązaniem tego problemu może być zastosowanie odpowiedniego komputera jednopłytkowego z wydajnym procesorem graficznym (GPU), np. z rodziny Jetson firmy NVIDIA.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.5\textwidth]{images/jetson.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[NVIDIA Jetson Nano B01. https://kamami.pl/wycofane-z-oferty/574587-zestaw-deweloperski-nvidia-jetson-nano.html]{NVIDIA Jetson Nano B01.}
+\end{figure}
+
+Taka pltaforma umożliwi na przeniesienie omawianych obliczeń na GPU. Pozwoli to na znaczące zwiększenie liczby przetwarzanych klatek na sekundę, a tym samym poprawi responsywność systemu w kontekście wykrywania kolizji.
 
 Możliwe ulepszenia dla programu:
 
@@ -1031,159 +1044,7 @@ Aby skrócić czas obliczeń przy generowaniu mapy dysparycji, należy zmniejszy
 
 Generowanie mapy głębokości mogłoby również być korzystne.
 
-Wystarczyłoby zapisać wartości macierzy z kalibracji stereo, aby móc je ponownie wykorzystać. Dużo czasu mogłoby to zaoszczędzić w trakcie inicjalizacji.
-
-Uruchomienie programu na GPU pozwoliłoby również uzyskać gładsze obrazy, gdy kamera stereo jest w ruchu.
-
 Używana równość prosta zawsze zwracałaby dokładną odległość do obiektu z większą precyzją i mniejszym nakładem pracy.
-
-\subsubsection*{Structured Light}
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/POINTCLOUD.png}  % Adjust the path and width as necessary
-    \captionsetup{font=footnotesize}
-    \caption[Kamera Xbox 360 Kinect. https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html]{Kamera Xbox 360 Kinect}
-    \label{fig:kinect}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-Structured Light (pol. światło strukturalne) to technika aktywnej wizji komputerowej wykorzystywana do precyzyjnego pomiaru kształtu i głębokości obiektów. Polega na projekcji znanego wzorca świetlnego (np. siatki, kropek, pasków) na powierzchnię sceny, a następnie analizie deformacji tego wzorca za pomocą kamery.
-
-\bigskip
-
-System Structured Light składa się zazwyczaj z dwóch komponentów:
-
-\begin{itemize}
-  \item Projektora – emituje wzorzec świetlny (np. siatkę punktów lub paski) na obserwowaną scenę.
-
-  \item Kamery – rejestruje zniekształcony wzorzec po odbiciu od obiektów w przestrzeni.
-\end{itemize}
-
-Proces działa następująco:
-
-\begin{enumerate}
-  \item Znany wzorzec zostaje wyświetlony na scenie.
-
-  \item Gdy wzorzec napotyka obiekty o różnych kształtach i odległościach, zostaje geometrycznie zniekształcony.
-
-  \item Kamera rejestruje te deformacje.
-
-  \item System porównuje zarejestrowany obraz wzorca ze wzorcem referencyjnym, który byłby widoczny na płaskiej powierzchni.
-
-  \item Na podstawie różnic (tzw. disparity) obliczana jest głębokość – za pomocą triangulacji.
-\end{enumerate}
-
-\begin{minipage}[t]{\textwidth}
-\textbf{Wady i ograniczenia:}
-\begin{itemize}
-  \item W jasnym świetle dziennym (szczególnie na zewnątrz), wzorzec świetlny może zostać zaburzony lub całkowicie zaniknąć – szczególnie jeśli działa w paśmie IR.
-
-  \item Technika najlepiej sprawdza się na krótkich dystansach (0,5–2 m). Dalsze obiekty dają mniej wyraźne zniekształcenia wzorca.
-
-  \item Szkło, lustra, woda lub powierzchnie metaliczne mogą zaburzyć wzorzec lub wprowadzać wielokrotne odbicia.
-
-  \item Projektor i kamera muszą być precyzyjnie skalibrowane względem siebie – błędy kalibracji mogą znacząco wpłynąć na jakość głębi.
-
-  \item Gdy wzorzec nie dotrze do części sceny (np. w załomach, pod kątem), pomiar głębokości w tych miejscach będzie niemożliwy.
-\end{itemize}
-\end{minipage}
-
-\subsubsection*{LIDAR (Light Detection and Ranging)}
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.3\textwidth]{images/LIDAR.png}  % Adjust the path and width as necessary
-    \captionsetup{font=footnotesize}
-    \caption[Kamera Intel RealSense L515 z technologią LIDAR. https://cell-kom.com/inne/21454-kamera-internetowa-full-hd-b16-1080p-5900217390350.html]{Kamera Intel RealSense z technologią LIDAR.}
-    \label{fig:mono}  % Optional: use to refer to this image later in the text
-\end{figure}
-
-LIDAR (Light Detection and Ranging) to technologia zdalnego pomiaru odległości, która działa poprzez wysyłanie impulsów laserowych i mierzenie czasu, jaki upływa od ich odbicia od obiektu do powrotu do sensora. Na tej podstawie LIDAR tworzy bardzo dokładne mapy 3D otoczenia.
-
-Podstawowy mechanizm działania LiDAR opiera się na bardzo prostej zasadzie:
-
-\begin{itemize}
-  \item Sensor emituje impuls laserowy w kierunku otoczenia.
-  \item Światło odbija się od powierzchni obiektów i wraca do detektora.
-  \item System mierzy czas, jaki upłynął od wysłania do odebrania sygnału (Time-of-Flight, ToF).
-  \item Znając prędkość światła, obliczana jest dokładna odległość:
-    \[
-    d = \frac{c \cdot \Delta t}{2}
-    \]
-
-  gdzie:
-  \begin{align*}
-  d &- \text{odległość do obiektu} \\
-  c &- \text{prędkość światła (ok. } 3 \cdot 10^8 \, \text{m/s)} \\
-  \Delta t &- \text{czas przelotu sygnału}
-  \end{align*} 
-\end{itemize}
-
-LiDAR-y mogą wykonywać takie pomiary miliony razy na sekundę, skanując środowisko w 2D (jeden plan) lub 3D (pełna chmura punktów).
-
-\begin{minipage}[t]{\textwidth}
-\textbf{Wady i ograniczenia:}
-\begin{itemize}
-  \item Mgła, deszcz, śnieg i kurz mogą zakłócać odbicie promieni lasera, co wpływa na dokładność pomiarów.
-
-  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
-
-  \item LiDAR rejestruje wyłącznie dane geometryczne – nie dostarcza żadnych informacji o kolorze czy teksturze powierzchni.
-
-  \item W porównaniu do kamer, LiDAR-y mają stosunkowo rzadką siatkę pomiarową, co skutkuje niższą rozdzielczością przy dużych odległościach (np. obiekt 100 m dalej może być opisany przez kilka punktów).
-
-  \item Bardzo ciemne lub przezroczyste powierzchnie (np. szyby) mogą słabo odbijać impulsy lasera lub w ogóle je przepuszczać.
-\end{itemize}
-\end{minipage}
-
-\subsubsection*{Kamery zdarzeniowe}
-
-Kamery zdarzeniowe (ang. Event Cameras) to innowacyjne sensory wizyjne, które różnią się fundamentalnie od tradycyjnych kamer opartych na matrycy CMOS. Zamiast przechwytywać obraz w sposób klatkowy (frame-based), rejestrują one zmiany jasności na poziomie pojedynczych pikseli, co pozwala na znacznie wyższą rozdzielczość czasową i lepszą reakcję na dynamiczne sceny. Dzięki temu technologia ta znajduje coraz szersze zastosowanie w systemach robotycznych, autonomicznych pojazdach, AR/VR i przetwarzaniu sygnałów w czasie rzeczywistym.
-
-W tradycyjnych kamerach każda klatka rejestrowana jest w określonym interwale czasowym, co powoduje powstawanie rozmycia ruchu i dużego opóźnienia w dynamicznych scenach. Kamery zdarzeniowe działają zupełnie inaczej:
-
-Każdy piksel działa niezależnie i stale monitoruje zmiany lokalnej jasności.
-
-Gdy zmiana przekroczy ustalony próg (np. 10% zmiany jasności), piksel generuje tzw. zdarzenie (event).
-
-Zdarzenie zawiera informację o:
-
-\begin{itemize}
-  \item położeniu piksela (x, y),
-
-  \item czasie zdarzenia (z dokładnością do mikrosekund),
-
-  \item polaryzacji zmiany (jasność wzrosła lub zmalała).
-\end{itemize}
-
-Dzięki temu kamera generuje strumień asynchronicznych zdarzeń, a nie szereg klatek. Przykładami takich kamer są m.in. DVS (Dynamic Vision Sensor), DAVIS (łączący klasyczną kamerę z kamerą zdarzeniową) oraz CeleX.
-
-Brak informacji o statycznych obiektach: jeśli scena się nie zmienia, kamera nie generuje zdarzeń – co utrudnia pełną rekonstrukcję otoczenia.
-
-Trudności w przetwarzaniu danych: strumień zdarzeń ma inną strukturę niż klasyczne obrazy – wymaga specjalnych algorytmów i często dedykowanego sprzętu (np. FPGA).
-
-Niska rozdzielczość przestrzenna: w porównaniu do tradycyjnych kamer, choć technologia ta dynamicznie się rozwija.
-
-Szum przy słabym oświetleniu: niektóre sensory są bardziej podatne na fałszywe zdarzenia w nocy lub w ciemnych pomieszczeniach.
-
-Koszt: kamery zdarzeniowe są wciąż relatywnie drogie i mniej dostępne komercyjnie.
-
-\begin{minipage}[t]{\textwidth}
-\textbf{Wady i ograniczenia:}
-\begin{itemize}
-  \item Wymóg kalibracji i synchronizacji kamer – błędy w tym zakresie przekładają się bezpośrednio na błędną głębokość.
-
-  \item Brak dopasowania w teksturowo ubogich obszarach – np. białe ściany, niebo.
-
-  \item Problemy przy silnym oświetleniu i odbiciach – zmienność intensywności zaburza dopasowanie.
-
-  \item Duży koszt obliczeniowy – szczególnie w przypadku metod globalnych lub opartych na deep learningu.
-
-  \item Widzenie tylko z jednej perspektywy – martwe strefy między kamerami lub poza polem widzenia jednej z nich.
-\end{itemize}
-\end{minipage}
-
-\chapter{Zakończenie}
 
 \renewcommand{\listfigurename}{Spis rysunków}
 \addcontentsline{toc}{chapter}{Spis rysunków}
