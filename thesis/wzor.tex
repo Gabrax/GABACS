@@ -514,7 +514,7 @@ f_x & 0 & c_x \\
   \item Wartość $1$ w prawym dolnym rogu służy do zapewnienia jednorodności w transformacjach macierzowych
 \end{itemize}
 
-Przykładowe macierze kamer lewej i prawej uzyskane po kalibracji przedstawiają się następująco:
+Macierze kamer lewej i prawej uzyskane po kalibracji przedstawiają się następująco:
 
 \[
 \mathbf{M}_L =
@@ -533,6 +533,8 @@ Przykładowe macierze kamer lewej i prawej uzyskane po kalibracji przedstawiają
 \]
 
 W celu dalszego przetwarzania obrazów i uzyskania lepszej dokładności, macierze te mogą zostać zoptymalizowane przy użyciu funkcji cv2.getOptimalNewCameraMatrix(). Zoptymalizowane wersje macierzy, uwzględniające rzeczywisty obszar widzenia i dystorsje, są wykorzystywane podczas rektyfikacji obrazów za pomocą funkcji cv2.stereoRectify().
+
+Macierze kamer lewej i prawej uzyskane po rektyfikacji przedstawiają się następująco:
 
 \[
 \mathbf{M}_L =
@@ -568,7 +570,7 @@ Aby dodatkowo uprościć ten proces, stosuje się \textbf{rektyfikację stereo},
     \label{fig:rpi}
 \end{figure}
 
-Na rysunku \ref{fig:rpi} przedstawiono uproszczony model kamery stereo zbudowanej z dwóch kamer otworkowych. Punkty $O_l$ i $O_r$ to środki rzutów lewej i prawej kamery. Proste łączące punkty $p_l$ z $e_l$ oraz $p_r$ z $e_r$ to tzw. \textbf{linie epipolarne}, natomiast punkty $e_l$ i $e_r$ to \textbf{epipole} – rzuty środka jednej kamery na płaszczyznę obrazu drugiej.
+Na rysunku powyżej przedstawiono uproszczony model kamery stereo zbudowanej z dwóch kamer otworkowych. Punkty $O_l$ i $O_r$ to środki rzutów lewej i prawej kamery. Proste łączące punkty $p_l$ z $e_l$ oraz $p_r$ z $e_r$ to tzw. \textbf{linie epipolarne}, natomiast punkty $e_l$ i $e_r$ to \textbf{epipole} – rzuty środka jednej kamery na płaszczyznę obrazu drugiej.
 
 Geometria epipolarna umożliwia ograniczenie przestrzeni przeszukiwania punktu odpowiadającego z pełnej płaszczyzny obrazu do jednej linii – linii epipolarnej. Ułatwia to znacznie proces dopasowywania punktów. Można to podsumować w następujących punktach:
 
@@ -703,8 +705,6 @@ Right_Stereo_Map = cv2.initUndistortRectifyMap(MRS, dRS, RR, PR,
 
 Funkcja \texttt{cv2.stereoRectify()} przekształca obrazy w taki sposób, aby ich linie epipolarne były poziome. Z kolei \texttt{cv2.initUndistortRectifyMap()} umożliwia wygenerowanie obrazów bez dystorsji i z poprawną geometrią epipolarną.
 
-\textbf{Przykładowe macierze kalibracyjne:}
-
 \[
 \mathbf{M}_L =
 \begin{bmatrix}
@@ -725,7 +725,7 @@ Tak przygotowane obrazy mogą być bezpośrednio wykorzystane do obliczania mapy
 
 \section{Mapa dysparycji}
 
-Mapa dysparycji\cite{disparity} to obraz, w którym każdemu pikselowi przypisywana jest wartość reprezentująca przesunięcie (różnicę pozycji) pomiędzy odpowiadającymi sobie punktami w obrazie lewym i prawym. Im większe przesunięcie (czyli dysparycja), tym bliżej znajduje się dany obiekt względem kamery. Taka mapa stanowi podstawę do obliczenia mapy głębokości, która pozwala oszacować odległość poszczególnych punktów sceny od obserwatora.
+Mapa dysparycji \cite{disparity} to obraz, w którym każdemu pikselowi przypisywana jest wartość reprezentująca przesunięcie (różnicę pozycji) pomiędzy odpowiadającymi sobie punktami w obrazie lewym i prawym. Im większe przesunięcie (czyli dysparycja), tym bliżej znajduje się dany obiekt względem kamery. Taka mapa stanowi podstawę do obliczenia mapy głębokości, która pozwala oszacować odległość poszczególnych punktów sceny od obserwatora.
 
 \subsection*{Algorytm StereoSGBM}
 
@@ -805,27 +805,9 @@ Dzięki parametrom ustalonym podczas inicjalizacji otrzymujemy następujący wyn
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.4\textwidth]{images/dopracy3.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.4\textwidth]{images/disparity.png}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
-    \caption[Wynik dla mapy dysproporcji. Opracowanie własne.]{Wynik dla mapy dysproporcji.}
-\end{figure}
-
-Na wygenerowanej mapie dysparycji mogą nadal występować zakłócenia w postaci lokalnych szumów. W celu ich redukcji stosuje się filtrację morfologiczną, która pozwala poprawić spójność i ciągłość danych głębokości. W szczególności wykorzystywany jest operator zamykania (morphological closing), realizowany w OpenCV za pomocą funkcji \texttt{cv2.morphologyEx()} z flagą \texttt{cv2.MORPH\_CLOSE}. Zastosowanie tego filtru pozwala na eliminację drobnych czarnych artefaktów, które mogą pojawić się wewnątrz jednorodnych obszarów na mapie.
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.4\textwidth]{images/closing.png}  % Adjust the path and width as necessary
-    \captionsetup{font=footnotesize}
-    \caption[Przykład filtra zamykającego. https://docs.opencv.org/3.4/d9/d61/tutorial-py-morphological-ops.html]{Przykład filtra zamykającego.}
-\end{figure}
-
-Poniżej inny przykład tej samej sceny, aby lepiej zobaczyć różnicę.
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.4\textwidth]{images/dopracy4.png}  % Adjust the path and width as necessary
-    \captionsetup{font=footnotesize}
-    \caption[Wynik mapy dysproporcji po filtrze zamykającym. Opracowanie własne.]{Wynik mapy dysproporcji po filtrze zamykającym.}
+    \caption[Rezultat mapy dysproporcji StereoSGBM. Opracowanie własne.]{Rezultat mapy dysproporcji StereoSGBM.}
 \end{figure}
 
 \subsection*{Algorytm StereoBM}
@@ -836,22 +818,30 @@ Inicjalizacja przebiega następująco:
 
 \begin{lstlisting}[style=mypython]
 
-Inicjalizacja StereoBM
+# Inicjalizacja StereoBM
 num_disp = 64 # musi być podzielne przez 16
 block_size = 15 # większy blok = większa odporność na szumy
 
 stereo_bm = cv2.StereoBM_create(
-numDisparities=num_disp,
-blockSize=block_size
-)
+              numDisparities=num_disp,
+              blockSize=block_size)
 
-Obliczenie mapy dysparycji
+# Obliczenie mapy dysparycji
 disparity_bm = stereo_bm.compute(grayL, grayR)
 \end{lstlisting}
 
 W odróżnieniu od \texttt{StereoSGBM}, algorytm \texttt{StereoBM} analizuje jedynie lokalne dopasowania bez optymalizacji globalnej. Dzięki temu jest znacząco szybszy i mniej zasobożerny, co czyni go dobrym wyborem w systemach wbudowanych (np. Raspberry~Pi) lub w aplikacjach wymagających przetwarzania w czasie rzeczywistym. Jednak jego prostota powoduje większą wrażliwość na szumy i mniejszą dokładność w obszarach jednorodnych lub przy słabym tekście.
 
 Podobnie jak w przypadku \texttt{StereoSGBM}, poprawna rektyfikacja obrazów jest warunkiem uzyskania wiarygodnej mapy dysparycji. Ze względu jednak na mniejszą złożoność obliczeń, \texttt{StereoBM} wymaga często dodatkowych filtrów (np. medianowego lub morfologicznego) w celu poprawy jakości wyników.
+
+Wynik dla mapy dysparycji prezentuje się następująco:
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.4\textwidth]{images/BMdisparity.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Rezultat mapy dysproporcji StereoBM. Opracowanie własne.]{Rezultat mapy dysproporcji StereoBM.}
+\end{figure}
 
 \section{Filtr WLS}
 
@@ -871,6 +861,26 @@ Aby skorzystać z filtra WLS, tworzony jest dodatkowy obiekt dopasowania stereo 
 Sam proces filtracji przeprowadzany jest metodą \texttt{filter()} filtra WLS, a jego wynik poddawany jest normalizacji za pomocą funkcji \texttt{cv2.normalize()}, co pozwala na wizualizację rezultatu.
 
 Należy jednak zauważyć, że wynik filtru WLS nie jest już bezpośrednio wykorzystywalną mapą dysparycji — jest to obraz zakodowany w formacie uint8, który dobrze uwidacznia krawędzie, lecz nie zawiera już rzeczywistych wartości głębokości (w przeciwieństwie do oryginalnej mapy dysparycji w formacie float32).
+
+Tak wygląda rezultat filtra WLS:
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.8\textwidth]{images/combinedWLS.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Rezultat filtra WLS dla StereoSGBM i StereoBM. Opracowanie własne.]{Rezultat filtra WLS.}
+\end{figure}
+
+\section{Filtr zamykający}
+
+Na uzyskanym obrazie mogą nadal występować zakłócenia w postaci lokalnych szumów. W celu ich redukcji stosuje się filtrację morfologiczną, która pozwala poprawić spójność i ciągłość danych głębokości. W szczególności wykorzystywany jest operator zamykania (morphological closing), realizowany w OpenCV za pomocą funkcji \texttt{cv2.morphologyEx()} z flagą \texttt{cv2.MORPH\_CLOSE}. Zastosowanie tego filtru pozwala na eliminację drobnych czarnych artefaktów, które mogą pojawić się wewnątrz jednorodnych obszarów na mapie.
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.6\textwidth]{images/closeF.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Przykład filtra zamykającego. https://www.graphicsmill.com/docs/gm/minimum-maximum-median-filters.htm]{Przykład filtra zamykającego.}
+\end{figure}
 
 \section{Główna pętla}
 
@@ -1018,7 +1028,7 @@ Dla porównania, przy zastosowaniu wydajniejszego CPU udało się uzyskać okoł
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/cpu-compare.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.6\textwidth]{images/cpu-compare.png}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
     \caption[Porównanie CPU ARM i x86. https://www.cpubenchmark.net/]{Porównanie CPU ARM i x86}
 \end{figure}
@@ -1032,7 +1042,7 @@ Rozwiązaniem tego problemu może być zastosowanie odpowiedniego komputera jedn
     \caption[NVIDIA Jetson Nano B01. https://kamami.pl/wycofane-z-oferty/574587-zestaw-deweloperski-nvidia-jetson-nano.html]{NVIDIA Jetson Nano B01.}
 \end{figure}
 
-Taka pltaforma umożliwi na przeniesienie omawianych obliczeń na GPU. Pozwoli to na znaczące zwiększenie liczby przetwarzanych klatek na sekundę, a tym samym poprawi responsywność systemu w kontekście wykrywania kolizji.
+Taka pltaforma umożliwi na przeniesienie omuwionych obliczeń na GPU. Pozwoli to na znaczące zwiększenie liczby przetwarzanych klatek na sekundę, a tym samym poprawi responsywność systemu w kontekście wykrywania kolizji.
 
 Możliwe ulepszenia dla programu:
 
