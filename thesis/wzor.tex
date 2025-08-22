@@ -89,8 +89,8 @@
 \lstdefinestyle{mypython}{
     language=Python,
     basicstyle=\ttfamily\scriptsize,
-    keywordstyle=\color{red}\bfseries,
-    stringstyle=\color{green},
+    keywordstyle=\color{black}\bfseries,
+    stringstyle=\color{black},
     commentstyle=\color{blue},
     inputencoding=utf8,
     literate=
@@ -643,12 +643,6 @@ Algorytm operuje zazwyczaj na obrazach w odcieniach szarości, co znacząco zmni
 
 Po skonfigurowaniu obiektu \texttt{StereoSGBM}, obliczenie mapy dysparycji następuje poprzez wywołanie metody \texttt{compute()}. Wynikowy obraz przedstawia poziomą różnicę położenia punktów w obrazach stereo, co stanowi podstawę do dalszej rekonstrukcji głębi.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.4\textwidth]{images/disparity.png}
-\captionsetup{font=footnotesize}
-\caption[Rezultat mapy dysparycji StereoSGBM. Opracowanie własne.]{Rezultat mapy dysparycji StereoSGBM.}
-\end{figure}
 \subsection{Algorytm StereoBM}
 
 Alternatywą dla metody \texttt{StereoSGBM} jest algorytm \texttt{StereoBM} (ang. \textit{Block Matching}) \cite{bm}, będący jedną z najstarszych i najprostszych implementacji dopasowania stereoskopowego w bibliotece OpenCV. Jego działanie opiera się na zasadzie bezpośredniego porównywania lokalnych bloków pikseli pomiędzy obrazem lewym i prawym wzdłuż odpowiadających sobie linii epipolarnych. \texttt{StereoBM} nie wykorzystuje bezpośrednio parametrów kalibracyjnych w procesie dopasowania – działa tylko na rektyfikowanych obrazach. 
@@ -690,12 +684,6 @@ Ze względu na prostotę algorytmu i brak optymalizacji globalnej, wyniki uzyska
 
 \texttt{StereoBM} jest powszechnie stosowany w systemach wymagających przetwarzania w czasie rzeczywistym przy ograniczonych zasobach, np. w robotyce mobilnej lub systemach wizyjnych dla pojazdów autonomicznych, gdy wymagana jest szybka, ale przybliżona estymacja głębi.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.4\textwidth]{images/BMdisparity.png}
-    \captionsetup{font=footnotesize}
-    \caption[Rezultat mapy dysparycji StereoBM. Opracowanie własne.]{Rezultat mapy dysparycji uzyskanej metodą \texttt{StereoBM}.}
-\end{figure}
 \section{Filtr WLS}
 
 W celu dalszego ograniczenia szumu w mapie dysparycji stosowany jest filtr ważonych najmniejszych kwadratów(ang. \textit{Weighted Least Squares}) \cite{wls}, dostępny w module \texttt{cv2.ximgproc}. Jest on szczególnie skuteczny w poprawianiu ciągłości strukturalnej oraz w zachowaniu ostrych krawędzi w scenach o złożonej geometrii.
@@ -707,15 +695,6 @@ Aby skorzystać z filtra WLS, tworzony jest dodatkowy obiekt dopasowania stereo 
 Sam proces filtracji przeprowadzany jest metodą \texttt{filter()} filtra WLS, a jego wynik poddawany jest normalizacji za pomocą funkcji \texttt{cv2.normalize()}, co pozwala na wizualizację rezultatu.
 
 Należy jednak zauważyć, że wynik filtru WLS nie jest już bezpośrednio wykorzystywalną mapą dysparycji — jest to obraz zakodowany w formacie uint8, który dobrze uwidacznia krawędzie, lecz nie zawiera już rzeczywistych wartości głębokości (w przeciwieństwie do oryginalnej mapy dysparycji w formacie float32).
-
-Tak wygląda rezultat filtra WLS:
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.8\textwidth]{images/combinedWLS.png}  % Adjust the path and width as necessary
-    \captionsetup{font=footnotesize}
-    \caption[Rezultat filtra WLS dla StereoSGBM i StereoBM. Opracowanie własne.]{Rezultat filtra WLS dla StereoSGBM i StereoBM.}
-\end{figure}
 
 \subsection{Filtr zamykający}
 
@@ -752,8 +731,9 @@ Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice dy
 
 \chapter{Funkcjonalność projektu}
 
+\section*{Inicjalizacja}
+
 \begin{lstlisting}[style=mypython]
-# Termination criteria
 term_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 \end{lstlisting}
 
@@ -767,7 +747,6 @@ Na początku definiowane są kryteria zakończenia algorytmu optymalizacji (term
 Kryteria te są następnie wykorzystywane w procedurze doprecyzowywania lokalizacji narożników szachownicy.
 
 \begin{lstlisting}[style=mypython]
-# Prepare object points
 objp = np.zeros((9*6,3), np.float32)
 objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 \end{lstlisting}
@@ -775,9 +754,8 @@ objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 Tworzona jest macierz punktów obiektowych (objp), która reprezentuje idealny, znany geometrycznie układ narożników szachownicy w przestrzeni 3D. Przyjęto, że szachownica ma wymiar 9 × 6 pól (tj. 54 narożniki). Punkty są rozmieszczone w płaszczyźnie Z = 0, dzięki czemu uzyskano dwuwymiarową siatkę punktów w przestrzeni obiektowej
 
 \begin{lstlisting}[style=mypython]
-# Arrays to store object points and image points from all images
-objpoints= []   # 3d points in real world space
-imgpointsR= []   # 2d points in image plane
+objpoints= []   
+imgpointsR= []   
 imgpointsL= []
 
 ChessImaR = None
@@ -788,7 +766,7 @@ for i in range(0, 64):
     ChessImaR = cv2.imread('calib_images/right_chessboard-' + t + '.png', 0)
     ChessImaL = cv2.imread('calib_images/left_chessboard-' + t + '.png', 0)
     if ChessImaR is None or ChessImaL is None:
-        continue  # Skip this iteration if loading failed
+        continue  
     retR, cornersR = cv2.findChessboardCorners(ChessImaR, (9, 6), None)
     retL, cornersL = cv2.findChessboardCorners(ChessImaL, (9, 6), None)
     if retR and retL:
@@ -810,7 +788,6 @@ Program iteruje przez zestaw obrazów kalibracyjnych (64 par zdjęć lewej i pra
 \end{itemize}
 
 \begin{lstlisting}[style=mypython]
-# Calibration
 retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR, ChessImaR.shape[::-1], None, None)
 retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, ChessImaL.shape[::-1], None, None)
 \end{lstlisting}
@@ -831,11 +808,6 @@ OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 
 Następnie obliczane są optymalne macierze rzutowania (cv2.getOptimalNewCameraMatrix), które minimalizują wpływ dystorsji przy jednoczesnym zachowaniu maksymalnego obszaru obrazu.
 
 \begin{lstlisting}[style=mypython]
-OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
-OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
-\end{lstlisting}
-
-\begin{lstlisting}[style=mypython]
 retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = term_criteria,flags = cv2.CALIB_FIX_INTRINSIC)
 \end{lstlisting}
 
@@ -852,8 +824,8 @@ Proces ten, przy założeniu stałych parametrów wewnętrznych kamer (cv2.CALIB
 Parametry te określają wzajemne położenie i orientację obu kamer, a także zależności geometryczne między punktami obrazu zarejestrowanymi przez lewą i prawą kamerę.
 
 \begin{lstlisting}[style=mypython]
-rectify_scale= 0 # if 0 image croped, if 1 image nor croped
-RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale,(0,0))  # last paramater is alpha, if 0= croped, if 1= not croped
+rectify_scale= 0 
+RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale,(0,0))  
 \end{lstlisting}
 
 Powyższy fragment kodu implementuje \textbf{algorytm Bougueta} (rektyfikacja kalibrowana), który wykorzystuje pełny zestaw parametrów kalibracyjnych kamer do wyznaczenia rzutów obrazów na wspólną płaszczyznę epipolarną. 
@@ -875,7 +847,7 @@ Parametr \texttt{rectify\_scale} definiuje stopień przycięcia obrazu:
 \end{itemize}
 
 \begin{lstlisting}[style=mypython]
-Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)   # cv2.CV_16SC2 this format enables us the programme to work faster
+Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)
 Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImaR.shape[::-1], cv2.CV_16SC2)
 \end{lstlisting}
 
@@ -896,7 +868,6 @@ Algorytm Hartleya \cite{hartley} umożliwia rektyfikację obrazów stereo w przy
 \textbf{Wykrycie i opis cech lokalnych} – w obu obrazach (lewym i prawym) detekcja cech przeprowadzana jest za pomocą algorytmu ORB, który zwraca punkty kluczowe oraz deskryptory opisujące ich lokalny kontekst.
 
 \begin{lstlisting}[style=mypython]
-# Wykrycie i opis cech (np. ORB)
 orb = cv2.ORB_create()
 kp1, des1 = orb.detectAndCompute(imgL, None)
 kp2, des2 = orb.detectAndCompute(imgR, None)
@@ -905,7 +876,6 @@ kp2, des2 = orb.detectAndCompute(imgR, None)
 \textbf{Dopasowanie punktów korespondencyjnych} – wykorzystując algorytm \texttt{BFMatcher} z metryką Hamminga, dopasowywane są deskryptory z obu obrazów. Wyniki sortowane są według odległości, co pozwala wybrać najlepiej dopasowane pary punktów.
 
 \begin{lstlisting}[style=mypython]
-# Dopasowanie cech metodą BFMatcher
 bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 matches = bf.match(des1, des2)
 matches = sorted(matches, key=lambda x: x.distance)
@@ -914,7 +884,6 @@ matches = sorted(matches, key=lambda x: x.distance)
 \textbf{Estymacja macierzy fundamentalnej} – na podstawie uzyskanych dopasowań estymowana jest macierz fundamentalna $F$, opisująca geometryczne powiązanie pomiędzy obrazami stereo. Wykorzystanie metody \texttt{RANSAC} zapewnia odporność na błędne dopasowania (outliery).
 
 \begin{lstlisting}[style=mypython]
-# Konwersja dopasowań do tablic punktów
 pts1 = np.float32([kp1[m.queryIdx].pt for m in matches]).reshape(-1,1,2)
 pts2 = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1,1,2)
 \end{lstlisting}
@@ -922,14 +891,12 @@ pts2 = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1,1,2)
 \textbf{Filtracja inlierów} – do dalszych obliczeń wykorzystywane są jedynie punkty spełniające model geometryczny wynikający z macierzy fundamentalnej.
 
 \begin{lstlisting}[style=mypython]
-# Estymacja macierzy fundamentalnej
 F, mask = cv2.findFundamentalMat(pts1, pts2, cv2.FM_RANSAC)
 \end{lstlisting}
 
 \textbf{Obliczenie homografii rektyfikujących} – funkcja \texttt{stereoRectifyUncalibrated} wyznacza transformacje homograficzne $H_1$ i $H_2$, które przekształcają obrazy tak, aby epipolarne linie były wyrównane wzdłuż osi poziomej.
 
 \begin{lstlisting}[style=mypython]
-# Wybór tylko inlierów
 pts1 = pts1[mask.ravel()==1]
 pts2 = pts2[mask.ravel()==1]
 \end{lstlisting}
@@ -937,14 +904,12 @@ pts2 = pts2[mask.ravel()==1]
 \textbf{Rektyfikacja obrazów} – poprzez zastosowanie przekształceń homograficznych ($H_1$ i $H_2$) uzyskuje się zrektyfikowane obrazy lewe i prawe, które mogą zostać użyte w dalszych etapach przetwarzania (np. obliczania mapy dysparycji).
 
 \begin{lstlisting}[style=mypython]
-# Obliczenie homografii rektyfikujących
 ret, H1, H2 = cv2.stereoRectifyUncalibrated(
     pts1, pts2, F, imgSize=imgL.shape[::-1]
 )
 \end{lstlisting}
 
 \begin{lstlisting}[style=mypython]
-# Zastosowanie przekształceń homograficznych
 imgL_rect = cv2.warpPerspective(imgL, H1, imgL.shape[::-1])
 imgR_rect = cv2.warpPerspective(imgR, H2, imgR.shape[::-1])
 \end{lstlisting}
@@ -953,7 +918,6 @@ Poniższy fragment kodu przedstawia proces inicjalizacji algorytmu \textit{Semi-
 Algorytm ten jest wykorzystywany do estymacji mapy dysparycji na podstawie sparowanych obrazów stereo.  
 
 \begin{lstlisting}[style=mypython]
-# Inicjalizacja StereoSGBM
 block_size = 7
 min_disp = 2
 num_disp = 130-min_disp
@@ -987,9 +951,8 @@ Parametry algorytmu pełnią następujące funkcje:
 Poniższy fragment kodu ilustruje zastosowanie metody \textit{Block Matching} (StereoBM) do wyznaczania mapy dysparycji na podstawie obrazów stereo. Algorytm ten opiera się na lokalnym porównywaniu bloków pikseli pomiędzy lewym i prawym obrazem w celu oszacowania przesunięć odpowiadających sobie punktów.  
 
 \begin{lstlisting}[style=mypython]
-# Inicjalizacja StereoBM
-num_disp = 64 # musi być podzielne przez 16
-block_size = 15 # większy blok = większa odporność na szumy
+num_disp = 64 
+block_size = 15 
 
 stereo = cv2.StereoBM_create(numDisparities=num_disp,blockSize=block_size)
 \end{lstlisting}
@@ -997,7 +960,6 @@ stereo = cv2.StereoBM_create(numDisparities=num_disp,blockSize=block_size)
 W powyższym kodzie najpierw inicjalizowany jest obiekt klasy \texttt{StereoBM}, przy czym parametr \texttt{numDisparities} określa maksymalny zakres przesunięć (dysparycji), a \texttt{blockSize} definiuje rozmiar lokalnego okna porównawczego. Większy rozmiar bloku zwiększa odporność na szumy, jednak odbywa się to kosztem precyzji na krawędziach i przy drobnych szczegółach obrazu.  
 
 \begin{lstlisting}[style=mypython]
-# Tworzenie dopasowania w kierunku prawym
 stereoR = cv2.ximgproc.createRightMatcher(stereo)
 \end{lstlisting}
 
@@ -1018,18 +980,43 @@ Parametr \texttt{lambda} (\( \lambda \)) kontroluje siłę wygładzania – wię
 
 Zmienna \texttt{visual\_multiplier} określa współczynnik skalujący, wykorzystywany wyłącznie do wizualizacji przefiltrowanej mapy, nie wpływając na same wyniki obliczeń.  
 
+Poniższy fragment kodu odpowiada za inicjalizację strumienia wideo z kamery internetowej. Do akwizycji obrazu wykorzystano funkcję \texttt{cv2.VideoCapture()}, w której parametr \texttt{0} oznacza pierwsze urządzenie wideo podłączone do systemu.  
+
 \begin{lstlisting}[style=mypython]
 Cam = cv2.VideoCapture(0)
 Cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1100)  
 Cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 270)
 Cam.set(cv2.CAP_PROP_FPS, 60)
+\end{lstlisting}
 
+Dalsze instrukcje określają właściwości strumienia:  
+\begin{itemize}
+    \item \texttt{CAP\_PROP\_FRAME\_WIDTH} – ustala szerokość pojedynczej klatki na 1100 pikseli,  
+    \item \texttt{CAP\_PROP\_FRAME\_HEIGHT} – ustala wysokość klatki na 270 pikseli,  
+    \item \texttt{CAP\_PROP\_FPS} – definiuje docelową liczbę klatek na sekundę równą 60.  
+\end{itemize}
+
+Instrukcja przedstawiona poniżej odpowiada za utworzenie puli wątków przy użyciu klasy 
+\texttt{ThreadPoolExecutor} z modułu \texttt{concurrent.futures}.  
+
+\begin{lstlisting}[style=mypython]
 executor = ThreadPoolExecutor(max_workers=4)
+\end{lstlisting}
 
+Obiekt \texttt{executor} zarządza równoległym wykonywaniem zadań w czterech niezależnych 
+wątkach roboczych, co zostało określone parametrem \texttt{max\_workers=4}. 
+Dzięki temu możliwe jest asynchroniczne uruchamianie wielu fragmentów kodu, 
+co zwiększa efektywność obliczeń w przypadku zadań niezależnych, takich jak 
+przetwarzanie ramek obrazu czy obsługa wielu strumieni danych jednocześnie.  
+
+Zastosowanie puli wątków pozwala na automatyczną dystrybucję zadań pomiędzy dostępne 
+wątki oraz eliminuje konieczność ręcznego zarządzania cyklem życia każdego wątku.
+
+
+\begin{lstlisting}[style=mypython]
 focal_length_px = PL[0, 0]
 baseline_m = abs(T[0][0]) / 100  
 
-# --- Parametry wykrywania objektów --- #
 MIN_DISTANCE_TRIGGER = 0.65
 MAX_DISTANCE_RELEASE = 0.7
 DISPARITY_RANGE = (1.0, 150.0)
@@ -1037,105 +1024,300 @@ CONTOUR_AREA_THRESHOLD = 500
 DISP_AVG_HISTORY = 5
 
 distance_history = deque(maxlen=DISP_AVG_HISTORY)
+\end{lstlisting}
 
-while True:
-    current_time = time.time()
-    ret, frame = Cam.read()
-    if not ret:
-        print("Failed to capture frame. Exiting...")
+\section*{Główna pętla}
+
+Poniższy fragment kodu odpowiada za akwizycję pojedynczej klatki obrazu z urządzenia 
+wideo oraz weryfikację poprawności odczytu:  
+
+\begin{lstlisting}[style=mypython]
+ret, frame = Cam.read()
+if not ret:
+    break
+\end{lstlisting}
+
+Metoda \texttt{Cam.read()} zwraca dwie wartości:  
+\begin{itemize}
+    \item \texttt{ret} – zmienną logiczną informującą, czy operacja przechwycenia ramki zakończyła się powodzeniem,  
+    \item \texttt{frame} – tablicę zawierającą dane obrazu w postaci macierzy pikseli.  
+\end{itemize}
+
+Instrukcja warunkowa \texttt{if not ret: break} sprawdza poprawność akwizycji. 
+W przypadku niepowodzenia (np. utraty połączenia z kamerą, braku dostępu do urządzenia 
+lub błędu odczytu) pętla główna zostaje przerwana, co pozwala na bezpieczne zakończenie 
+pracy programu i zapobiega dalszemu przetwarzaniu niepoprawnych danych.  
+  
+Poniższy fragment kodu służy do określenia wymiarów pozyskanej ramki obrazu oraz obliczenia jej punktu środkowego w poziomie:
+
+\begin{lstlisting}[style=mypython]
+height, width, _ = frame.shape
+mid = width // 2
+\end{lstlisting}
+
+Właściwość \texttt{frame.shape} zwraca krotkę opisującą wymiary macierzy obrazu:  
+\begin{itemize}
+    \item \texttt{height} – wysokość obrazu w pikselach (liczba wierszy),  
+    \item \texttt{width} – szerokość obrazu w pikselach (liczba kolumn),  
+    \item trzeci element (\texttt{\_}) – liczbę kanałów barwnych (np. 3 dla modelu RGB).  
+\end{itemize}
+
+Obliczenie wartości \texttt{mid = width // 2} pozwala uzyskać współrzędną $x$ odpowiadającą połowie szerokości obrazu. Jest to istotne m.in. przy dzieleniu klatki na dwie części (lewą i prawą) w aplikacjach stereowizyjnych lub przy analizie symetrii sceny.  
+
+Takie wyodrębnienie parametrów obrazu umożliwia dalsze, elastyczne przetwarzanie danych w zależności od wymagań algorytmu.  
+
+Przedstawiony fragment kodu odpowiada za pozyskanie informacji o wymiarach pojedynczej klatki obrazu oraz obliczenie współrzędnej środkowej w poziomie:
+
+\begin{lstlisting}[style=mypython]
+height, width, _ = frame.shape
+mid = width // 2
+\end{lstlisting}
+
+Metoda \texttt{frame.shape} zwraca trójskładnikową krotkę opisującą rozmiar obrazu, gdzie kolejno:  
+\begin{itemize}
+    \item \texttt{height} – liczba wierszy macierzy obrazu, czyli jego wysokość w pikselach,  
+    \item \texttt{width} – liczba kolumn macierzy obrazu, czyli jego szerokość w pikselach,  
+    \item trzeci element (\texttt{\_}) – liczba kanałów barwnych (np. 3 dla przestrzeni RGB).  
+\end{itemize}
+
+Instrukcja \texttt{mid = width // 2} oblicza wartość połowy szerokości ramki, co odpowiada współrzędnej $x$ środka obrazu w układzie współrzędnych pikselowych. Informacja ta może być wykorzystywana m.in. do dzielenia obrazu na części (np. lewą i prawą) w systemach stereowizyjnych, lokalizacji osi symetrii lub jako punkt odniesienia w dalszym etapie przetwarzania danych wizyjnych.  
+
+Zaprezentowany fragment kodu realizuje proces rektyfikacji obrazów lewego i prawego pochodzących z kamery stereoskopowej, korzystając z uprzednio wyznaczonych map przekształceń geometrycznych:
+
+\begin{lstlisting}[style=mypython]
+Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],
+                            interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],
+                             interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+\end{lstlisting}
+
+Wykorzystana funkcja \texttt{cv2.remap} dokonuje odwzorowania (ang. \textit{remapping}) obrazu wejściowego na nową siatkę współrzędnych zdefiniowaną przez macierze mapujące \texttt{Left\_Stereo\_Map} oraz \texttt{Right\_Stereo\_Map}. Mapy te zostały wygenerowane w procesie kalibracji i rektyfikacji kamer stereo i pozwalają na skorygowanie zniekształceń obiektywów oraz wyrównanie obrazów tak, aby linie epipolarne były równoległe do osi poziomej.  
+
+Przetwarzanie obu ramek (\texttt{left\_frame}, \texttt{right\_frame}) zostało zrealizowane równolegle dzięki wykorzystaniu obiektu \texttt{ThreadPoolExecutor}, co pozwala na zwiększenie efektywności obliczeń. Parametr \texttt{interpolation=cv2.INTER\_LANCZOS4} określa metodę interpolacji opartą na jądrze Lanczosa, która charakteryzuje się wysoką jakością odtwarzania szczegółów obrazu. Z kolei \texttt{borderMode=cv2.BORDER\_CONSTANT} ustala sposób traktowania pikseli wychodzących poza granice obrazu – w tym przypadku wypełniane są one stałą wartością (najczęściej czernią).  
+
+W wyniku działania kodu uzyskiwane są dwa obrazy: \texttt{Left\_nice} oraz \texttt{Right\_nice}, które stanowią rektyfikowane odpowiedniki oryginalnych ramek wejściowych i są przygotowane do dalszych etapów przetwarzania stereowizyjnego, takich jak obliczanie map dysparycji czy rekonstrukcja głębi sceny.
+
+\begin{lstlisting}[style=mypython]
+gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY).result()
+gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY).result()
+\end{lstlisting}
+
+W pierwszym etapie do obliczeń wykorzystywana jest funkcja cv2.cvtColor, która przekształca obraz z przestrzeni barw BGR (Blue-Green-Red) do przestrzeni odcieni szarości (grayscale). Operacja ta jest realizowana równolegle przy użyciu mechanizmu wielowątkowości (executor.submit), co pozwala na jednoczesne przetwarzanie obrazu lewego i prawego, a w konsekwencji zwiększa efektywność całego systemu przetwarzania stereoskopowego.
+
+Wynikiem tego etapu są dwa obrazy (gray\_left i gray\_right) w skali szarości, które stanowią podstawę do dalszych obliczeń, w szczególności do wyznaczania mapy dysparycji. Przekształcenie do skali szarości jest niezbędne, ponieważ większość algorytmów stereo (np. StereoBM czy StereoSGBM) operuje na intensywnościach pikseli, a nie na pełnej informacji kolorystycznej.
+
+\begin{lstlisting}[style=mypython]
+futureL = executor.submit(lambda: stereo.compute(gray_left, gray_right).astype(np.float32) / 16.0)
+futureR = executor.submit(lambda: stereoR.compute(gray_right, gray_left).astype(np.float32) / 16.0)
+dispL = futureL.result()
+dispR = futureR.result()
+\end{lstlisting}
+
+W pierwszym kroku wykorzystano algorytmy dopasowania stereo zaimplementowane w bibliotece OpenCV (stereo i stereoR), które obliczają różnicę położenia odpowiadających sobie pikseli w obrazie lewym i prawym. Operacja ta jest przeprowadzana równolegle dla obu kierunków:
+
+\begin{itemize}
+  \item stereo.compute(gray\_left, gray\_right) wyznacza dysparycję z punktu widzenia kamery lewej,
+  \item stereoR.compute(gray\_right, gray\_left) wykonuje analogiczną operację z perspektywy kamery prawej.
+\end{itemize}
+
+Wynikiem działania są początkowo macierze dysparycji w formacie całkowitoliczbowym, które następnie są konwertowane do typu float32 i dzielone przez wartość 16.0. Ten krok normalizuje dane, ponieważ algorytmy stereo w OpenCV zwracają wartości zdyskretyzowane, przeskalowane domyślnie przez współczynnik 16.
+
+Uzyskane w ten sposób macierze (dispL i dispR) reprezentują mapy dysparycji, które stanowią kluczowy etap w procesie rekonstrukcji głębi sceny. Na ich podstawie możliwe jest późniejsze obliczanie mapy głębi (ang. depth map) i trójwymiarowej rekonstrukcji obserwowanego otoczenia.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{images/disparity.png}
+\captionsetup{font=footnotesize}
+\caption[Rezultat mapy dysparycji StereoSGBM. Opracowanie własne.]{Rezultat mapy dysparycji StereoSGBM.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/BMdisparity.png}
+    \captionsetup{font=footnotesize}
+    \caption[Rezultat mapy dysparycji StereoBM. Opracowanie własne.]{Rezultat mapy dysparycji uzyskanej metodą \texttt{StereoBM}.}
+\end{figure}
+
+\begin{lstlisting}[style=mypython]
+filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
+\end{lstlisting}
+
+Algorytm WLS jest techniką wygładzania i poprawy jakości map dysparycji. Jego działanie polega na redukcji szumu oraz artefaktów dopasowania stereo, przy jednoczesnym zachowaniu wyraźnych granic obiektów. Dzięki temu mapa głębi uzyskana z przefiltrowanej dysparycji charakteryzuje się lepszą spójnością wizualną i większą dokładnością w obszarach o jednolitej teksturze.
+
+\begin{itemize}
+  \item dispL stanowi surową mapę dysparycji obliczoną dla obrazu lewego,
+  \item gray\_left pełni funkcję obrazu przewodniego (ang. guidance image), który umożliwia filtrowi WLS lepsze dostosowanie wygładzania do struktury krawędzi w obrazie,
+  \item dispR to dodatkowa mapa dysparycji z perspektywy prawej kamery, wykorzystywana do poprawy spójności filtracji.
+\end{itemize}
+
+Wynikiem operacji jest filtered\_disp, czyli przefiltrowana mapa dysparycji, stanowiąca wysokiej jakości estymację głębi sceny. Uzyskane dane mogą być następnie użyte w dalszych etapach przetwarzania, takich jak obliczanie odległości do obiektów, segmentacja przestrzenna czy trójwymiarowa rekonstrukcja otoczenia.
+
+Tak wygląda rezultat filtra WLS:
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.8\textwidth]{images/combinedWLS.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[Rezultat filtra WLS dla StereoSGBM i StereoBM. Opracowanie własne.]{Rezultat filtra WLS dla StereoSGBM i StereoBM.}
+\end{figure}
+
+\begin{lstlisting}[style=mypython]
+disp_closed = cv2.morphologyEx(filtered_disp, cv2.MORPH_CLOSE, kernel)
+\end{lstlisting}
+
+Operacja domykania (closing) w morfologii matematycznej polega na sekwencyjnym zastosowaniu dwóch operacji: dylatacji, a następnie erozji, przy użyciu zadanego elementu strukturalnego (kernel). Jej głównym celem jest wypełnianie niewielkich dziur, luk i szumów wewnątrz obiektów, a także wygładzanie ich konturów, przy jednoczesnym zachowaniu ogólnego kształtu i rozmiaru struktur.
+
+W kontekście przetwarzania mapy dysparycji:
+
+\begin{itemize}
+  \item filtered\_disp reprezentuje mapę głębi uzyskaną po wcześniejszej filtracji WLS,
+  \item kernel to element strukturalny definiujący sąsiedztwo pikseli, na podstawie którego wykonywana jest operacja morfologiczna,
+  \item cv2.MORPH\_CLOSE określa, że zostanie zastosowane domykanie.
+\end{itemize}
+
+W rezultacie otrzymujemy disp\_closed, czyli mapę dysparycji o bardziej zwartym i spójnym charakterze, wolną od drobnych artefaktów oraz przerw w powierzchniach obiektów. Taka postać mapy głębi jest bardziej użyteczna w dalszej analizie, np. przy rekonstrukcji trójwymiarowej sceny, segmentacji przestrzeni czy detekcji przeszkód.
+
+\begin{lstlisting}[style=mypython]
+disp_height, disp_width = disp_closed.shape
+roi_width = disp_width // 3  
+roi_height = disp_height // 2  
+roi_x = (disp_width - roi_width + 150) // 2
+roi_y = (disp_height - roi_height) // 2
+roi_rect = (roi_x, roi_y, roi_width, roi_height)
+\end{lstlisting}
+
+Powyższy fragment kodu w języku Python realizuje wyznaczenie prostokątnego obszaru zainteresowania (ang. Region of Interest, ROI) w obrębie analizowanego obrazu, którego wymiary określa macierz disp\_closed. Proces ten przebiega w następujących etapach:
+
+\begin{enumerate}
+  \item Pobranie wymiarów obrazu – zmienne disp\_height oraz disp\_width są inicjalizowane wartościami wysokości i szerokości obrazu na podstawie jego rozmiaru (shape), co umożliwia dalsze obliczenia w jednostkach pikselowych.
+  \item Wyznaczenie wymiarów ROI – obszar zainteresowania jest definiowany jako prostokąt o szerokości równej jednej trzeciej szerokości obrazu (roi\_width = disp\_width // 3) oraz wysokości stanowiącej połowę wysokości obrazu (roi\_height = disp\_height // 2). Zastosowanie operatora dzielenia całkowitego (//) zapewnia, że wymiary te są liczbami całkowitymi.
+  \item Określenie położenia ROI – współrzędne lewego górnego narożnika prostokąta ROI są wyliczane tak, aby obszar ten był centralnie zlokalizowany w obrazie, z dodatkowym przesunięciem w osi poziomej o 150 pikseli w prawo:
+  \begin{itemize}
+    \item współrzędna roi\_x jest obliczana jako połowa różnicy pomiędzy szerokością obrazu a szerokością ROI, powiększona o wartość 150 pikseli,
+    \item współrzędna roi\_y jest obliczana jako połowa różnicy pomiędzy wysokością obrazu a wysokością ROI.
+  \end{itemize}
+
+  \item Definicja prostokąta ROI – zmienna roi\_rect przyjmuje postać krotki (roi\_x, roi\_y, roi\_width, roi\_height), która jednoznacznie opisuje położenie oraz rozmiary wyodrębnionego obszaru zainteresowania.
+\end{enumerate}
+
+W efekcie powyższych operacji uzyskuje się parametry umożliwiające dalszą analizę lub przetwarzanie wybranego fragmentu obrazu w sposób zlokalizowany, co jest szczególnie istotne w zadaniach takich jak segmentacja, detekcja obiektów czy analiza dysparycji w wybranym regionie.
+
+\begin{lstlisting}[style=mypython]
+_, close_mask = cv2.threshold(disp_closed, 160, 255, cv2.THRESH_BINARY)
+\end{lstlisting}
+
+Powyższy fragment kodu implementuje etap segmentacji obrazu przy wykorzystaniu progowania binarnego, którego celem jest detekcja obiektów znajdujących się w niewielkiej odległości od kamery. Operacja ta realizowana jest z użyciem funkcji cv2.threshold z biblioteki OpenCV i przebiega w następujący sposób:
+
+\begin{enumerate}
+  \item Dane wejściowe – macierz disp\_closed reprezentuje obraz głębi (np. mapę dysparycji), w której wyższe wartości odpowiadają mniejszym odległościom od obserwatora.
+  \item Progowanie binarne – funkcja cv2.threshold porównuje każdą wartość piksela obrazu wejściowego z ustalonym progiem (160).
+    \begin{itemize}
+      \item Jeśli wartość piksela jest większa lub równa progowi (160), w obrazie wynikowym przypisywana jest wartość maksymalna (255), co oznacza piksel należący do obiektu bliskiego. W przeciwnym przypadku piksel przyjmuje wartość 0, co odpowiada tłu lub obiektowi odległemu.
+    \end{itemize}
+  \item Parametry funkcji:
+    \begin{itemize}
+      \item 160 – wartość progu decydująca o rozróżnieniu pikseli odpowiadających obiektom bliskim,
+      \item 255 – wartość przypisywana pikselom spełniającym warunek progowy,
+      \item cv2.THRESH\_BINARY – flaga wskazująca na zastosowanie binarnego trybu progowania.
+    \end{itemize}
+  \item Wynik operacji – funkcja zwraca dwie wartości:
+    \begin{itemize}
+      \item drugi element (close\_mask) to obraz maski binarnej, w której piksele odpowiadające obiektom bliskim mają wartość 255, a pozostałe 0.
+    \end{itemize}
+\end{enumerate}
+
+W efekcie otrzymuje się mapę binarną bliskich obiektów, która może zostać wykorzystana w dalszych etapach przetwarzania, takich jak ekstrakcja konturów, segmentacja obszarów, czy analiza kolizji w systemach wizyjnych.
+
+\begin{lstlisting}[style=mypython]
+roi_mask = np.zeros_like(close_mask)
+roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
+\end{lstlisting}
+
+Powyższy fragment kodu odpowiada za ograniczenie obszaru analizy binarnej maski close\_mask do wcześniej zdefiniowanego regionu zainteresowania (Region of Interest, ROI). Uzyskana maska roi\_mask zawiera wartości binarne (0 i 255) tylko w wyznaczonym regionie zainteresowania, natomiast wszystkie pozostałe piksele przyjmują wartość 0. W ten sposób dalsza analiza (np. wykrywanie konturów, obliczanie miar) jest ograniczona wyłącznie do fragmentu obrazu istotnego z punktu widzenia aplikacji.
+
+\subsection*{Wykrywanie obiektów}
+
+\begin{lstlisting}[style=mypython]
+contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+current_stop_flag = False
+
+for cnt in contours:
+    if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
+        continue
+
+    x, y, w, h = cv2.boundingRect(cnt)
+    cx, cy = x + w // 2, y + h // 2
+
+    if cy - 1 < 0 or cy + 2 > dispL.shape[0] or cx - 1 < 0 or cx + 2 > dispL.shape[1]:
+        continue
+
+    roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
+    valid_disp = roi_disp[(roi_disp > DISPARITY_RANGE[0]) & (roi_disp < DISPARITY_RANGE[1])]
+
+    if valid_disp.size == 0:
+        continue
+
+    avg_disp = np.median(valid_disp)
+    distance = (focal_length_px * baseline_m) / avg_disp
+    distance_history.append(distance)
+    smoothed_distance = np.median(distance_history)
+
+    if smoothed_distance < MIN_DISTANCE_TRIGGER:
+        current_stop_flag = True
         break
 
-    height, width, _ = frame.shape
-    mid = width // 2
-
-    left_frame = frame[:, :mid]
-    right_frame = frame[:, mid:]
-
-    # --- Remap rectificated images --- #
-    Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],
-                                interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
-    Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],
-                                 interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
-
-    # --- Convert to grayscale --- #
-    gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY).result()
-    gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY).result()
-
-    # --- Compute disparity maps --- #
-    futureL = executor.submit(lambda: stereo.compute(gray_left, gray_right).astype(np.float32) / 16.0)
-    futureR = executor.submit(lambda: stereoR.compute(gray_right, gray_left).astype(np.float32) / 16.0)
-    dispL = futureL.result()
-    dispR = futureR.result()
-
-    # --- Apply WLS filter --- #
-    filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
-
-    # --- Closing Filter --- #
-    disp_closed = cv2.morphologyEx(filtered_disp, cv2.MORPH_CLOSE, kernel)
-
-    disp_vis = cv2.normalize(disp_closed, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-
-    # --- ROI image to analyze --- #
-    disp_height, disp_width = disp_vis.shape
-    roi_width = disp_width // 3  # 1/3 width
-    roi_height = disp_height // 2  # 1/2 height
-    roi_x = (disp_width - roi_width + 150) // 2
-    roi_y = (disp_height - roi_height) // 2
-    roi_rect = (roi_x, roi_y, roi_width, roi_height)
-
-    # --- Visualize ROI --- #
-    cv2.rectangle(disp_closed, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (0, 255, 255), 2)
-
-    # Detect close objects via thresholding
-    _, close_mask = cv2.threshold(disp_closed, 160, 255, cv2.THRESH_BINARY)
-
-    # Restrict mask to ROI only
-    roi_mask = np.zeros_like(close_mask)
-    roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
-
-    # Find contours in ROI restricted region
-    contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    current_stop_flag = False
-
-    for cnt in contours:
-        if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
-            continue
-
-        x, y, w, h = cv2.boundingRect(cnt)
-        cx, cy = x + w // 2, y + h // 2
-
-        # Make sure coordinates are within image bounds
-        if cy - 1 < 0 or cy + 2 > dispL.shape[0] or cx - 1 < 0 or cx + 2 > dispL.shape[1]:
-            continue
-
-        roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
-        valid_disp = roi_disp[(roi_disp > DISPARITY_RANGE[0]) & (roi_disp < DISPARITY_RANGE[1])]
-
-        if valid_disp.size == 0:
-            continue
-
-        avg_disp = np.median(valid_disp)
-        distance = (focal_length_px * baseline_m) / avg_disp
-        distance_history.append(distance)
-        smoothed_distance = np.median(distance_history)
-
-        # Apply hysteresis logic for stability
-        if smoothed_distance < MIN_DISTANCE_TRIGGER:
-            current_stop_flag = True
-            box_color = (0, 0, 255) if smoothed_distance < 0.5 else (0, 255, 0)
-            cv2.rectangle(disp_closed, (x, y), (x + w, y + h), box_color, 2)
-            cv2.putText(disp_closed, f"{smoothed_distance:.2f} m", (x, y - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
-            break
-
-    # Trigger GPIO only once per frame
-    # if current_stop_flag:
-    #     lgpio.gpio_write(chip, PIN, 0)  # Stop
-    # elif len(distance_history) == DISP_AVG_HISTORY and smoothed_distance > MAX_DISTANCE_RELEASE:
-    #     lgpio.gpio_write(chip, PIN, 1)  # Move forward
-
+if current_stop_flag:
+    lgpio.gpio_write(chip, PIN, 0)
+elif len(distance_history) == DISP_AVG_HISTORY and smoothed_distance > MAX_DISTANCE_RELEASE:
+    lgpio.gpio_write(chip, PIN, 1)
 \end{lstlisting}
+
+Powyższy fragment kodu realizuje kompletną procedurę detekcji obiektów znajdujących się w obszarze zainteresowania oraz określenia ich odległości od systemu wizyjnego na podstawie mapy dysparycji. Dodatkowo implementuje logikę sterowania urządzeniem (np. robota mobilnego) z wykorzystaniem mechanizmu histerezy w celu zapewnienia stabilności działania. Szczegółowe etapy działania można opisać następująco:
+
+\begin{enumerate}
+\item Detekcja konturów w masce ograniczonej do ROI
+
+Funkcja cv2.findContours wyszukuje kontury w binarnej masce roi\_mask, uprzednio ograniczonej do regionu zainteresowania. Zastosowany tryb cv2.RETR\_EXTERNAL powoduje, że wykrywane są wyłącznie kontury zewnętrzne, natomiast metoda cv2.CHAIN\_APPROX\_SIMPLE dokonuje kompresji punktów konturu w celu redukcji pamięci.
+\item Iteracja po wykrytych konturach z filtracją szumu
+  \begin{itemize}
+    \item Filtracja według powierzchni: Kontury o polu mniejszym niż zadany próg (CONTOUR\_AREA\_THRESHOLD) są odrzucane jako szum lub obiekty nieistotne.
+    \item Wyznaczenie prostokąta otaczającego: Funkcja cv2.boundingRect oblicza minimalny prostokąt obejmujący dany kontur. Na jego podstawie wyznaczany jest środek prostokąta (cx,cy).
+  \end{itemize}
+\item Weryfikacja poprawności położenia
+
+Aby uniknąć błędów indeksowania, sprawdzane jest, czy punkt środkowy prostokąta wraz z niewielkim marginesem (1 piksel w górę i w dół) mieści się w granicach obrazu dispL.
+\item Analiza lokalnej mapy dysparycji
+
+Z obrazu dysparycji (dispL) pobierany jest fragment 3×3 wokół punktu centralnego obiektu (roi\_disp). Następnie wybierane są jedynie te wartości, które mieszczą się w dopuszczalnym zakresie (DISPARITY\_RANGE), eliminując w ten sposób punkty nieprawidłowe lub o niskiej jakości pomiaru.
+\item Estymacja odległości
+
+Jeżeli w analizowanym fragmencie znajdują się prawidłowe wartości dysparycji, obliczana jest ich mediana (\texttt{avg\_disp}), a następnie na tej podstawie wyznaczana odległość do obiektu zgodnie ze wzorem:
+\[
+\text{distance} = \frac{\text{focal\_length\_px} \cdot \text{baseline\_m}}{\text{avg\_disp}}
+\]
+gdzie:
+\begin{itemize}
+    \item $\text{focal\_length\_px}$ – ogniskowa wyrażona w pikselach,
+    \item $\text{baseline\_m}$ – odległość między kamerami stereoskopowymi,
+    \item $\text{avg\_disp}$ – medianowa wartość dysparycji w ROI.
+\end{itemize}
+
+Obliczona wartość jest dodawana do historii pomiarów (\texttt{distance\_history}), a następnie obliczana jest jej mediana (\texttt{smoothed\_distance}) w celu wygładzenia wyników i eliminacji szumu pomiarowego.
+
+\item Zastosowanie logiki histerezy i wizualizacja
+
+Jeżeli wygładzona odległość jest mniejsza niż zadany próg (MIN\_DISTANCE\_TRIGGER), ustawiany jest znacznik current\_stop\_flag = True. Wówczas na obrazie disp\_closed rysowany jest prostokąt wokół wykrytego obiektu w kolorze zależnym od odległości (czerwony dla odległości poniżej 0,5 m, zielony w pozostałych przypadkach). Dodatkowo wyświetlana jest etykieta z informacją o odległości w metrach. Pętla zostaje przerwana po pierwszym wykryciu obiektu spełniającego kryteria.
+
+\item Sterowanie urządzeniem za pomocą GPIO
+
+Na koniec, w zależności od wartości current\_stop\_flag oraz mediany odległości w historii pomiarów, podejmowana jest decyzja o wysłaniu sygnału do wyjścia GPIO:
+  \begin{itemize}
+    \item Jeżeli obiekt znajduje się zbyt blisko (current\_stop\_flag == True), na pinie sterującym ustawiany jest stan niski (lgpio.gpio\_write(chip, PIN, 0)), co odpowiada zatrzymaniu urządzenia.
+    \item Jeżeli w historii znajduje się pełny zestaw pomiarów (DISP\_AVG\_HISTORY) i odległość przekracza wartość MAX\_DISTANCE\_RELEASE, wysyłany jest sygnał uruchomienia ruchu (lgpio.gpio\_write(chip, PIN, 1)).
+  \end{itemize}
+
+\end{enumerate}
 
 \chapter{Wnioski i możliwe ulepszenia}
 
