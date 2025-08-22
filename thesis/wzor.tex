@@ -176,9 +176,20 @@ W ramach realizacji projektu przeprowadzona została analiza skuteczności oraz 
   \item ocenę możliwości zastosowania projektu w celach komercyjnych, m.in. w robotyce mobilnej, pojazdach magazynowych czy inteligentnych systemach bezpieczeństwa.
 \end{itemize}
 
-Implementacja systemu antykolizyjnego na bazie Raspberry Pi 5 oraz kamery stereoskopowej wykazała, że nawet przy ograniczonych zasobach sprzętowych możliwe jest skuteczne przeprowadzanie przetwarzania obrazu w czasie rzeczywistym. Pomimo istotnego obciążenia obliczeniowego, stereowizja dostarcza bogatych informacji o głębi sceny, co zwiększa niezawodność systemów unikania przeszkód.
+Większa wartość paralaksy oznacza mniejszą odległość obiektu od kamery.
 
-Dzięki kompaktowym rozmiarom, niskiej cenie oraz energooszczędności, Raspberry Pi 5 okazuje się atrakcyjną platformą dla zastosowań edukacyjnych, prototypowych oraz potencjalnie komercyjnych.
+Opracowany system został zaimplementowany w języku \texttt{Python} z wykorzystaniem biblioteki \texttt{OpenCV} do przetwarzania obrazów oraz biblioteki \texttt{rpi.lgpio} do obsługi pinów wejścia/wyjścia \textit{Raspberry Pi}.
+
+Typowy proces obliczania głębi metodą stereowizyjną obejmuje następujące kluczowe kroki:
+
+\begin{enumerate}
+    \item \textbf{Rektyfikacja obrazów} – transformacja obrazów w taki sposób, aby linie epipolarne były równoległe i współpłaszczyznowe względem osi \(Y\), co umożliwia wyszukiwanie korespondencji wyłącznie wzdłuż osi \(X\).
+    \item \textbf{Wyszukiwanie korespondencji} – identyfikacja odpowiadających sobie punktów na obrazach lewym i prawym, prowadząca do wygenerowania \textit{mapy dysparycji} przedstawiającej różnice położenia na osi \(X\).
+    \item \textbf{Filtr WLS} – filtr wygładzający, który redukuje szumy w mapie dysparycji, zachowując jednocześnie ostrość krawędzi obiektów.
+    \item \textbf{Triangulacja} – przekształcenie mapy dysparycji na mapę głębi przy wykorzystaniu parametrów geometrycznych układu kamer.
+\end{enumerate}
+
+System uruchamiany jest automatycznie wraz ze startem systemu operacyjnego \textit{Raspberry Pi}. Moduł przekaźnikowy domyślnie pozostaje w stanie odłączenia, a po aktywacji systemu obie kamery są inicjalizowane w trybie pracy ciągłej.
 
 \chapter{Natura kamery}
 
@@ -386,12 +397,11 @@ v_{\text{corrected}} = f_y \cdot y_{\text{corrected}} + c_y
 
 W ten sposób otrzymujemy ostateczną, skorygowaną pozycję punktu obrazu, która uwzględnia wpływ obu typów zniekształceń optycznych.
 
-\section{Dane z obrazu kamery}
+\section*{Dane z obrazu kamery}
 
 Znormalizowane współrzędne $(x, y)$ oraz współrzędne pikselowe $(u, v)$ służą do różnych celów, ale są ze sobą ściśle powiązane. Współrzędne znormalizowane są używane wszędzie tam, gdzie istotna jest struktura geometryczna sceny i relacje przestrzenne – np. w algorytmach rekonstrukcji 3D, lokalizacji kamery czy kalibracji. Z kolei współrzędne pikselowe są wykorzystywane do interakcji z obrazem: lokalizacji punktów na zdjęciu, wizualizacji, wykrywania cech czy ekstrakcji informacji wizualnych.
 
-
-\chapter{Funkcjonalność projektu}
+\chapter{Stereowizja}
 
 Stereowizja, nazywana również wizją stereoskopową, jest techniką pozyskiwania informacji przestrzennych na podstawie dwóch lub więcej obrazów tej samej sceny, zarejestrowanych z różnych punktów obserwacyjnych. Metoda ta, inspirowana sposobem postrzegania przestrzeni przez ludzkie oczy, stanowi jedno z najstarszych i najbardziej rozwiniętych podejść do estymacji głębi w przetwarzaniu obrazu.
 
@@ -399,84 +409,7 @@ W przeciwieństwie do wizji monokularnej, stereowizja pozwala na geometrycznie u
 
 W systemie stereowizyjnym wykorzystuje się dwa obrazy uzyskane przez kamery rozmieszczone w znanej odległości od siebie, określanej jako \textit{baza stereo}. Kluczowym pojęciem jest \textit{paralaksa} – przesunięcie położenia obrazu tego samego punktu sceny między lewym a prawym obrazem.
 
-Przy założeniu idealnej konfiguracji (kamery wyrównane, płaszczyzny obrazów równoległe), głębokość \(Z\) punktu sceny można obliczyć z zależności:
-
-\[
-Z = \frac{f \cdot B}{d}
-\]
-
-gdzie:
-\begin{itemize}
-    \item \(f\) – ogniskowa kamery,
-    \item \(B\) – odległość między kamerami (baza stereo),
-    \item \(d\) – przesunięcie (paralaksa) danego punktu między obrazem lewym i prawym.
-\end{itemize}
-
-Większa wartość paralaksy oznacza mniejszą odległość obiektu od kamery.
-
-Typowy proces obliczania głębi metodą stereowizyjną obejmuje następujące kroki:
-
-\begin{enumerate}
-    \item \textbf{Korekcja zniekształceń optycznych} – eliminacja zniekształceń promieniowych i stycznych w obrazach na podstawie parametrów kalibracyjnych kamery.
-    \item \textbf{Rektyfikacja obrazów} – transformacja obrazów w taki sposób, aby linie epipolarne były równoległe i współpłaszczyznowe względem osi \(Y\), co umożliwia wyszukiwanie korespondencji wyłącznie wzdłuż osi \(X\).
-    \item \textbf{Wyszukiwanie korespondencji} – identyfikacja odpowiadających sobie punktów na obrazach lewym i prawym, prowadząca do wygenerowania \textit{mapy dysparycji} przedstawiającej różnice położenia na osi \(X\).
-    \item \textbf{Triangulacja} – przekształcenie mapy dysparycji na mapę głębi przy wykorzystaniu parametrów geometrycznych układu kamer.
-\end{enumerate}
-
-Opracowany system został zaimplementowany w języku \texttt{Python} z wykorzystaniem biblioteki \texttt{OpenCV} do przetwarzania obrazów oraz biblioteki \texttt{RPI.GPIO} do obsługi pinów wejścia/wyjścia \textit{Raspberry Pi}.
-
-W procesie działania systemu wykonywana jest:
-\begin{itemize}
-    \item kalibracja kamer na podstawie zestawu zdjęć wzorcowych,
-    \item generacja mapy dysparycji,
-    \item estymacja odległości dla każdego piksela na podstawie równania wyznaczonego eksperymentalnie,
-    \item filtracja wyników przy użyciu filtra \textit{WLS} (Weighted Least Squares), co pozwala na wyraźniejsze rozpoznawanie krawędzi obiektów.
-\end{itemize}
-
-System uruchamiany jest automatycznie wraz ze startem systemu operacyjnego \textit{Raspberry Pi}. Moduł przekaźnikowy domyślnie pozostaje w stanie odłączenia, a po aktywacji systemu obie kamery są inicjalizowane w trybie pracy ciągłej.
-
 \section{Kalibracja}
-
-\begin{lstlisting}[style=mypython]
-# Określa warunki, przy których iteracyjny algorytm się zatrzymuje
-# Przerwij iteracje, gdy wykonano 30 kroków lub zmiana wyniku jest mniejsza niż 0.001
-criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-
-# Przygotowanie punktów obiektu
-objp = np.zeros((9*6,3), np.float32)
-objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
-
-# Tablice do przechowywania punktów obiektu i punktów obrazu ze wszystkich obrazow
-objpoints= []   # Punkty 3D w przestrzeni swiata rzeczywistego
-imgpointsR= []   # Punkty 2D na plaszczyznie obrazu
-imgpointsL= []
-
-for i in range(0, 64):
-    t = str(i)
-    ChessImgR = cv2.imread('calib_images/right_chessboard-' + t + '.png', 0)
-    ChessImgL = cv2.imread('calib_images/left_chessboard-' + t + '.png', 0)
-    if ChessImgR is None or ChessImgL is None:
-        continue  # Skip this iteration if loading failed
-    retR, cornersR = cv2.findChessboardCorners(ChessImgR, (9, 6), None)
-    retL, cornersL = cv2.findChessboardCorners(ChessImgL, (9, 6), None)
-    if retR and retL:
-        objpoints.append(objp)
-        cv2.cornerSubPix(ChessImgR, cornersR, (11, 11), (-1, -1), criteria)
-        cv2.cornerSubPix(ChessImgL, cornersL, (11, 11), (-1, -1), criteria)
-        imgpointsR.append(cornersR)
-        imgpointsL.append(cornersL)
-
-# Kalibracja
-retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR,
-                                                    ChessImgR.shape[::-1], None, None)
-retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, 
-                                                    ChessImgL.shape[::-1], None, None)
-OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, 
-                                      ChessImgR.shape[::-1], 1, ChessImgR.shape[::-1])
-OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, 
-                                      ChessImgL.shape[::-1], 1, ChessImgL.shape[::-1])
-\end{lstlisting}
 
 Proces kalibracji kamery polega na wyznaczeniu jej parametrów wewnętrznych i zewnętrznych, co jest możliwe dzięki analizie serii zdjęć wzorca kalibracyjnego - najczęściej szachownicy — wykonanych pod różnymi kątami. Kluczowe jest, aby narożniki szachownicy były dobrze widoczne i możliwe do jednoznacznego zidentyfikowania przy użyciu funkcji \texttt{cv2.findChessboardCorners()}. Zgodnie z zaleceniami OpenCV, do uzyskania wiarygodnej kalibracji wymaganych jest co najmniej 10 obrazów dla każdej kamery. W niniejszym projekcie wykorzystano 32 obrazy kalibracyjne przypisane osobno do lewej i prawej kamery.
 
@@ -618,20 +551,18 @@ co prowadzi do zależności:
 R = R_r R_l^T, \quad T = T_r - R T_l
 \]
 
-\subsection{Algorytmy rektyfikacji w OpenCV}
-
 Celem rektyfikacji jest takie przekształcenie obrazów, aby ich linie epipolarne były współliniowe i poziome. W praktyce oznacza to sprowadzenie układów optycznych obu kamer do tej samej płaszczyzny rzutowania.
 
 W wyniku rektyfikacji uzyskuje się dla każdej kamery:
 
 \begin{itemize}
     \item wektor dystorsji,
-    \item macierz rotacji rektyfikującej $R_{\text{rect}}$,
-    \item zrektyfikowaną macierz projekcji $M_{\text{rect}}$,
+    \item macierz rotacji rektyfikującej $R^{\text{RECT}}$,
+    \item zrektyfikowaną macierz projekcji $M^{\text{RECT}}$,
     \item oryginalną (niezrektyfikowaną) macierz kamery $M$.
 \end{itemize}
 
-\subsection*{Algorytm Hartley’a}
+\subsection{Algorytm Hartley’a}
 
 Algorytm Hartley’a \cite{hartley} pozwala przeprowadzić rektyfikację obrazów bez znajomości parametrów wewnętrznych kamer (metoda niekalibrowana).
 
@@ -644,41 +575,7 @@ Algorytm Hartley’a \cite{hartley} pozwala przeprowadzić rektyfikację obrazó
 
 Wadą tej metody jest brak informacji o rzeczywistej skali sceny – relacje przestrzenne są wyłącznie względne.
 
-\noindent Przykładowa implementacja w Pythonie z wykorzystaniem funkcji \texttt{stereoRectifyUncalibrated} z biblioteki OpenCV:
-
-\begin{lstlisting}[style=mypython]
-# Wykrycie i opis cech (np. ORB)
-orb = cv2.ORB_create()
-kp1, des1 = orb.detectAndCompute(imgL, None)
-kp2, des2 = orb.detectAndCompute(imgR, None)
-
-# Dopasowanie cech metodą BFMatcher
-bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-matches = bf.match(des1, des2)
-matches = sorted(matches, key=lambda x: x.distance)
-
-# Konwersja dopasowań do tablic punktów
-pts1 = np.float32([kp1[m.queryIdx].pt for m in matches]).reshape(-1,1,2)
-pts2 = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1,1,2)
-
-# Estymacja macierzy fundamentalnej
-F, mask = cv2.findFundamentalMat(pts1, pts2, cv2.FM_RANSAC)
-
-# Wybór tylko inlierów
-pts1 = pts1[mask.ravel()==1]
-pts2 = pts2[mask.ravel()==1]
-
-# Obliczenie homografii rektyfikujących
-ret, H1, H2 = cv2.stereoRectifyUncalibrated(
-    pts1, pts2, F, imgSize=imgL.shape[::-1]
-)
-
-# Zastosowanie przekształceń homograficznych
-imgL_rect = cv2.warpPerspective(imgL, H1, imgL.shape[::-1])
-imgR_rect = cv2.warpPerspective(imgR, H2, imgR.shape[::-1])
-\end{lstlisting}
-
-\subsection*{Algorytm Bouguet’a}
+\subsection{Algorytm Bouguet’a}
 
 Algorytm Bouguet’a \cite{bouget}, stosowany m.in. w narzędziu \textit{Camera Calibration Toolbox} dla MATLAB-a, opiera się na wcześniejszej kalibracji kamer (metoda kalibrowana).
 
@@ -692,31 +589,18 @@ Algorytm Bouguet’a \cite{bouget}, stosowany m.in. w narzędziu \textit{Camera 
 
 Metoda ta zapewnia większą precyzję, lecz jest wrażliwa na błędy kalibracji (np. niedokładne wykrycie wzorca).
 
-\begin{lstlisting}[style=mypython]
-# Funkcja stereoRectify
-RL, RR, PL, PR, Q, roiL, roiR = cv2.stereoRectify(MLS, dLS, MRS, dRS,
-                                              ChessImgR.shape[::-1], R, T, 0, (0, 0))
-# Generowanie map przekształceń
-Left_Stereo_Map = cv2.initUndistortRectifyMap(MLS, dLS, RL, PL,
-                                              ChessImgR.shape[::-1], cv2.CV_16SC2)
-Right_Stereo_Map = cv2.initUndistortRectifyMap(MRS, dRS, RR, PR,
-                                              ChessImgR.shape[::-1], cv2.CV_16SC2)
-\end{lstlisting}
-
-Funkcja \texttt{cv2.stereoRectify()} przekształca obrazy w taki sposób, aby ich linie epipolarne były poziome. Z kolei \texttt{cv2.initUndistortRectifyMap()} umożliwia wygenerowanie obrazów bez dystorsji i z poprawną geometrią epipolarną.
-
 \[
-\mathbf{M}_L =
+\mathbf{M}_L^\text{RECT} =
 \begin{bmatrix}
-791.0 & 0 & 390.6 \\
-0 & 791.0 & 194.4 \\
+791 & 0 & 390.6 \\
+0 & 791 & 194.4 \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \qquad
-\mathbf{M}_R =
+\mathbf{M}_R^\text{RECT} =
 \begin{bmatrix}
-791.0 & 0 & 390.6 \\
-0 & 791.0 & 194.4 \\
+791 & 0 & 390.6 \\
+0 & 791 & 194.4 \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \]
@@ -725,57 +609,15 @@ Tak przygotowane obrazy mogą być bezpośrednio wykorzystane do obliczania mapy
 
 \section{Mapa dysparycji}
 
-Mapa dysparycji \cite{disparity} to obraz, w którym każdemu pikselowi przypisywana jest wartość reprezentująca przesunięcie (różnicę pozycji) pomiędzy odpowiadającymi sobie punktami w obrazie lewym i prawym. Im większe przesunięcie (czyli dysparycja), tym bliżej znajduje się dany obiekt względem kamery. Taka mapa stanowi podstawę do obliczenia mapy głębokości, która pozwala oszacować odległość poszczególnych punktów sceny od obserwatora.
+Mapa dysparycji \cite{disparity} to obraz, w którym każdemu pikselowi przypisywana jest wartość reprezentująca przesunięcie (różnicę pozycji) pomiędzy odpowiadającymi sobie punktami w obrazie lewym i prawym. Im większe przesunięcie (czyli dysparycja), tym bliżej znajduje się dany obiekt względem kamery. Taka mapa stanowi podstawę do obliczenia mapy głębokości, która pozwala oszacować odległość poszczególnych punktów sceny od obserwator.
 
-\subsection*{Algorytm StereoSGBM}
+\subsection{Algorytm StereoSGBM}
 
-\begin{lstlisting}[style=mypython]
-# Inicjalizacja StereoSGBM
-block_size = 7
-min_disp = 2
-num_disp = 130-min_disp
-stereo = cv2.StereoSGBM_create(
-    minDisparity = min_disp,
-    # Minimalna dysparycja (najmniejsze oczekiwane przesunięcie pikseli).
-    # Zwykle 0 lub lekko dodatnia wartość, jeśli obiekty mogą być bardzo daleko.
-    numDisparities = num_disp,
-    # Liczba możliwych poziomów dysparycji (musi być podzielna przez 16!).
-    # Określa zakres przeszukiwania. Większy = można wykryć bliższe obiekty.
-    blockSize = block_size,
-    # Rozmiar bloku dopasowania (okno porównywane między obrazami).
-    # Większe wartości = lepsza odporność na szumy, ale gorsza precyzja brzegów.
-    uniquenessRatio = 10,
-    # Minimalna różnica procentowa między najlepszym a drugim najlepszym dopasowaniem.
-    # Pomaga odrzucać niepewne wyniki - im wyższa wartość, tym ostrzejsze kryterium.
-    speckleWindowSize = 100,
-    # Maksymalny rozmiar obszaru z "plamkami" (ang. speckles), który zostanie usunięty.
-    # Używane do usuwania małych, niespójnych obszarów w mapie dysparycji.
-    speckleRange = 32,
-    # Maksymalna dozwolona różnica dysparycji w obrębie speckle.
-    # Pomaga wyciąć obszary o nietypowych skokach dysparycji.
-    disp12MaxDiff = 5,
-    # Maksymalna dopuszczalna różnica między wynikami z dopasowania lewo-prawo i prawo-lewo.
-    # Służy do sprawdzania spójności dopasowania - niskie wartości odrzucają więcej niepewnych pikseli.
-    P1 = 8*3*block_size**2,
-    # Kara za niewielkie zmiany dysparycji między sąsiednimi pikselami (gładkość).
-    # Wzór zależy od liczby kanałów (3 dla koloru) i wielkości bloku.
-    P2 = 32*3*block_size**2
-    # Kara za większe zmiany dysparycji (duże skoki).
-    # Powinna być większa niż P1 - większe wartości = bardziej gładka mapa dysparycji.
-)
+Jeden z algorytmów do obliczenia mapy dysparycji w bibliotece OpenCV jest \texttt{StereoSGBM}. Algorytm ten implementuje metodę półglobalnego dopasowania blokowego (ang. \textit{Semi-Global Block Matching}) \cite{semi-global}, która umożliwia estymację przesunięć pomiędzy odpowiadającymi sobie punktami w obrazach stereo — pochodzących z lewej i prawej kamery.
 
-# Tworzy druga instancje StereoSGBM, identyczna jak stereo,
-# ale z ustawieniami odpowiednimi do przetwarzania prawego obrazu wzgledem lewego.
-stereoR=cv2.ximgproc.createRightMatcher(stereo)
-\end{lstlisting}
+Podstawową ideą algorytmu jest porównywanie fragmentów (bloków) obrazów wzdłuż odpowiadających sobie linii epipolarnych, w celu znalezienia najlepszego dopasowania. Jednym z kluczowych parametrów wejściowych jest rozmiar bloku (\textit{block size}), który określa wielkość lokalnego sąsiedztwa uwzględnianego podczas dopasowania. Dla wartości większych niż 1, algorytm operuje na blokach pikseli, a nie na pojedynczych pikselach, co pozwala zwiększyć odporność na szum kosztem precyzji w obszarach o drobnych szczegółach.
 
-Aby obliczyć mapę dysparycji, wykorzystywany jest obiekt klasy StereoSGBM, tworzony za pomocą funkcji \texttt{cv2.StereoSGBM-create()}. Algorytm ten wykorzustuje metodę półglobalnego dopasowania blokowego (ang. \textit{Semi-Global Block Matching}) \cite{semi-global}, która umożliwia estymację przesunięć pomiędzy obrazami stereo — z lewej i prawej kamery.
-
-Jednym z kluczowych parametrów wejściowych algorytmu jest rozmiar bloku, który określa wielkość lokalnego sąsiedztwa wykorzystywanego do dopasowania. W przypadku, gdy wartość ta jest większa niż 1, algorytm operuje nie na pojedynczych pikselach, lecz na blokach. W praktyce oznacza to, że każdy blok z obrazu referencyjnego (np. lewego) porównywany jest z blokami z obrazu dopasowywanego (np. prawego) w celu znalezienia najlepszego dopasowania.
-
-Jeśli stereo-kalibracja i rektyfikacja zostały przeprowadzone poprawnie, porównania odbywają się jedynie wzdłuż odpowiadających sobie wierszy, czyli linii epipolarnych. Dzięki temu przeszukiwanie ogranicza się do jednej wymiarowej przestrzeni (poziomej), co znacznie zmniejsza złożoność obliczeniową algorytmu.
-
-Na przykład, blok o współrzędnych (4,7) w obrazie bazowym zostaje porównany z wszystkimi blokami (4, i) w tej samej linii epipolarnej obrazu dopasowywanego.
+Zakładając, że kalibracja i rektyfikacja zostały przeprowadzone prawidłowo, dopasowanie odbywa się wzdłuż linii epipolarnych, które w zrektyfikowanych obrazach pokrywają się z liniami poziomymi. Dzięki temu proces wyszukiwania korespondencji ogranicza się do jednej osi (poziomej), co znacząco redukuje złożoność obliczeniową. Przykładowo, blok o współrzędnych $(4,7)$ w obrazie referencyjnym (np. lewym) porównywany jest z blokami w tej samej linii poziomej obrazu dopasowywanego (np. prawego), tj. $(4,i)$.
 
 \begin{figure}[H]
 \centering
@@ -784,9 +626,9 @@ Na przykład, blok o współrzędnych (4,7) w obrazie bazowym zostaje porównany
 \caption[Wyszukiwanie pasujących bloków za pomocą StereoSGBM. Opracowanie własne.]{Wyszukiwanie pasujących bloków za pomocą StereoSGBM.}
 \end{figure}
 
-Im większy stopień dopasowania między blokami, tym większe prawdopodobieństwo, że reprezentują one ten sam punkt w przestrzeni trójwymiarowej. W przedstawionym przykładzie najwyższe dopasowanie dla bloku referencyjnego (4,7) uzyskano względem bloku (4,4) w obrazie dopasowywanym.
+Dopasowanie oceniane jest na podstawie funkcji kosztu, a im mniejsza wartość kosztu, tym większe prawdopodobieństwo, że porównywane bloki odpowiadają temu samemu punktowi w przestrzeni trójwymiarowej. W przedstawionym przykładzie najwyższe dopasowanie dla bloku $(4,7)$ uzyskano względem bloku $(4,4)$ w obrazie prawym.
 
-Choć w teorii dopasowania dokonuje się tylko w jednym kierunku (poziomym), implementacja algorytmu w OpenCV zakłada analizę także w dodatkowych kierunkach (łącznie pięciu), co pozwala na zwiększenie dokładności dopasowań poprzez uwzględnienie lokalnych kontekstów z różnych stron.
+W przeciwieństwie do metod opierających się wyłącznie na lokalnych dopasowaniach, algorytm \texttt{StereoSGBM} minimalizuje energię globalną, uwzględniając dodatkowe kierunki propagacji dopasowania. W implementacji OpenCV analizowanych jest pięć kierunków, co pozwala ograniczyć ryzyko lokalnych błędów dopasowania i poprawia spójność wyników.
 
 \begin{figure}[H]
 \centering
@@ -795,62 +637,66 @@ Choć w teorii dopasowania dokonuje się tylko w jednym kierunku (poziomym), imp
 \caption[Pięć kierunków przeszukiwania w algorytmie StereoSGBM. Opracowanie własne.]{Pięć kierunków przeszukiwania w algorytmie StereoSGBM.}
 \end{figure}
 
-Wartość dysparycji uzyskuje się poprzez obliczenie różnicy poziomej współrzędnej piksela (lub bloku) w obrazie referencyjnym i odpowiadającej mu pozycji w obrazie dopasowywanym. W praktyce przyjmuje się wartość bezwzględną tej różnicy, a im jest ona większa, tym obiekt znajduje się bliżej kamery (zgodnie z zasadą triangulacji w stereowizji).
+Wartość dysparycji obliczana jest jako różnica współrzędnych poziomych piksela (lub bloku) w obrazie lewym i odpowiadającej mu pozycji w obrazie prawym. Zgodnie z zasadą triangulacji, większa wartość dysparycji oznacza, że obiekt znajduje się bliżej kamery. W praktyce przyjmuje się wartość bezwzględną tej różnicy.
 
-Algorytm zazwyczaj operuje na obrazach w odcieniach szarości (jednokanałowych), co pozwala znacząco zredukować czas obliczeń. Możliwe jest również zastosowanie obrazów kolorowych (np. w przestrzeni BGR), jednak wiąże się to ze zwiększonym obciążeniem procesora, bez gwarancji proporcjonalnej poprawy wyników.
+Algorytm operuje zazwyczaj na obrazach w odcieniach szarości, co znacząco zmniejsza czas obliczeń. Możliwe jest użycie obrazów kolorowych, jednak wiąże się to ze zwiększonym zapotrzebowaniem na moc obliczeniową, bez istotnej poprawy jakości wyników.
 
-Właściwa mapa dysparycji obliczana jest przy użyciu metody \texttt{compute()} na wcześniej skonfigurowanym obiekcie StereoSGBM.
+Po skonfigurowaniu obiektu \texttt{StereoSGBM}, obliczenie mapy dysparycji następuje poprzez wywołanie metody \texttt{compute()}. Wynikowy obraz przedstawia poziomą różnicę położenia punktów w obrazach stereo, co stanowi podstawę do dalszej rekonstrukcji głębi.
 
-Dzięki parametrom ustalonym podczas inicjalizacji otrzymujemy następujący wynik dla mapy dysparycji.
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.4\textwidth]{images/disparity.png}  % Adjust the path and width as necessary
-    \captionsetup{font=footnotesize}
-    \caption[Rezultat mapy dysproporcji StereoSGBM. Opracowanie własne.]{Rezultat mapy dysproporcji StereoSGBM.}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{images/disparity.png}
+\captionsetup{font=footnotesize}
+\caption[Rezultat mapy dysparycji StereoSGBM. Opracowanie własne.]{Rezultat mapy dysparycji StereoSGBM.}
 \end{figure}
+\subsection{Algorytm StereoBM}
 
-\subsection*{Algorytm StereoBM}
+Alternatywą dla metody \texttt{StereoSGBM} jest algorytm \texttt{StereoBM} (ang. \textit{Block Matching}) \cite{bm}, będący jedną z najstarszych i najprostszych implementacji dopasowania stereoskopowego w bibliotece OpenCV. Jego działanie opiera się na zasadzie bezpośredniego porównywania lokalnych bloków pikseli pomiędzy obrazem lewym i prawym wzdłuż odpowiadających sobie linii epipolarnych. \texttt{StereoBM} nie wykorzystuje bezpośrednio parametrów kalibracyjnych w procesie dopasowania – działa tylko na rektyfikowanych obrazach. 
 
-Alternatywą dla metody \texttt{StereoSGBM} jest \texttt{StereoBM} (ang. \textit{Block Matching}) \cite{bm}, będący jedną z najstarszych implementacji dopasowania stereoskopowego w bibliotece OpenCV. Algorytm ten bazuje na bezpośrednim porównywaniu bloków pikseli pomiędzy obrazem lewym i prawym wzdłuż linii epipolarnych, wykorzystując prostą funkcję kosztu, np. \textit{Sum of Absolute Differences} (SAD).
+Proces dopasowania rozpoczyna się od wyboru bloku referencyjnego w obrazie lewym. Dla każdego takiego bloku algorytm przeszukuje wzdłuż tej samej linii epipolarnej w obrazie prawym obszar o zadanym zakresie dysparycji, aby znaleźć najbardziej podobny fragment. Do oceny podobieństwa stosowana jest prosta funkcja kosztu, najczęściej \textbf{Sum of Absolute Differences (SAD)}, definiowana jako:
 
-Inicjalizacja przebiega następująco:
+\[
+\text{SAD}(x,y,d) = \sum_{i=-\frac{w}{2}}^{\frac{w}{2}} \sum_{j=-\frac{h}{2}}^{\frac{h}{2}} | I_L(x+i,y+j) - I_R(x+i-d,y+j) |
+\]
 
-\begin{lstlisting}[style=mypython]
+gdzie:
+\begin{itemize}
+    \item $(x,y)$ -- współrzędne środka bloku w obrazie lewym,
+    \item $d$ -- wartość przesunięcia (kandydat na dysparycję),
+    \item $w,h$ -- szerokość i wysokość bloku dopasowania,
+    \item $I_L$, $I_R$ -- intensywności pikseli w obrazie lewym i prawym.
+\end{itemize}
 
-# Inicjalizacja StereoBM
-num_disp = 64 # musi być podzielne przez 16
-block_size = 15 # większy blok = większa odporność na szumy
+Dysparycja dla danego punktu wybierana jest jako wartość $d$, dla której funkcja kosztu osiąga minimum.  
 
-stereo_bm = cv2.StereoBM_create(
-              numDisparities=num_disp,
-              blockSize=block_size)
+Algorytm ten analizuje wyłącznie dopasowania lokalne, bez uwzględnienia kontekstu globalnego, co odróżnia go od metody \texttt{StereoSGBM}, która implementuje optymalizację w wielu kierunkach i minimalizuje energię globalną. Brak optymalizacji globalnej skutkuje mniejszą dokładnością w obszarach jednorodnych (bez wyraźnej tekstury), w cieniu oraz przy obecności szumów.  
 
-# Obliczenie mapy dysparycji
-disparity_bm = stereo_bm.compute(grayL, grayR)
-\end{lstlisting}
+\textbf{Najważniejsze różnice między \texttt{StereoBM} a \texttt{StereoSGBM}:}
+\begin{itemize}
+    \item \textbf{Metoda dopasowania:}  
+    \texttt{StereoBM} stosuje lokalne dopasowanie blokowe na podstawie funkcji SAD, natomiast \texttt{StereoSGBM} rozszerza dopasowanie o koszt gradientu intensywności i optymalizację półglobalną.
+    
+    \item \textbf{Kontekst globalny:}  
+    \texttt{StereoBM} ignoruje zależności przestrzenne między sąsiadującymi pikselami, podczas gdy \texttt{StereoSGBM} propaguje koszty w wielu kierunkach, co redukuje błędy dopasowania w jednorodnych obszarach.
+    
+    \item \textbf{Jakość mapy dysparycji:}  
+    Wyniki \texttt{StereoBM} są zazwyczaj gorsze w obszarach o niskim kontraście i w cieniu. \texttt{StereoSGBM} lepiej radzi sobie z tymi przypadkami dzięki dodatkowym ograniczeniom ciągłości dysparycji.
+    
+    \item \textbf{Złożoność obliczeniowa:}  
+    \texttt{StereoBM} jest znacząco szybszy i mniej zasobożerny, co czyni go atrakcyjnym rozwiązaniem w systemach o ograniczonej mocy obliczeniowej, natomiast \texttt{StereoSGBM} wymaga więcej pamięci i czasu obliczeń.
+\end{itemize}
 
-W odróżnieniu od \texttt{StereoSGBM}, algorytm \texttt{StereoBM} analizuje jedynie lokalne dopasowania bez optymalizacji globalnej. Dzięki temu jest znacząco szybszy i mniej zasobożerny, co czyni go dobrym wyborem w systemach wbudowanych (np. Raspberry~Pi) lub w aplikacjach wymagających przetwarzania w czasie rzeczywistym. Jednak jego prostota powoduje większą wrażliwość na szumy i mniejszą dokładność w obszarach jednorodnych lub przy słabym tekście.
+Ze względu na prostotę algorytmu i brak optymalizacji globalnej, wyniki uzyskane przy użyciu \texttt{StereoBM} są bardziej podatne na błędy dopasowania (tzw. szumy dysparycji), szczególnie w obszarach pozbawionych tekstury lub przy zakłóceniach oświetlenia.
 
-Podobnie jak w przypadku \texttt{StereoSGBM}, poprawna rektyfikacja obrazów jest warunkiem uzyskania wiarygodnej mapy dysparycji. Ze względu jednak na mniejszą złożoność obliczeń, \texttt{StereoBM} wymaga często dodatkowych filtrów (np. medianowego lub morfologicznego) w celu poprawy jakości wyników.
+\texttt{StereoBM} jest powszechnie stosowany w systemach wymagających przetwarzania w czasie rzeczywistym przy ograniczonych zasobach, np. w robotyce mobilnej lub systemach wizyjnych dla pojazdów autonomicznych, gdy wymagana jest szybka, ale przybliżona estymacja głębi.
 
-Wynik dla mapy dysparycji prezentuje się następująco:
-
-\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
-    \centering  % Centers the image
-    \includegraphics[width=0.4\textwidth]{images/BMdisparity.png}  % Adjust the path and width as necessary
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/BMdisparity.png}
     \captionsetup{font=footnotesize}
-    \caption[Rezultat mapy dysproporcji StereoBM. Opracowanie własne.]{Rezultat mapy dysproporcji StereoBM.}
+    \caption[Rezultat mapy dysparycji StereoBM. Opracowanie własne.]{Rezultat mapy dysparycji uzyskanej metodą \texttt{StereoBM}.}
 \end{figure}
-
 \section{Filtr WLS}
-
-\begin{lstlisting}[style=mypython]
-# Parametry filtra WLS
-wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=stereo)
-wls_filter.setLambda(80000)
-wls_filter.setSigmaColor(1.8)
-\end{lstlisting}
 
 W celu dalszego ograniczenia szumu w mapie dysparycji stosowany jest filtr ważonych najmniejszych kwadratów(ang. \textit{Weighted Least Squares}) \cite{wls}, dostępny w module \texttt{cv2.ximgproc}. Jest on szczególnie skuteczny w poprawianiu ciągłości strukturalnej oraz w zachowaniu ostrych krawędzi w scenach o złożonej geometrii.
 
@@ -868,10 +714,10 @@ Tak wygląda rezultat filtra WLS:
     \centering  % Centers the image
     \includegraphics[width=0.8\textwidth]{images/combinedWLS.png}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
-    \caption[Rezultat filtra WLS dla StereoSGBM i StereoBM. Opracowanie własne.]{Rezultat filtra WLS.}
+    \caption[Rezultat filtra WLS dla StereoSGBM i StereoBM. Opracowanie własne.]{Rezultat filtra WLS dla StereoSGBM i StereoBM.}
 \end{figure}
 
-\section{Filtr zamykający}
+\subsection{Filtr zamykający}
 
 Na uzyskanym obrazie mogą nadal występować zakłócenia w postaci lokalnych szumów. W celu ich redukcji stosuje się filtrację morfologiczną, która pozwala poprawić spójność i ciągłość danych głębokości. W szczególności wykorzystywany jest operator zamykania (morphological closing), realizowany w OpenCV za pomocą funkcji \texttt{cv2.morphologyEx()} z flagą \texttt{cv2.MORPH\_CLOSE}. Zastosowanie tego filtru pozwala na eliminację drobnych czarnych artefaktów, które mogą pojawić się wewnątrz jednorodnych obszarów na mapie.
 
@@ -882,112 +728,7 @@ Na uzyskanym obrazie mogą nadal występować zakłócenia w postaci lokalnych s
     \caption[Przykład filtra zamykającego. https://www.graphicsmill.com/docs/gm/minimum-maximum-median-filters.htm]{Przykład filtra zamykającego.}
 \end{figure}
 
-\section{Główna pętla}
-
-\begin{lstlisting}[style=mypython]
-while True:
-
-    ret, frame = Cam.read()
-    if not ret:
-        # Przerwij jesli nie odczytano klatki z kamery
-        break
-
-    height, width, _ = frame.shape
-    mid = width // 2
-
-    left_frame = executor.submit(lambda: frame[:, :mid])
-    right_frame = executor.submit(lambda: frame[:, mid:])
-    LFrame = left_frame.result()
-    RFrame = right_frame.result()
-
-    # Rownolegle operacje remapowania 
-    future_Left_nice = executor.submit(cv2.remap, LFrame,
-                                Left_Stereo_Map[0], Left_Stereo_Map[1],
-                                interpolation=cv2.INTER_LANCZOS4,
-                                borderMode=cv2.BORDER_CONSTANT)
-    future_Right_nice = executor.submit(cv2.remap, RFrame,
-                                Right_Stereo_Map[0], Right_Stereo_Map[1],
-                                interpolation=cv2.INTER_LANCZOS4,
-                                borderMode=cv2.BORDER_CONSTANT)
-    Left_nice = future_Left_nice.result()
-    Right_nice = future_Right_nice.result()
-
-    # Rownolegla konwersja na skale szarosci
-    future_gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY)
-    future_gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY)
-    Gray_left = future_gray_left.result()
-    Gray_right = future_gray_right.result()
-
-    # Rownolegla kalkukacja dysproporcji
-    future_dispL = executor.submit(stereo.compute, Gray_left, Gray_right)
-    future_dispR = executor.submit(stereoR.compute, Gray_right, Gray_left)
-    DispL = np.int16(future_dispL.result())
-    DispR = np.int16(future_dispR.result())
-
-    disp = ((DispL.astype(np.float32) / 16) - min_disp) / num_disp
-
-    filteredImg = wls_filter.filter(DispL, Gray_left, None, DispR)
-    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, 
-                                alpha=255, norm_type=cv2.NORM_MINMAX)
-    filteredImg = np.uint8(filteredImg)
-
-    filt_Color = cv2.applyColorMap(filteredImg, cv2.COLORMAP_OCEAN)
-\end{lstlisting}
-
-Po wygenerowaniu mapy dysparycji należy określić odległość. Zadanie polega na znalezieniu zależności między wartością dysparycji, a odległością.
-
-\section{Estymacja odległości}
-
-\begin{lstlisting}[style=mypython]
-_, close_mask = cv2.threshold(filteredImg, 160, 255, cv2.THRESH_BINARY)
-close_mask = cv2.morphologyEx(close_mask, cv2.MORPH_CLOSE, kernel)
-contours, _ = cv2.findContours(close_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-for cnt in contours:
-    if cv2.contourArea(cnt) > 500:
-        x, y, w, h = cv2.boundingRect(cnt)
-
-        roi_disp = disp[y:y + h, x:x + w].astype(np.float32)
-        cx, cy = x + w // 2, y + h // 2
-        sample_disp = disp[cy - 1:cy + 2, cx - 1:cx + 2].astype(np.float32)
-        average_disp = np.mean(sample_disp[sample_disp > 0])
-
-        if average_disp > 0:
-            distance = -593.97 * average_disp**3 + 1506.8 
-                               * average_disp**2 - 1373.1 
-                               * average_disp + 522.06
-            distance = np.around(distance * 0.01, decimals=2)
-
-            if distance < 1.0:
-                box_color = (0, 0, 255) if distance < 0.5 else (0, 255, 0)
-                cv2.rectangle(filt_Color, (x, y), (x + w, y + h), box_color, 2)
-                cv2.putText(filt_Color, f"{distance:.2f} m", (x, y - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
-\end{lstlisting}
-
-Obraz filteredImg (np. przefiltrowany obraz po detekcji koloru lub kształtu) jest zamieniany na obraz czarno-biały (binary mask), gdzie tylko jasne piksele > 160 zostają. Następnie nakłada się na ten obraz filtr domknięcia (closing).
-
-Funkcja findContours wykrywa obiekty (kontury) w masce. RETR\_EXTERNAL oznacza, że interesują nas tylko zewnętrzne kontury.
-
-Pętla sprawdza każdy kontur. Kontury mniejsze niż 500 pikseli są ignorowane (eliminacja szumów).
-
-Z mapy dysparycji obliczany jest bounding box wokół konturu, następnie wycinany jest fragment mapy dysparycji w tym obszarze. Z jego środka (cx, cy) pobierany jest mały fragment (3×3) do analizy.
-
-Obliczana jest średnia dysparycja. Z 3×3 pikseli ze środka wybierane są tylko te z sensowną wartością (większą od zera).
-
-Na podstawie średniej dysparycji obliczana jest odległość w metrach. Użyty jest wzór aproksymacyjny (polinom).
-
-Wynik skalowany jest do metrów i zaokrąglany do 2 miejsc po przecinku.
-
-Jeśli obiekt znajduje się bliżej niż 1 metr, rysowana jest prostokątna ramka: czerwona jeśli < 0.5 m, zielona jeśli 0.5 – 1.0 m.
-
-Nad obiektem wyświetlana jest informacja o odległości w metrach.
-
-Pomiar odległości dotyczy tylko odległości od 67 cm do 203 cm, aby uzyskać dobre wyniki. Precyzja pomiaru zależy również od jakości kalibracji. Kamera stereo były w stanie zmierzyć odległość do obiektu z precyzją ± 5 cm.
-
-Zwrócona wartość to średnia dysparycji z macierzy 9x9 pikseli.
-
-\subsection{Triangulacja}
+\section{Triangulacja}
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -1008,6 +749,393 @@ Do obliczenia odległości można użyć następującego wzoru można obliczyć:
 Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością, a odległością.
 Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
 Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na tej podstawie można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
+
+\chapter{Funkcjonalność projektu}
+
+\begin{lstlisting}[style=mypython]
+# Termination criteria
+term_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+\end{lstlisting}
+
+Na początku definiowane są kryteria zakończenia algorytmu optymalizacji (term\_criteria), które łączą dwa warunki:
+
+\begin{itemize}
+    \item osiągnięcie maksymalnej liczby iteracji (30),
+    \item osiągnięcie dokładności wyrażonej w zmianie pozycji punktu poniżej zadanego progu (0.001).
+\end{itemize}
+
+Kryteria te są następnie wykorzystywane w procedurze doprecyzowywania lokalizacji narożników szachownicy.
+
+\begin{lstlisting}[style=mypython]
+# Prepare object points
+objp = np.zeros((9*6,3), np.float32)
+objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
+\end{lstlisting}
+
+Tworzona jest macierz punktów obiektowych (objp), która reprezentuje idealny, znany geometrycznie układ narożników szachownicy w przestrzeni 3D. Przyjęto, że szachownica ma wymiar 9 × 6 pól (tj. 54 narożniki). Punkty są rozmieszczone w płaszczyźnie Z = 0, dzięki czemu uzyskano dwuwymiarową siatkę punktów w przestrzeni obiektowej
+
+\begin{lstlisting}[style=mypython]
+# Arrays to store object points and image points from all images
+objpoints= []   # 3d points in real world space
+imgpointsR= []   # 2d points in image plane
+imgpointsL= []
+
+ChessImaR = None
+ChessImaL = None
+
+for i in range(0, 64):
+    t = str(i)
+    ChessImaR = cv2.imread('calib_images/right_chessboard-' + t + '.png', 0)
+    ChessImaL = cv2.imread('calib_images/left_chessboard-' + t + '.png', 0)
+    if ChessImaR is None or ChessImaL is None:
+        continue  # Skip this iteration if loading failed
+    retR, cornersR = cv2.findChessboardCorners(ChessImaR, (9, 6), None)
+    retL, cornersL = cv2.findChessboardCorners(ChessImaL, (9, 6), None)
+    if retR and retL:
+        objpoints.append(objp)
+        cv2.cornerSubPix(ChessImaR, cornersR, (11, 11), (-1, -1), term_criteria)
+        cv2.cornerSubPix(ChessImaL, cornersL, (11, 11), (-1, -1), term_criteria)
+        imgpointsR.append(cornersR)
+        imgpointsL.append(cornersL)
+\end{lstlisting}
+
+Program iteruje przez zestaw obrazów kalibracyjnych (64 par zdjęć lewej i prawej kamery). Dla każdej pary:
+
+\begin{itemize}
+    \item wczytywane są obrazy w odcieniach szarości,
+    \item wykonywana jest detekcja narożników szachownicy (cv2.findChessboardCorners),
+    \item w przypadku sukcesu, pozycje narożników są doprecyzowywane metodą subpikselową (cv2.cornerSubPix),
+    \item wykonywana jest detekcja narożników szachownicy (cv2.findChessboardCorners),
+    \item współrzędne narożników (punkty obrazu) dodawane są do listy punktów obrazowych dla każdej kamery (imgpointsL, imgpointsR), przy jednoczesnym przypisaniu do odpowiadających im punktów obiektowych (objpoints).
+\end{itemize}
+
+\begin{lstlisting}[style=mypython]
+# Calibration
+retR, mtxR, distR, rvecsR, tvecsR = cv2.calibrateCamera(objpoints, imgpointsR, ChessImaR.shape[::-1], None, None)
+retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, ChessImaL.shape[::-1], None, None)
+\end{lstlisting}
+
+Dla każdej z kamer przeprowadzana jest osobna kalibracja przy użyciu funkcji cv2.calibrateCamera. Wynikiem są:
+
+\begin{itemize}
+    \item macierze wewnętrzne kamer (mtxL, mtxR),
+    \item współczynniki dystorsji (distL, distR),
+    \item parametry związane z położeniem i orientacją kamery dla każdej pozycji wzorca (rvecs, tvecs).
+\end{itemize}
+
+\begin{lstlisting}[style=mypython]
+OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
+OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
+\end{lstlisting}
+
+Następnie obliczane są optymalne macierze rzutowania (cv2.getOptimalNewCameraMatrix), które minimalizują wpływ dystorsji przy jednoczesnym zachowaniu maksymalnego obszaru obrazu.
+
+\begin{lstlisting}[style=mypython]
+OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
+OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
+\end{lstlisting}
+
+\begin{lstlisting}[style=mypython]
+retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = term_criteria,flags = cv2.CALIB_FIX_INTRINSIC)
+\end{lstlisting}
+
+W ostatnim etapie wykonywana jest właściwa stereokalibracja przy użyciu funkcji cv2.stereoCalibrate.
+Proces ten, przy założeniu stałych parametrów wewnętrznych kamer (cv2.CALIB\_FIX\_INTRINSIC), estymuje:
+
+\begin{itemize}
+    \item macierz rotacji R,
+    \item wektor translacji T,
+    \item macierz fundamentalną F,
+    \item macierz epipolarną E.
+\end{itemize}
+
+Parametry te określają wzajemne położenie i orientację obu kamer, a także zależności geometryczne między punktami obrazu zarejestrowanymi przez lewą i prawą kamerę.
+
+\begin{lstlisting}[style=mypython]
+rectify_scale= 0 # if 0 image croped, if 1 image nor croped
+RL, RR, PL, PR, Q, roiL, roiR= cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale,(0,0))  # last paramater is alpha, if 0= croped, if 1= not croped
+\end{lstlisting}
+
+Powyższy fragment kodu implementuje \textbf{algorytm Bougueta} (rektyfikacja kalibrowana), który wykorzystuje pełny zestaw parametrów kalibracyjnych kamer do wyznaczenia rzutów obrazów na wspólną płaszczyznę epipolarną. 
+Funkcja \texttt{cv2.stereoRectify} korzysta z macierzy wewnętrznych kamer ($M_{LS}, M_{RS}$), współczynników dystorsji ($d_{LS}, d_{RS}$), a także parametrów opisujących wzajemne położenie kamer w przestrzeni ($R,T$). 
+Na tej podstawie estymowane są:
+
+\begin{itemize}
+    \item macierze rektyfikacji ($R_L,R_R$) dla lewej i prawej kamery,
+    \item nowe macierze rzutowania ($P_L,P_R$),
+    \item macierz dysparycji do głębi $Q$, umożliwiająca odwzorowanie punktów obrazu w trójwymiarową przestrzeń,
+    \item regiony zainteresowania (ROI), określające użyteczny obszar obrazu po rektyfikacji.
+\end{itemize}
+
+Parametr \texttt{rectify\_scale} definiuje stopień przycięcia obrazu:
+
+\begin{itemize}
+    \item $\alpha = 0$ – obrazy są przycięte w celu wyeliminowania obszarów pozbawionych informacji,
+    \item $\alpha = 1$ – obrazy nie są przycinane, co pozwala zachować pełne pole widzenia, kosztem obecności obszarów pustych.
+\end{itemize}
+
+\begin{lstlisting}[style=mypython]
+Left_Stereo_Map= cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)   # cv2.CV_16SC2 this format enables us the programme to work faster
+Right_Stereo_Map= cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImaR.shape[::-1], cv2.CV_16SC2)
+\end{lstlisting}
+
+Następnie, przy pomocy funkcji \texttt{cv2.initUndistortRectifyMap}, obliczane są mapy przekształceń dla lewej i prawej kamery. 
+Mapy te definiują sposób, w jaki każdy piksel obrazu wejściowego powinien zostać przesunięty w celu eliminacji zniekształceń soczewki oraz dostosowania do nowego układu rektyfikowanego.
+
+W kodzie generowane są dwie mapy:
+
+\begin{itemize}
+    \item \texttt{Left\_Stereo\_Map} dla obrazu lewego,
+    \item \texttt{Right\_Stereo\_Map} dla obrazu prawego.
+\end{itemize}
+
+Dane wyjściowe mają format \texttt{cv2.CV\_16SC2}, co pozwala na szybsze działanie programu dzięki wykorzystaniu mapy przesunięć w formie stałoprzecinkowej.
+
+Algorytm Hartleya \cite{hartley} umożliwia rektyfikację obrazów stereo w przypadku braku wcześniejszej kalibracji układu kamer. W odróżnieniu od metody opartej na \texttt{stereoRectify}, która wymaga znajomości parametrów wewnętrznych i zewnętrznych kamer, tutaj proces bazuje wyłącznie na dopasowanych punktach korespondencyjnych pomiędzy obrazami lewym i prawym.
+
+\textbf{Wykrycie i opis cech lokalnych} – w obu obrazach (lewym i prawym) detekcja cech przeprowadzana jest za pomocą algorytmu ORB, który zwraca punkty kluczowe oraz deskryptory opisujące ich lokalny kontekst.
+
+\begin{lstlisting}[style=mypython]
+# Wykrycie i opis cech (np. ORB)
+orb = cv2.ORB_create()
+kp1, des1 = orb.detectAndCompute(imgL, None)
+kp2, des2 = orb.detectAndCompute(imgR, None)
+\end{lstlisting}
+
+\textbf{Dopasowanie punktów korespondencyjnych} – wykorzystując algorytm \texttt{BFMatcher} z metryką Hamminga, dopasowywane są deskryptory z obu obrazów. Wyniki sortowane są według odległości, co pozwala wybrać najlepiej dopasowane pary punktów.
+
+\begin{lstlisting}[style=mypython]
+# Dopasowanie cech metodą BFMatcher
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+matches = bf.match(des1, des2)
+matches = sorted(matches, key=lambda x: x.distance)
+\end{lstlisting}
+
+\textbf{Estymacja macierzy fundamentalnej} – na podstawie uzyskanych dopasowań estymowana jest macierz fundamentalna $F$, opisująca geometryczne powiązanie pomiędzy obrazami stereo. Wykorzystanie metody \texttt{RANSAC} zapewnia odporność na błędne dopasowania (outliery).
+
+\begin{lstlisting}[style=mypython]
+# Konwersja dopasowań do tablic punktów
+pts1 = np.float32([kp1[m.queryIdx].pt for m in matches]).reshape(-1,1,2)
+pts2 = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1,1,2)
+\end{lstlisting}
+
+\textbf{Filtracja inlierów} – do dalszych obliczeń wykorzystywane są jedynie punkty spełniające model geometryczny wynikający z macierzy fundamentalnej.
+
+\begin{lstlisting}[style=mypython]
+# Estymacja macierzy fundamentalnej
+F, mask = cv2.findFundamentalMat(pts1, pts2, cv2.FM_RANSAC)
+\end{lstlisting}
+
+\textbf{Obliczenie homografii rektyfikujących} – funkcja \texttt{stereoRectifyUncalibrated} wyznacza transformacje homograficzne $H_1$ i $H_2$, które przekształcają obrazy tak, aby epipolarne linie były wyrównane wzdłuż osi poziomej.
+
+\begin{lstlisting}[style=mypython]
+# Wybór tylko inlierów
+pts1 = pts1[mask.ravel()==1]
+pts2 = pts2[mask.ravel()==1]
+\end{lstlisting}
+
+\textbf{Rektyfikacja obrazów} – poprzez zastosowanie przekształceń homograficznych ($H_1$ i $H_2$) uzyskuje się zrektyfikowane obrazy lewe i prawe, które mogą zostać użyte w dalszych etapach przetwarzania (np. obliczania mapy dysparycji).
+
+\begin{lstlisting}[style=mypython]
+# Obliczenie homografii rektyfikujących
+ret, H1, H2 = cv2.stereoRectifyUncalibrated(
+    pts1, pts2, F, imgSize=imgL.shape[::-1]
+)
+\end{lstlisting}
+
+\begin{lstlisting}[style=mypython]
+# Zastosowanie przekształceń homograficznych
+imgL_rect = cv2.warpPerspective(imgL, H1, imgL.shape[::-1])
+imgR_rect = cv2.warpPerspective(imgR, H2, imgR.shape[::-1])
+\end{lstlisting}
+
+Poniższy fragment kodu przedstawia proces inicjalizacji algorytmu \textit{Semi-Global Block Matching} (StereoSGBM) w bibliotece OpenCV.  
+Algorytm ten jest wykorzystywany do estymacji mapy dysparycji na podstawie sparowanych obrazów stereo.  
+
+\begin{lstlisting}[style=mypython]
+# Inicjalizacja StereoSGBM
+block_size = 7
+min_disp = 2
+num_disp = 130-min_disp
+stereo = cv2.StereoSGBM_create(
+    minDisparity = min_disp,
+    numDisparities = num_disp,
+    blockSize = block_size,
+    uniquenessRatio = 10,
+    speckleWindowSize = 100,
+    speckleRange = 32,
+    disp12MaxDiff = 5,
+    P1 = 8*3*block_size**2,
+    P2 = 32*3*block_size**2
+)
+\end{lstlisting}
+
+Parametry algorytmu pełnią następujące funkcje:
+
+\begin{itemize}
+    \item \textbf{minDisparity} - minimalna oczekiwana wartość dysparycji. Określa najmniejsze przesunięcie pikseli między obrazami lewym i prawym. Zwykle jest równa 0 lub niewielkiej wartości dodatniej.
+    \item \textbf{numDisparities} - liczba poziomów dysparycji, które będą analizowane. Musi być wielokrotnością 16. Im większa wartość, tym większy zakres głębi można zarejestrować, kosztem wydajności obliczeniowej.
+    \item \textbf{blockSize} - rozmiar bloku (\textit{okna}), na podstawie którego porównywane są fragmenty obrazów. Duże wartości zwiększają odporność na szumy, ale pogarszają precyzję przy krawędziach obiektów.
+    \item \textbf{uniquenessRatio} - minimalna różnica procentowa między najlepszym a drugim najlepszym dopasowaniem. Wyższe wartości pozwalają odrzucać niepewne wyniki.
+    \item \textbf{speckleWindowSize} - maksymalny rozmiar obszaru złożonego z przypadkowych artefaktów (tzw. \textit{speckles}), który zostanie usunięty.
+    \item \textbf{speckleRange} - maksymalna dozwolona różnica dysparycji w obrębie speckle. Parametr ten pomaga eliminować niespójne obszary.
+    \item \textbf{disp12MaxDiff} - maksymalna dopuszczalna różnica pomiędzy wynikami uzyskanymi w dopasowaniu lewo-prawo oraz prawo-lewo. Ma na celu zapewnienie spójności obliczeń.
+    \item \textbf{P1} - kara za niewielkie zmiany dysparycji między sąsiednimi pikselami. Wartość ta jest proporcjonalna do liczby kanałów obrazu oraz kwadratu wielkości bloku.
+    \item \textbf{P2} - kara za większe zmiany dysparycji, znacząco wyższa niż \textbf{P1}. Zapewnia gładkość mapy dysparycji poprzez redukcję gwałtownych skoków wartości.
+\end{itemize}
+
+Poniższy fragment kodu ilustruje zastosowanie metody \textit{Block Matching} (StereoBM) do wyznaczania mapy dysparycji na podstawie obrazów stereo. Algorytm ten opiera się na lokalnym porównywaniu bloków pikseli pomiędzy lewym i prawym obrazem w celu oszacowania przesunięć odpowiadających sobie punktów.  
+
+\begin{lstlisting}[style=mypython]
+# Inicjalizacja StereoBM
+num_disp = 64 # musi być podzielne przez 16
+block_size = 15 # większy blok = większa odporność na szumy
+
+stereo = cv2.StereoBM_create(numDisparities=num_disp,blockSize=block_size)
+\end{lstlisting}
+
+W powyższym kodzie najpierw inicjalizowany jest obiekt klasy \texttt{StereoBM}, przy czym parametr \texttt{numDisparities} określa maksymalny zakres przesunięć (dysparycji), a \texttt{blockSize} definiuje rozmiar lokalnego okna porównawczego. Większy rozmiar bloku zwiększa odporność na szumy, jednak odbywa się to kosztem precyzji na krawędziach i przy drobnych szczegółach obrazu.  
+
+\begin{lstlisting}[style=mypython]
+# Tworzenie dopasowania w kierunku prawym
+stereoR = cv2.ximgproc.createRightMatcher(stereo)
+\end{lstlisting}
+
+Potrzebna jest druga instancja dopasowania (\texttt{stereoR}) z wykorzystaniem funkcji \texttt{cv2.ximgproc.createRightMatcher}. Jest to wariant algorytmu obliczający dopasowanie obrazu prawego względem lewego, co umożliwia późniejsze zastosowanie filtrów spójności. 
+
+W celu poprawy jakości uzyskanej mapy dysparycji stosuje się filtrację post-procesową. W poniższym fragmencie kodu wykorzystano filtrację metodą \textit{Weighted Least Squares} (WLS), dostępną w module \texttt{cv2.ximgproc}. Technika ta redukuje artefakty i szumy w mapie dysparycji, zwłaszcza w rejonach o niskim kontraście i w pobliżu krawędzi obiektów.  
+
+\begin{lstlisting}[style=mypython]
+lmbda = 80000
+sigma = 1.8
+visual_multiplier = 1.0
+wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=stereo)
+wls_filter.setLambda(lmbda)
+wls_filter.setSigmaColor(sigma)
+\end{lstlisting}
+
+Parametr \texttt{lambda} (\( \lambda \)) kontroluje siłę wygładzania – większa wartość powoduje bardziej globalne uśrednianie mapy dysparycji, co redukuje zakłócenia, lecz może prowadzić do utraty szczegółów. Z kolei parametr \texttt{sigma} reguluje wpływ informacji barwnej podczas filtracji; większe wartości umożliwiają zachowanie ciągłości na jednolitych obszarach, a jednocześnie lepsze odwzorowanie krawędzi obiektów.  
+
+Zmienna \texttt{visual\_multiplier} określa współczynnik skalujący, wykorzystywany wyłącznie do wizualizacji przefiltrowanej mapy, nie wpływając na same wyniki obliczeń.  
+
+\begin{lstlisting}[style=mypython]
+Cam = cv2.VideoCapture(0)
+Cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1100)  
+Cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 270)
+Cam.set(cv2.CAP_PROP_FPS, 60)
+
+executor = ThreadPoolExecutor(max_workers=4)
+
+focal_length_px = PL[0, 0]
+baseline_m = abs(T[0][0]) / 100  
+
+# --- Parametry wykrywania objektów --- #
+MIN_DISTANCE_TRIGGER = 0.65
+MAX_DISTANCE_RELEASE = 0.7
+DISPARITY_RANGE = (1.0, 150.0)
+CONTOUR_AREA_THRESHOLD = 500
+DISP_AVG_HISTORY = 5
+
+distance_history = deque(maxlen=DISP_AVG_HISTORY)
+
+while True:
+    current_time = time.time()
+    ret, frame = Cam.read()
+    if not ret:
+        print("Failed to capture frame. Exiting...")
+        break
+
+    height, width, _ = frame.shape
+    mid = width // 2
+
+    left_frame = frame[:, :mid]
+    right_frame = frame[:, mid:]
+
+    # --- Remap rectificated images --- #
+    Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],
+                                interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+    Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],
+                                 interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+
+    # --- Convert to grayscale --- #
+    gray_left = executor.submit(cv2.cvtColor, Left_nice, cv2.COLOR_BGR2GRAY).result()
+    gray_right = executor.submit(cv2.cvtColor, Right_nice, cv2.COLOR_BGR2GRAY).result()
+
+    # --- Compute disparity maps --- #
+    futureL = executor.submit(lambda: stereo.compute(gray_left, gray_right).astype(np.float32) / 16.0)
+    futureR = executor.submit(lambda: stereoR.compute(gray_right, gray_left).astype(np.float32) / 16.0)
+    dispL = futureL.result()
+    dispR = futureR.result()
+
+    # --- Apply WLS filter --- #
+    filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
+
+    # --- Closing Filter --- #
+    disp_closed = cv2.morphologyEx(filtered_disp, cv2.MORPH_CLOSE, kernel)
+
+    disp_vis = cv2.normalize(disp_closed, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+
+    # --- ROI image to analyze --- #
+    disp_height, disp_width = disp_vis.shape
+    roi_width = disp_width // 3  # 1/3 width
+    roi_height = disp_height // 2  # 1/2 height
+    roi_x = (disp_width - roi_width + 150) // 2
+    roi_y = (disp_height - roi_height) // 2
+    roi_rect = (roi_x, roi_y, roi_width, roi_height)
+
+    # --- Visualize ROI --- #
+    cv2.rectangle(disp_closed, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (0, 255, 255), 2)
+
+    # Detect close objects via thresholding
+    _, close_mask = cv2.threshold(disp_closed, 160, 255, cv2.THRESH_BINARY)
+
+    # Restrict mask to ROI only
+    roi_mask = np.zeros_like(close_mask)
+    roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
+
+    # Find contours in ROI restricted region
+    contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    current_stop_flag = False
+
+    for cnt in contours:
+        if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
+            continue
+
+        x, y, w, h = cv2.boundingRect(cnt)
+        cx, cy = x + w // 2, y + h // 2
+
+        # Make sure coordinates are within image bounds
+        if cy - 1 < 0 or cy + 2 > dispL.shape[0] or cx - 1 < 0 or cx + 2 > dispL.shape[1]:
+            continue
+
+        roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
+        valid_disp = roi_disp[(roi_disp > DISPARITY_RANGE[0]) & (roi_disp < DISPARITY_RANGE[1])]
+
+        if valid_disp.size == 0:
+            continue
+
+        avg_disp = np.median(valid_disp)
+        distance = (focal_length_px * baseline_m) / avg_disp
+        distance_history.append(distance)
+        smoothed_distance = np.median(distance_history)
+
+        # Apply hysteresis logic for stability
+        if smoothed_distance < MIN_DISTANCE_TRIGGER:
+            current_stop_flag = True
+            box_color = (0, 0, 255) if smoothed_distance < 0.5 else (0, 255, 0)
+            cv2.rectangle(disp_closed, (x, y), (x + w, y + h), box_color, 2)
+            cv2.putText(disp_closed, f"{smoothed_distance:.2f} m", (x, y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
+            break
+
+    # Trigger GPIO only once per frame
+    # if current_stop_flag:
+    #     lgpio.gpio_write(chip, PIN, 0)  # Stop
+    # elif len(distance_history) == DISP_AVG_HISTORY and smoothed_distance > MAX_DISTANCE_RELEASE:
+    #     lgpio.gpio_write(chip, PIN, 1)  # Move forward
+
+\end{lstlisting}
 
 \chapter{Wnioski i możliwe ulepszenia}
 
@@ -1037,24 +1165,16 @@ Rozwiązaniem tego problemu może być zastosowanie odpowiedniego komputera jedn
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.5\textwidth]{images/jetson.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.4\textwidth]{images/jetson.png}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
     \caption[NVIDIA Jetson Nano B01. https://kamami.pl/wycofane-z-oferty/574587-zestaw-deweloperski-nvidia-jetson-nano.html]{NVIDIA Jetson Nano B01.}
 \end{figure}
 
 Taka pltaforma umożliwi na przeniesienie omuwionych obliczeń na GPU. Pozwoli to na znaczące zwiększenie liczby przetwarzanych klatek na sekundę, a tym samym poprawi responsywność systemu w kontekście wykrywania kolizji.
 
-Możliwe ulepszenia dla programu:
+Implementacja systemu antykolizyjnego na bazie Raspberry Pi 5 oraz kamery stereoskopowej wykazała, że nawet przy ograniczonych zasobach sprzętowych możliwe jest skuteczne przeprowadzanie przetwarzania obrazu w czasie rzeczywistym. Pomimo istotnego obciążenia obliczeniowego, stereowizja dostarcza bogatych informacji o głębi sceny, co zwiększa niezawodność systemów unikania przeszkód.
 
-Należy wziąć kształt filtra WLS i projektować go na mapie dysparycji. Ta projekcja zostanie następnie użyta do pobrania wszystkich wartości dysparycji, które znajdują się w tym kształcie, a wartość, która występuje najczęściej, zostanie ustawiona jako wartość dla całej powierzchni.
-
-Użycie filtra bilateralnego na skalibrowanych obrazach przed wygenerowaniem mapy dysparycji, w ten sposób mogłoby być możliwe, aby nie stosować filtra WLS. Należy to sprawdzić, ale filtr WLS służy głównie do dobrego rozpoznawania krawędzi obiektów, być może istnieje lepsza metoda.
-
-Aby skrócić czas obliczeń przy generowaniu mapy dysparycji, należy zmniejszyć skalibrowane obrazy za pomocą funkcji cv2.resize(cv2.INTER\_AbyREA). Należy przy tym pamiętać, że wartości macierzy esencjalnych i fundamentalnych również muszą być proporcjonalnie zmniejszone.
-
-Generowanie mapy głębokości mogłoby również być korzystne.
-
-Używana równość prosta zawsze zwracałaby dokładną odległość do obiektu z większą precyzją i mniejszym nakładem pracy.
+Dzięki kompaktowym rozmiarom, niskiej cenie oraz energooszczędności, Raspberry Pi 5 okazuje się atrakcyjną platformą dla zastosowań edukacyjnych, prototypowych oraz potencjalnie komercyjnych.
 
 \renewcommand{\listfigurename}{Spis rysunków}
 \addcontentsline{toc}{chapter}{Spis rysunków}

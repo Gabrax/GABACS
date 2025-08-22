@@ -14,13 +14,8 @@ from collections import deque
 # Filtering
 kernel= np.ones((3,3),np.uint8)
 
-def estimate_distance(disparity_value):
-    distance = -593.97 * disparity_value**3 + 1506.8 * disparity_value**2 - 1373.1 * disparity_value + 522.06
-    return np.around(distance * 0.01, decimals=2)  # Convert to meters
-
 # Termination criteria
-criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+term_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 # Prepare object points
 objp = np.zeros((9*6,3), np.float32)
@@ -47,8 +42,8 @@ for i in range(0, 64):
     retL, cornersL = cv2.findChessboardCorners(ChessImaL, (9, 6), None)
     if retR and retL:
         objpoints.append(objp)
-        cv2.cornerSubPix(ChessImaR, cornersR, (11, 11), (-1, -1), criteria)
-        cv2.cornerSubPix(ChessImaL, cornersL, (11, 11), (-1, -1), criteria)
+        cv2.cornerSubPix(ChessImaR, cornersR, (11, 11), (-1, -1), term_criteria)
+        cv2.cornerSubPix(ChessImaL, cornersL, (11, 11), (-1, -1), term_criteria)
         imgpointsR.append(cornersR)
         imgpointsL.append(cornersL)
 
@@ -58,7 +53,7 @@ retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, C
 OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
 OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaL.shape[::-1], 1, ChessImaL.shape[::-1])
 
-retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = criteria_stereo,flags = cv2.CALIB_FIX_INTRINSIC)
+retS, MLS, dLS, MRS, dRS, R, T, E, F= cv2.stereoCalibrate(objpoints,imgpointsL,imgpointsR,mtxL,distL,mtxR,distR,ChessImaR.shape[::-1],criteria = term_criteria,flags = cv2.CALIB_FIX_INTRINSIC)
 
 print('Calibration complete')
 
@@ -142,10 +137,11 @@ while True:
 
     # --- Apply WLS filter --- #
     filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
-    disp_vis = cv2.normalize(filtered_disp, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 
     # --- Closing Filter --- #
-    disp_closed = cv2.morphologyEx(disp_vis, cv2.MORPH_CLOSE, kernel)
+    disp_closed = cv2.morphologyEx(filtered_disp, cv2.MORPH_CLOSE, kernel)
+
+    disp_vis = cv2.normalize(disp_closed, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 
     # --- ROI image to analyze --- #
     disp_height, disp_width = disp_vis.shape
