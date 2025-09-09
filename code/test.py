@@ -127,20 +127,13 @@ retL, mtxL, distL, rvecsL, tvecsL = cv2.calibrateCamera(objpoints, imgpointsL, C
 OmtxR, roiR = cv2.getOptimalNewCameraMatrix(mtxR, distR, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
 OmtxL, roiL = cv2.getOptimalNewCameraMatrix(mtxL, distL, ChessImaR.shape[::-1], 1, ChessImaR.shape[::-1])
 
-retS, MLS, dLS, MRS, dRS, R, T, E, F = cv2.stereoCalibrate(
-    objpoints, imgpointsL, imgpointsR,
-    mtxL, distL, mtxR, distR,
-    ChessImaR.shape[::-1], criteria=criteria_stereo,
-    flags=cv2.CALIB_FIX_INTRINSIC
-)
+retS, MLS, dLS, MRS, dRS, R, T, E, F = cv2.stereoCalibrate(objpoints, imgpointsL, imgpointsR,mtxL, distL, mtxR, distR,ChessImaR.shape[::-1], criteria=criteria_stereo,flags=cv2.CALIB_FIX_INTRINSIC)
 
 print('Calibration complete')
 
 # Rektyfikacja
 rectify_scale = 0  # 0 = crop, 1 = no crop
-RL, RR, PL, PR, Q, roiL, roiR = cv2.stereoRectify(
-    MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale, (0, 0)
-)
+RL, RR, PL, PR, Q, roiL, roiR = cv2.stereoRectify(MLS, dLS, MRS, dRS, ChessImaR.shape[::-1], R, T, rectify_scale, (0, 0))
 
 Left_Stereo_Map = cv2.initUndistortRectifyMap(MLS, dLS, RL, PL, ChessImaR.shape[::-1], cv2.CV_16SC2)
 Right_Stereo_Map = cv2.initUndistortRectifyMap(MRS, dRS, RR, PR, ChessImaR.shape[::-1], cv2.CV_16SC2)
@@ -213,14 +206,8 @@ while True:
     right_frame = frame[:, mid:]
 
     # Rektyfikacja do rozmiaru pełnego
-    Left_nice = executor.submit(
-        cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],
-        interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT
-    ).result()
-    Right_nice = executor.submit(
-        cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],
-        interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT
-    ).result()
+    Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+    Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
 
     # Skala dla SGBM
     if SCALE_FOR_SGBM != 1.0:
