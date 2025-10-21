@@ -42,7 +42,7 @@
 %numer albumu
 \nralbumu{395263}
 %tytuł pracy
-\title{System antykolizyjny na mikroprocesorze Raspberry Pi}
+\title{Opracowanie systemu antykolizyjnego na mikroprocesorze Raspberry Pi}
 %kierunek studiów
 \kierunek{Informatyka}
 %promotor w dopełniaczu
@@ -53,7 +53,7 @@
 %Słowa kluczowe:
 \slkluczowe{Przetwarzanie obrazu, Głębia obrazu, Metody pomiaru odległości w czasie rzeczywistym, Zastosowania w robotyce}
 %tytuł po angielsku
-\tytulang{Collision avoidance system on Raspberry Pi microprocessor}
+\tytulang{Development of an anti-collision system on a Raspberry Pi microprocessor}
 %słowa kluczowe po angielsku
 \keywords{Image Processing, Image Depth, Real-Time Distance Measurement Methods, Applications in Robotics}
 %% koniec ważnych definicji %%
@@ -117,7 +117,7 @@ Systemy wizyjne znajdują zastosowanie m.in. w diagnostyce medycznej (np. analiz
 
 Celem niniejszego projektu jest implementacja oraz ocena działania \textbf{systemu antykolizyjnego} w czasie rzeczywistym. Główną platformą obliczeniową jest \textbf{Raspberry Pi 5} – komputer jednopłytkowy nowej generacji, oferujący około 50\% wyższą wydajność w porównaniu do swojego poprzednika.
 
-System bazuje na wykorzystaniu \textbf{stereowizji}, czyli przetwarzania obrazu z dwóch zsynchronizowanych kamer w celu uzyskania mapy dysparycji i wyznaczenia odległości do obiektów w scenie. W przypadku wykrycia przeszkody znajdującej się zbyt blisko, system podejmuje decyzję o zatrzymaniu pojazdu poprzez fizyczne odłączenie zasilania jego silnika napędowego, co ma na celu uniknięcie kolizji.
+System bazuje na wykorzystaniu \textbf{stereowizji}, czyli przetwarzania obrazu z dwóch zsynchronizowanych kamer w celu uzyskania mapy dysparycji i wyznaczenia odległości do obiektów w scenie. W przypadku wykrycia przeszkody znajdującej się zbyt blisko, decyzja jest podejmowana automatycznie przez system o zatrzymaniu pojazdu poprzez fizyczne odłączenie zasilania jego silnika napędowego, co ma na celu uniknięcie kolizji.
 
 Projekt został zrealizowany przy użyciu następujących komponentów sprzętowych:
 
@@ -191,9 +191,9 @@ Typowy proces obliczania głębi metodą stereowizyjną obejmuje następujące k
 
 System uruchamiany jest automatycznie wraz ze startem systemu operacyjnego \textit{Raspberry Pi}. Moduł przekaźnikowy domyślnie pozostaje w stanie odłączenia, a po aktywacji systemu obie kamery są inicjalizowane w trybie pracy ciągłej.
 
-\chapter{Natura kamery}
+\chapter{Właściwości kamery}
 
-Kamery rejestrują promienie świetlne z otoczenia. Zasadniczo kamera działa podobnie jak ludzkie oko — odbite promienie światła trafiają do oka i są skupiane na siatkówce.
+Kamery rejestrują promienie świetlne z otoczenia. W dużym uproszczeniu kamera działa podobnie jak ludzkie oko — odbite promienie światła trafiają do oka i są skupiane na siatkówce.
 
 Najprostszym modelem kamery jest tzw. „kamera otworkowa” \cite{otworkowa}. To dobre uproszczenie pozwalające zrozumieć podstawy działania kamery. W tym modelu wszystkie promienie świetlne są blokowane przez ścianki, a tylko te przechodzące przez mały otwór trafiają na powierzchnię światłoczułą wewnątrz kamery, tworząc odwrócony obraz. Poniższa ilustracja przedstawia tę zasadę.
 
@@ -224,7 +224,6 @@ Względny rozmiar obrazu rzutowanego na powierzchnię w kamerze zależy od ognis
 W modelu otworkowym ogniskowa to odległość między otworem, przez który przechodzi światło, a obszarem, na który rzutowany jest obraz.
 
 Aby wyznaczyć, jak duży będzie obraz obiektu na płaszczyźnie projekcji, korzystamy z \textbf{twierdzenia Talesa}.  
-Dlaczego?
 
 Obiekt znajdujący się w przestrzeni oraz jego rzut w kamerze tworzą dwa \textbf{podobne trójkąty}:
 \begin{itemize}
@@ -260,7 +259,7 @@ Obraz na matrycy jest odwrócony, dlatego często w literaturze pojawia się wer
 \end{figure}
 
 Ponieważ soczewka nie jest idealnie wyśrodkowana, wprowadzono dwa parametry, $C_x$ i $C_y$, oznaczające odpowiednio poziome i pionowe przemieszczenie soczewki.
-Ogniskowa na osiach $X$ i $Y$ są również różna, ponieważ obszar obrazu jest prostokątny. Daje to następujący wzór na położenie obiektu na powierzchni.
+Ogniskowa na osiach $X$ i $Y$ jest również różna, ponieważ obszar obrazu jest prostokątny. Zatem otrzymujemy wzór na położenie obiektu na powierzchni.
 
 \[
 x_{\text{screen}} = f_x \left( \frac{X}{Z} \right) + c_x, \quad
@@ -334,7 +333,7 @@ Współrzędne \( x, y \) po normalizacji są współrzędnymi piksela na płasz
 
 Teoretycznie możliwe jest zbudowanie obiektywu, który nie powoduje zniekształceń, np. przy użyciu soczewki parabolicznej. W praktyce jednak znacznie łatwiej i taniej jest wytwarzać soczewki sferyczne, które niestety powodują różne typy zniekształceń geometrycznych obrazu \cite{dystorsja}.
 
-Aby móc opisać i skorygować te zniekształcenia, punkt obrazu wyrażony w pikselach \( (u, v) \) przekształca się najpierw do znormalizowanego układu współrzędnych kamery:
+Do opisu i korekcji tych zniekształceń, punkt obrazu wyrażony w pikselach \( (u, v) \) przekształca się najpierw do znormalizowanego układu współrzędnych kamery:
 
 \[
 x = \frac{u - c_x}{f_x}, \quad y = \frac{v - c_y}{f_y}
@@ -449,13 +448,13 @@ f_x & 0 & c_x \\
 
 W celu dalszego przetwarzania obrazów i uzyskania lepszej dokładności, macierze te mogą zostać zoptymalizowane przy użyciu funkcji \texttt{getOptimalNewCameraMatrix()}. Zoptymalizowane wersje macierzy, uwzględniające rzeczywisty obszar widzenia i dystorsje, są wykorzystywane podczas rektyfikacji obrazów za pomocą funkcji \texttt{stereoRectify()}.
 
-Aby wyznaczyć wzajemne położenie kamer względem siebie (rotację i translację), wykorzystywana jest funkcja \texttt{stereoCalibrate()}, która pozwala określić pełną konfigurację geometryczną układu stereo. Parametry te są niezbędne do poprawnego przekształcenia obrazów oraz dalszej analizy głębi, np. przy obliczaniu mapy dysparycji.
+W celu wyznaczenia wzajemnego położenia kamer względem siebie (rotacji i translacji), wykorzystywana jest funkcja \texttt{stereoCalibrate()}, która pozwala określić pełną konfigurację geometryczną układu stereo. Parametry te są niezbędne do poprawnego przekształcenia obrazów oraz dalszej analizy głębi, np. przy obliczaniu mapy dysparycji.
 
 \section{Rektyfikacja stereo}
 
 Jednym z kluczowych zagadnień w stereowizji jest \textbf{geometria epipolarna}, która opisuje zależność pomiędzy rzutami punktów przestrzennych na dwa obrazy uzyskane z różnych punktów widzenia. Celem tej geometrii jest ograniczenie przestrzeni poszukiwania punktów odpowiadających w drugim obrazie, co znacząco upraszcza dopasowywanie i rekonstrukcję głębi.
 
-Aby dodatkowo uprościć ten proces, stosuje się \textbf{rektyfikację stereo}, czyli transformację obrazów, która sprowadza linie epipolarne do postaci równoległych i poziomych. Dzięki temu dopasowywanie punktów może być wykonywane wzdłuż jednej osi (najczęściej poziomej), co przyspiesza obliczenia i zwiększa ich dokładność.
+Dla uproszczenia procesu, stosuje się \textbf{rektyfikację stereo}, czyli transformację obrazów, która sprowadza linie epipolarne do postaci równoległych i poziomych. Dzięki temu dopasowywanie punktów może być wykonywane wzdłuż jednej osi (najczęściej poziomej), co przyspiesza obliczenia i zwiększa ich dokładność.
 
 W wyniku rektyfikacji uzyskuje się dla każdej kamery:
 
@@ -489,7 +488,7 @@ Geometria epipolarna umożliwia ograniczenie przestrzeni przeszukiwania punktu o
 
 \subsection{Macierz fundamentalna i esencjalna}
 
-Aby matematycznie opisać zależności pomiędzy punktami w dwóch obrazach, wykorzystuje się dwie macierze: \textbf{macierz esencjalną} $E$ oraz \textbf{macierz fundamentalną} $F$. Macierz $E$ opisuje wzajemną orientację kamer (rotację i translację), natomiast $F$ uwzględnia dodatkowo parametry wewnętrzne kamer, takie jak ogniskowa czy środek obrazu.
+Zależności pomiędzy punktami w dwóch obrazach można opisać matematycznie za pomocą dwóch macierzy: \textbf{macierz esencjalną} $E$ oraz \textbf{macierz fundamentalną} $F$. Macierz $E$ opisuje wzajemną orientację kamer (rotację i translację), natomiast $F$ uwzględnia dodatkowo parametry wewnętrzne kamer, takie jak ogniskowa czy środek obrazu.
 
 Związek pomiędzy punktami $p_l$ i $p_r$ w obrazach opisuje równanie epipolarne:
 \[
@@ -507,7 +506,7 @@ q_r^T F q_l = 0
 
 \subsection{Macierz obrotu i wektor translacji}
 
-Aby wyznaczyć relację przestrzenną między kamerami, definiuje się:
+Relację przestrzenną między kamerami można określić, definiując:
 
 \begin{itemize}
     \item $P_l = R_l P + T_l$ – przekształcenie punktu przestrzennego $P$ do układu lewej kamery,
@@ -684,7 +683,15 @@ Można zauważyć, że istnieje nieliniowa zależność między rozbieżnością
 Jeśli rozbieżność jest bliska 0, małe różnice w rozbieżności prowadzą do dużych różnic w odległości.
 Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice dysproporcji nie prowadzą do dużych różnic odległości. Na tej podstawie można wywnioskować, że stereowizja ma wysoką rozdzielczość głębi, tylko dla obiektów znajdujących się blisko kamery.
 
-\chapter{Funkcjonalność projektu}
+\chapter{Specyfikacja projektu}
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.6\textwidth]{images/diagram.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[\textbf{Schemat triangulacji}. \textit{Learning OpenCV 3, O'Reilly, Str. 705}]{Schemat triangulacji.}
+    \label{fig:rpi}  % Optional: use to refer to this image later in the text
+\end{figure}
 
 \section*{Inicjalizacja}
 
@@ -1329,6 +1336,7 @@ Obliczona wartość odległości zapisywana jest w historii pomiarów (\texttt{d
     \includegraphics[width=1.0\textwidth]{images/detect_vis.png}
     \captionsetup{font=footnotesize}
     \caption[\textbf{Wizualizacja wykrycia obiektu}. \textit{Opracowanie własne.}]{Wizualizacja wykrycia obiektu}
+    \label{fig:detect}
 \end{figure}
 
 \begin{figure}[H]
@@ -1352,7 +1360,7 @@ Rozbieżność ta może wynikać z kilku czynników:
 
 Analiza literatury oraz przeprowadzone badania wykazały, że systemy stereowizyjne, mimo swojej użyteczności w detekcji głębi, posiadają szereg ograniczeń, które należy uwzględnić przy projektowaniu systemów antykolizyjnych. Główne problemy wynikają z podatności stereowizji na zakłócenia w warunkach zmiennego oświetlenia. Zarówno silne światło, jak i niedostateczne oświetlenie, a także obecność refleksów, utrudniają prawidłowe dopasowanie pikseli. Ponadto w obszarach ubogich w teksturę, takich jak jednolite powierzchnie ścian czy niebo, proces dopasowania może być zawodny, prowadząc do błędów w mapie dysparycji. Ograniczone pole widzenia kamer stereowizyjnych skutkuje powstawaniem martwych stref pomiędzy kamerami lub poza obszarem ich obserwacji, co dodatkowo ogranicza niezawodność systemu.
 
-Dodatkowo, stereowizja napotyka trudności w przypadku dynamicznych scen, gdy obiekty poruszają się szybko, co może powodować artefakty w mapie głębi. Powtarzalne lub symetryczne wzory, jak kratki czy płytki, utrudniają jednoznaczne dopasowanie pikseli. Wysokie odległości między kamerą a obiektem ograniczają dokładność pomiaru, ponieważ dysparycja staje się bardzo mała. Ponadto niska jakość kamer, obecność szumu, czy złe warunki atmosferyczne, takie jak mgła, deszcz czy pył, mogą dodatkowo pogarszać jakość danych. Istotnym czynnikiem ograniczającym praktyczne zastosowania stereowizji jest także złożoność obliczeniowa algorytmów dopasowania dysparycji, co w klasycznych jednostkach CPU ogranicza liczbę przetwarzanych klatek na sekundę. Analiza wykazała, że osiągnięcie wartości około $15\,\text{FPS}$ jest niewystarczające do zapewnienia szybkiej i niezawodnej reakcji systemu.
+Dodatkowo, stereowizja napotyka trudności w przypadku dynamicznych scen, gdy obiekty poruszają się szybko, co może powodować artefakty w mapie głębi. Powtarzalne lub symetryczne wzory, jak kratki czy płytki, utrudniają jednoznaczne dopasowanie pikseli. Wysokie odległości między kamerą a obiektem ograniczają dokładność pomiaru, ponieważ dysparycja staje się bardzo mała. Ponadto niska jakość kamer, obecność szumu, czy złe warunki atmosferyczne, takie jak mgła, deszcz czy pył, mogą dodatkowo pogarszać jakość danych. Istotnym czynnikiem ograniczającym praktyczne zastosowania stereowizji jest także złożoność obliczeniowa algorytmów dopasowania dysparycji, co w klasycznych jednostkach CPU ogranicza liczbę przetwarzanych klatek na sekundę. Analiza wykazała, że osiągnięcie wartości około $15,\text{FPS}$ jest wystarczające dla podstawowego działania systemu, jednak przy wyższych prędkościach pracy lub bardziej dynamicznych scenach może okazać się niewystarczające do zapewnienia pełnej niezawodności.
 
 \begin{figure}[H]
     \centering
@@ -1361,9 +1369,9 @@ Dodatkowo, stereowizja napotyka trudności w przypadku dynamicznych scen, gdy ob
     \caption[\textbf{Porównanie CPU ARM i x86}. \textit{https://www.cpubenchmark.net/}]{Porównanie CPU ARM i x86}
 \end{figure}
 
-Dla porównania, przy zastosowaniu wydajniejszego CPU uzyskano około $32\,\text{FPS}$, co nadal nie spełnia wymagań systemu czasu rzeczywistego. Oznacza to, że dalsze zwiększanie mocy CPU nie jest wystarczającym rozwiązaniem.
+Dla porównania, zastosowanie wydajniejszego CPU pozwoliło uzyskać około $32,\text{FPS}$, co zapewnia znacznie stabilniejsze działanie i lepszą reakcję systemu. Niemniej jednak, porównując moc obliczeniową obu procesorów, można zauważyć, że mikroprocesory muszą przejść znaczącą ewolucję, aby osiągać stabilne wartości powyżej 30 FPS w tego typu zastosowaniach czasu rzeczywistego.
 
-Aby przezwyciężyć powyższe ograniczenia, w projektowaniu systemów stereowizyjnych zaleca się stosowanie kamer o szerokim zakresie dynamiki (HDR), które zapewniają stabilne działanie zarówno w jasnych, jak i ciemnych warunkach oświetleniowych. Aktywne źródła światła, takie jak diody podczerwieni lub projektory IR, pozwalają utrzymać dokładny pomiar głębi w słabo oświetlonych scenach. Wsparcie systemu dodatkowymi sensorami, takimi jak LiDAR, ultradźwięki czy kamery RealSense generujące mapę głębi bezpośrednio na procesorze kamery, znacząco zwiększa odporność na zakłócenia i martwe strefy. Poprawa jakości kamer, zastosowanie filtrów normalizujących jasność obrazu, adaptacyjne algorytmy dopasowania oraz metody odporne na zmiany oświetlenia minimalizują wpływ szumu i trudnych warunków środowiskowych. Z kolei wykorzystanie wydajnych jednostek obliczeniowych, w szczególności GPU, pozwala na przetwarzanie większej liczby klatek na sekundę w czasie rzeczywistym, co jest kluczowe dla szybkiej detekcji kolizji.
+Jednym ze sposobów przezwyciężenia powyższych ograniczeń jest wykorzystanie kamer o szerokim zakresie dynamiki (HDR) podczas projektowania systemów stereowizyjnych, które zapewniają stabilne działanie zarówno w jasnych, jak i ciemnych warunkach oświetleniowych. Aktywne źródła światła, takie jak diody podczerwieni lub projektory IR, pozwalają utrzymać dokładny pomiar głębi w słabo oświetlonych scenach. Wsparcie systemu dodatkowymi sensorami, takimi jak LiDAR, ultradźwięki czy kamery RealSense generujące mapę głębi bezpośrednio na procesorze kamery, znacząco zwiększa odporność na zakłócenia i martwe strefy. Poprawa jakości kamer, zastosowanie filtrów normalizujących jasność obrazu, adaptacyjne algorytmy dopasowania oraz metody odporne na zmiany oświetlenia minimalizują wpływ szumu i trudnych warunków środowiskowych. Z kolei wykorzystanie wydajnych jednostek obliczeniowych, w szczególności GPU, pozwala na przetwarzanie większej liczby klatek na sekundę w czasie rzeczywistym, co jest kluczowe dla szybkiej detekcji kolizji.
 
 W celu stworzenia wiarygodnego systemu stereowizyjnego zdolnego do pracy w trudnych warunkach środowiskowych oraz umożliwiającego przetwarzanie danych w czasie rzeczywistym, proponuje się zestaw składający się z kamer stereowizyjnych o wysokiej rozdzielczości i szerokim zakresie dynamiki (HDR), jednostki obliczeniowej z wydajnym procesorem graficznym (GPU), dodatkowych czujników uzupełniających oraz odpowiedniej ochrony mechanicznej i optycznej.  
 
