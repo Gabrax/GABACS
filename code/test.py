@@ -37,24 +37,6 @@ MAX_DEPTH_VIS = 4.0   # m – zakres do wizualizacji (kolorowanie)
 # =====================
 # Narzędzia pomocnicze
 # =====================
-class ScalarKalman:
-    """Prosty filtr Kalmana dla skalarnego pomiaru odległości."""
-    def __init__(self, process_var=1e-3, meas_var=1e-2, init=1.0):
-        self.x = init
-        self.P = 1.0
-        self.Q = process_var
-        self.R = meas_var
-
-    def update(self, z):
-        # Predict (tożsamościowy model przejścia)
-        self.P += self.Q
-        # Update
-        K = self.P / (self.P + self.R)
-        self.x = self.x + K * (z - self.x)
-        self.P = (1 - K) * self.P
-        return self.x
-
-
 def depth_from_disparity(disparity, focal_px, baseline_m):
     """Z = f * B / d (metry). Zwraca macierz float32, inf dla d<=0."""
     disp = disparity.astype(np.float32)
@@ -62,32 +44,6 @@ def depth_from_disparity(disparity, focal_px, baseline_m):
     valid = disp > 0.0
     Z[valid] = (focal_px * baseline_m) / disp[valid]
     return Z
-
-
-def colorize_depth(depth_m, max_depth=4.0):
-    """Prosta wizualizacja: bliżej jaśniej. Zwraca obraz uint8 do pokazania."""
-    depth = depth_m.copy()
-    depth[~np.isfinite(depth)] = max_depth
-    depth = np.clip(depth, 0, max_depth)
-    inv = (max_depth - depth) / max_depth  # bliżej -> większa wartość
-    vis = (inv * 255.0).astype(np.uint8)
-    vis = cv2.applyColorMap(vis, cv2.COLORMAP_JET)
-    return vis
-
-
-def mode_disparity(values, bin_width=0.25):
-    """Zwrot modalnej dysparycji (najczęstszej), przez histogram z zadanym kosztem binów."""
-    if values.size == 0:
-        return None
-    vmin, vmax = np.min(values), np.max(values)
-    if vmin == vmax:
-        return float(vmin)
-    bins = int(max(1, np.ceil((vmax - vmin) / bin_width)))
-    hist, edges = np.histogram(values, bins=bins, range=(vmin, vmax))
-    idx = np.argmax(hist)
-    # środek kosza
-    return float(0.5 * (edges[idx] + edges[idx + 1]))
-
 
 # =====================
 # Kalibracja i rektyfikacja
@@ -186,9 +142,8 @@ if USE_BG_SUBTRACTOR:
         history=BG_HISTORY, varThreshold=BG_VAR_THRESHOLD, detectShadows=False
     )
 
-# Bufor i filtr Kalmana
+# Bufor
 distance_history = deque(maxlen=DISP_AVG_HISTORY)
-kalman = ScalarKalman(process_var=1e-3, meas_var=5e-3, init=1.0)
 
 # =====================
 # Główna pętla
@@ -206,8 +161,10 @@ while True:
     right_frame = frame[:, mid:]
 
     # Rektyfikacja do rozmiaru pełnego
-    Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
-    Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+    Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], Left_Stereo_Map[1],
+                                interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
+    Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0], Right_Stereo_Map[1],
+                                 interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT).result()
 
     # Skala dla SGBM
     if SCALE_FOR_SGBM != 1.0:
@@ -220,142 +177,102 @@ while True:
     gray_left = cv2.cvtColor(small_left, cv2.COLOR_BGR2GRAY)
     gray_right = cv2.cvtColor(small_right, cv2.COLOR_BGR2GRAY)
 
-    # (2) Filtr bilateralny przed SGBM
     if USE_BILATERAL:
         gray_left = cv2.bilateralFilter(gray_left, BILATERAL_DIAM, BILATERAL_SIGMA_COLOR, BILATERAL_SIGMA_SPACE)
         gray_right = cv2.bilateralFilter(gray_right, BILATERAL_DIAM, BILATERAL_SIGMA_COLOR, BILATERAL_SIGMA_SPACE)
 
-    # Dysparycja (na obrazach zeskalowanych)
+    # Dysparycja
     dispL = stereo.compute(gray_left, gray_right).astype(np.float32) / 16.0
     dispR = stereoR.compute(gray_right, gray_left).astype(np.float32) / 16.0
 
-    # WLS filtr
-    if USE_WLS and wls_filter is not None:
-        filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
-    else:
-        filtered_disp = dispL
-
-    # Wizualizacja dysparycji
-    disp_vis = cv2.normalize(filtered_disp, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-
-    # (6) Maska tła z lewego obrazu (na tej samej skali)
-    fgmask = None
-    if USE_BG_SUBTRACTOR:
-        fgmask = bg_subtractor.apply(gray_left)
-        # porządki: erozja/dylatacja by ściąć szum
-        fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel, iterations=1)
-        fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_DILATE, kernel, iterations=1)
-
-    # Dodatkowe domknięcie na wizualizacji (do prostszej segmentacji bliskich obiektów)
-    disp_closed = cv2.morphologyEx(disp_vis, cv2.MORPH_CLOSE, kernel)
-
-    # ROI do analizy (na rozmiarze SGBM)
-    disp_height, disp_width = disp_vis.shape
-    roi_width = disp_width // 3
-    roi_height = disp_height // 2
-    roi_x = (disp_width - roi_width + 150) // 2
-    roi_y = (disp_height - roi_height) // 2
-
-    # Wizualizacja ROI
-    cv2.rectangle(disp_closed, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (0, 255, 255), 2)
-
-    # Prosty próg na "blisko" (na obrazie 8-bit po normalizacji)
-    _, close_mask = cv2.threshold(disp_closed, 160, 255, cv2.THRESH_BINARY)
-
-    # Ograniczenie do ROI
-    roi_mask = np.zeros_like(close_mask)
-    roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
-
-    # Połączenie z maską tła (jeśli włączona)
-    if fgmask is not None:
-        roi_mask = cv2.bitwise_and(roi_mask, fgmask)
-
-    # Kontury w ROI
-    contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    current_stop_flag = False
+    filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR) if (USE_WLS and wls_filter is not None) else dispL
 
     # (3) Skalowanie ogniskowej do rozmiaru SGBM
     focal_length_px = focal_length_px_full * SCALE_FOR_SGBM
 
     # (4) Mapa głębokości Z
     depth_map_m = depth_from_disparity(np.maximum(filtered_disp, 0), focal_length_px, baseline_m)
+    disp_vis = np.clip(filtered_disp, min_disp, min_disp + num_disp)
+    disp_vis = ((disp_vis - min_disp) / float(num_disp) * 255.0).astype(np.uint8)
 
-    # (1) Projekcja kształtu (maski konturu) na mapę dysparycji + modalna wartość
+    # === ROI for analysis on depth map (same scale as SGBM) ===
+    depth_height, depth_width = depth_map_m.shape
+    roi_width = depth_width // 3
+    roi_height = depth_height // 2
+    roi_x = (depth_width - roi_width + 150) // 2
+    roi_y = (depth_height - roi_height) // 2
+
+    # --- Create binary mask for "close" regions (< 0.20 m) ---
+    close_mask = np.zeros_like(depth_map_m, dtype=np.uint8)
+    close_mask[(depth_map_m < 0.20) & (depth_map_m > 0)] = 255  # only valid finite depths
+
+    # Limit to ROI only
+    roi_mask = np.zeros_like(close_mask)
+    roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
+
+    # Clean small noise blobs
+    roi_mask = cv2.morphologyEx(roi_mask, cv2.MORPH_OPEN, kernel, iterations=1)
+    roi_mask = cv2.morphologyEx(roi_mask, cv2.MORPH_CLOSE, kernel, iterations=2)
+
+    # Visualization image (always computed)
+    resized_depth = depth_map_m
+
+    current_stop_flag = False
+
+    # Find contours in ROI
+    contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for cnt in contours:
-
         if cv2.contourArea(cnt) < CONTOUR_AREA_THRESHOLD:
             continue
 
-        # Maska pojedynczego konturu (na rozmiarze SGBM)
-        mask = np.zeros_like(disp_vis, dtype=np.uint8)
-        cv2.drawContours(mask, [cnt], -1, color=255, thickness=cv2.FILLED)
-
-        # Zabezpieczenie: ograniczamy do ROI, żeby nie wyjść poza
-        mask_roi = np.zeros_like(mask)
-        mask_roi[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] = 255
-        mask = cv2.bitwise_and(mask, mask_roi)
-
-        # Pobranie dysparycji wewnątrz konturu z ograniczeniem zakresu
-        disp_vals = filtered_disp[mask == 255]
-        valid_disp = disp_vals[(disp_vals > DISPARITY_RANGE[0]) & (disp_vals < DISPARITY_RANGE[1])]
-        if valid_disp.size == 0:
-            continue
-
-        # Modalna dysparycja przez histogram (stabilniejsza niż mediana przy jednolitych powierzchniach)
-        modal_disp = mode_disparity(valid_disp, bin_width=0.25)
-        if modal_disp is None or modal_disp <= 0:
-            continue
-
-        # Odległość z modalnej dysparycji
-        distance = (focal_length_px * baseline_m) / modal_disp
-
-        # Bufor + Kalman (5)
-        distance_history.append(distance)
-        # używamy mediany do pomiaru wejściowego Kalmana, by zbić outliery, a Kalman da płynność
-        z_meas = float(np.median(distance_history))
-        kalman_distance = kalman.update(z_meas)
-
-        # Decyzja z histerezą
-        if kalman_distance < MIN_DISTANCE_TRIGGER:
-            current_stop_flag = True
-
-        # Wizualizacja konturu + tekst
+        # Bounding box
         x, y, w, h = cv2.boundingRect(cnt)
-        box_color = (0, 0, 255) if kalman_distance < 0.5 else (0, 255, 0)
-        cv2.rectangle(disp_closed, (x, y), (x + w, y + h), box_color, 2)
-        cv2.putText(disp_closed, f"{kalman_distance:.2f} m", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
-        break  # jeden najbliższy kontur na klatkę
 
-    # (opcjonalnie) sterowanie GPIO – pozostawione jak w oryginale (zakomentowane)
-    # if current_stop_flag:
-    #     lgpio.gpio_write(chip, PIN, 0)  # Stop
-    # elif len(distance_history) == DISP_AVG_HISTORY and kalman_distance > MAX_DISTANCE_RELEASE:
-    #     lgpio.gpio_write(chip, PIN, 1)  # Move forward
+        # Compute median depth inside contour
+        mask = np.zeros_like(depth_map_m, dtype=np.uint8)
+        cv2.drawContours(mask, [cnt], -1, 255, -1)
+        depth_vals = depth_map_m[mask == 255]
+        valid_depth = depth_vals[(depth_vals > 0) & np.isfinite(depth_vals)]
+        if valid_depth.size == 0:
+            continue
 
-    # FPS
-    current_time = time.time()
-    fps = 1.0 / (current_time - prev_time + 1e-6)
-    prev_time = current_time
+        distance = np.median(valid_depth)
+        distance_history.append(distance)
+        avg_distance = float(np.median(distance_history))
 
-    # Napisy na ekranie
-    cv2.putText(disp_closed, f"FPS: {fps:.2f}", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-    cv2.putText(disp_closed, f"Size (SGBM): {disp_width}x{disp_height}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        if avg_distance < 0.20:
+            current_stop_flag = True
+        else:
+            current_stop_flag = False
 
-    # Pokazywanie okien
-    cv2.imshow('Filtered Disparity (debug)', disp_closed)
+        color = (0, 0, 255) if current_stop_flag else (0, 255, 0)
+        cv2.rectangle(disp_vis, (x, y), (x + w, y + h), color, 2)
+        cv2.putText(disp_vis, f"{avg_distance:.2f} m", (x, y - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
-    if SHOW_DEPTH_MAP:
-        depth_vis = colorize_depth(depth_map_m, MAX_DEPTH_VIS)
-        # dopasuj rozmiar do okna dysparycji (jeśli skala < 1)
-        if depth_vis.shape[:2] != disp_closed.shape[:2]:
-            depth_vis = cv2.resize(depth_vis, (disp_closed.shape[1], disp_closed.shape[0]), interpolation=cv2.INTER_NEAREST)
-        cv2.imshow('Depth Map (m, pseudo-color)', depth_vis)
+        break  # only first contour
 
-    key = cv2.waitKey(1) & 0xFF
-    if key == 27:  # ESC
+    # Draw ROI box
+    cv2.rectangle(disp_vis, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (255, 255, 0), 2)
+
+    # Show depth map with overlays
+    window_name = 'Depth Map (m, pseudo-color)'
+    cv2.imshow(window_name, disp_vis)
+
+    # Mouse callback
+    def show_depth_value(event, x, y, flags, param):
+        if event == cv2.EVENT_MOUSEMOVE:
+            depth_value = resized_depth[y, x]
+            if np.isfinite(depth_value) and depth_value > 0:
+                text = f"({x},{y}) depth: {depth_value:.2f} m"
+                cv2.putText(disp_vis, text, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                cv2.imshow(window_name, disp_vis)
+
+    cv2.setMouseCallback(window_name, show_depth_value)
+
+    # Exit on ESC
+    if cv2.waitKey(1) & 0xFF == 27:
         break
-
 Cam.release()
 cv2.destroyAllWindows()
