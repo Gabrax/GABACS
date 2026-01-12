@@ -115,11 +115,27 @@ Przetwarzanie obrazu cyfrowego stanowi jedną z kluczowych dziedzin współczesn
 
 Systemy wizyjne znajdują zastosowanie m.in. w diagnostyce medycznej (np. analiza obrazów RTG i MRI), przemyśle (automatyczna kontrola jakości), systemach bezpieczeństwa (rozpoznawanie twarzy i analiza zachowań) oraz w autonomicznych pojazdach i robotyce, gdzie odpowiadają za detekcję przeszkód i wspomaganie decyzji nawigacyjnych w czasie rzeczywistym. Szczególne znaczenie zyskują implementacje systemów wizyjnych na platformach o ograniczonych zasobach sprzętowych, takich jak mikrokontrolery czy komputery jednopłytkowe.
 
-Celem niniejszego projektu jest implementacja oraz ocena działania \textbf{systemu antykolizyjnego} w czasie rzeczywistym. Główną platformą obliczeniową jest \textbf{Raspberry Pi 5} – komputer jednopłytkowy nowej generacji, oferujący około 50\% wyższą wydajność w porównaniu do swojego poprzednika.
+\section*{Hipoteza}
 
-System bazuje na wykorzystaniu \textbf{stereowizji}, czyli przetwarzania obrazu z dwóch zsynchronizowanych kamer w celu uzyskania mapy dysparycji i wyznaczenia odległości do obiektów w scenie. W przypadku wykrycia przeszkody znajdującej się zbyt blisko, decyzja jest podejmowana automatycznie przez system o zatrzymaniu pojazdu poprzez fizyczne odłączenie zasilania jego silnika napędowego, co ma na celu uniknięcie kolizji.
+Przyjmuje się, że na platformie Raspberry Pi 5 możliwe jest zrealizowanie wydajnego systemu antykolizyjnego działającego w czasie rzeczywistym z wykorzystaniem stereowizji, zapewniającego skuteczną detekcję przeszkód oraz autonomiczne reagowanie w postaci zatrzymania pojazdu. Mimo ograniczonych zasobów obliczeniowych w porównaniu do komputerów o architekturze x64, Raspberry Pi 5 - dzięki swojej architekturze i nowym możliwościom sprzętowym - może efektywnie realizować zadania związane z przetwarzaniem obrazu stereoskopowego oraz podejmowaniem decyzji w oparciu o analizę głębi sceny.
 
-Projekt został zrealizowany przy użyciu następujących komponentów sprzętowych:
+\section*{Cele pracy}
+
+Celem niniejszego projektu jest implementacja oraz ocena działania \textbf{systemu antykolizyjnego} w czasie rzeczywistym, opartego na przetwarzaniu obrazu stereoskopowego. W ramach pracy zrealizowano następujące cele szczegółowe:
+
+\begin{itemize}
+  \item ocenę dokładności estymacji głębi oraz detekcji przeszkód,
+  \item pomiar obciążenia obliczeniowego Raspberry Pi 5 i ocena jego zdolności do pracy w czasie rzeczywistym,
+  \item analizę responsywności systemu w kontekście szybkości reakcji na przeszkody,
+  \item testy stabilności zasilania przy wykorzystaniu UPS HAT w środowisku mobilnym,
+  \item ocenę możliwości zastosowania projektu w celach komercyjnych, m.in. w robotyce mobilnej, pojazdach magazynowych czy inteligentnych systemach bezpieczeństwa.
+\end{itemize}
+
+\section*{Opis projektu}
+
+Opracowany system został zaimplementowany w języku Python z wykorzystaniem biblioteki OpenCV, odpowiadającej za przetwarzanie i analizę obrazów, oraz biblioteki rpi.lgpio, służącej do obsługi interfejsu wejścia/wyjścia platformy Raspberry Pi. Implementację przeprowadzono na komputerze jednopłytkowym Raspberry Pi 5, wyposażonym w dwa zsynchronizowane moduły kamer umożliwiające estymację głębi sceny w czasie rzeczywistym. W sytuacji, gdy system wykryje przeszkodę znajdującą się w odległości mniejszej niż ustalony próg bezpieczeństwa, automatycznie odłącza on zasilanie jednostki napędowej pojazdu, co pozwala skutecznie zapobiec kolizji.
+
+Projekt wykorzystuje następujące komponenty sprzętowe:
 
 \begin{itemize}
   \item \textbf{Raspberry Pi 5} – odpowiada za przetwarzanie obrazu stereoskopowego, analizę głębi oraz sterowanie logiką decyzyjną systemu.
@@ -166,32 +182,7 @@ Projekt został zrealizowany przy użyciu następujących komponentów sprzętow
 
 \end{itemize}
 
-W ramach realizacji projektu przeprowadzona została analiza skuteczności oraz wydajności systemu w warunkach rzeczywistych. Zakres badań obejmował:
-
-\begin{itemize}
-  \item ocenę dokładności estymacji głębi oraz detekcji przeszkód,
-  \item pomiar obciążenia obliczeniowego Raspberry Pi 5 i ocena jego zdolności do pracy w czasie rzeczywistym,
-  \item analizę responsywności systemu w kontekście szybkości reakcji na przeszkody,
-  \item testy stabilności zasilania przy wykorzystaniu UPS HAT w środowisku mobilnym,
-  \item ocenę możliwości zastosowania projektu w celach komercyjnych, m.in. w robotyce mobilnej, pojazdach magazynowych czy inteligentnych systemach bezpieczeństwa.
-\end{itemize}
-
-Większa wartość paralaksy oznacza mniejszą odległość obiektu od kamery.
-
-Opracowany system został zaimplementowany w języku \texttt{Python} z wykorzystaniem biblioteki \texttt{OpenCV} do przetwarzania obrazów oraz biblioteki \texttt{rpi.lgpio} do obsługi pinów wejścia/wyjścia \textit{Raspberry Pi}.
-
-Typowy proces obliczania głębi metodą stereowizyjną obejmuje następujące kluczowe kroki:
-
-\begin{enumerate}
-    \item \textbf{Rektyfikacja obrazów} – transformacja obrazów w taki sposób, aby linie epipolarne były równoległe i współpłaszczyznowe względem osi \(Y\), co umożliwia wyszukiwanie korespondencji wyłącznie wzdłuż osi \(X\).
-    \item \textbf{Wyszukiwanie korespondencji} – identyfikacja odpowiadających sobie punktów na obrazach lewym i prawym, prowadząca do wygenerowania \textit{mapy dysparycji} przedstawiającej różnice położenia na osi \(X\).
-    \item \textbf{Filtr WLS} – filtr wygładzający, który redukuje szumy w mapie dysparycji, zachowując jednocześnie ostrość krawędzi obiektów.
-    \item \textbf{Triangulacja} – przekształcenie mapy dysparycji na mapę głębi przy wykorzystaniu parametrów geometrycznych układu kamer.
-\end{enumerate}
-
-System uruchamiany jest automatycznie wraz ze startem systemu operacyjnego \textit{Raspberry Pi}. Moduł przekaźnikowy domyślnie pozostaje w stanie odłączenia, a po aktywacji systemu obie kamery są inicjalizowane w trybie pracy ciągłej.
-
-\chapter{Właściwości kamery}
+\chapter{Urządzenie rejestrujące - kamera i jej właściwości}
 
 Kamery rejestrują promienie świetlne z otoczenia. W dużym uproszczeniu kamera działa podobnie jak ludzkie oko — odbite promienie światła trafiają do oka i są skupiane na siatkówce.
 
@@ -403,10 +394,20 @@ Znormalizowane współrzędne $(x, y)$ oraz współrzędne pikselowe $(u, v)$ s�
 \chapter{Stereowizja}
 
 Stereowizja \cite{rao}, nazywana również wizją stereoskopową, jest techniką pozyskiwania informacji przestrzennych na podstawie dwóch lub więcej obrazów tej samej sceny, zarejestrowanych z różnych punktów obserwacyjnych. Metoda ta, inspirowana sposobem postrzegania przestrzeni przez ludzkie oczy, stanowi jedno z najstarszych i najbardziej rozwiniętych podejść do estymacji głębi w przetwarzaniu obrazu.
+Podstawową ideą stereowizji jest wykorzystanie różnic między obrazami pochodzącymi z dwóch punktów widzenia do rekonstrukcji trójwymiarowej struktury sceny.
 
-W przeciwieństwie do wizji monokularnej, stereowizja pozwala na geometrycznie uzasadnione, bezpośrednie obliczanie odległości do obiektów. Dzięki temu znajduje zastosowanie w systemach wymagających wysokiej precyzji pomiarów, takich jak robotyka, pojazdy autonomiczne czy systemy pomiarowe 3D.
+W przeciwieństwie do wizji monokularnej, stereowizja pozwala na geometrycznie uzasadnione i bezpośrednie obliczanie odległości do obiektów. Dzięki temu znajduje zastosowanie w systemach wymagających wysokiej precyzji pomiarów, takich jak robotyka, pojazdy autonomiczne czy systemy pomiarowe 3D.
 
-W systemie stereowizyjnym wykorzystuje się dwa obrazy uzyskane przez kamery rozmieszczone w znanej odległości od siebie, określanej jako \textit{baza stereo}. Kluczowym pojęciem jest \textit{paralaksa} – przesunięcie położenia obrazu tego samego punktu sceny między lewym a prawym obrazem.
+W systemie stereowizyjnym wykorzystuje się dwa obrazy uzyskane przez kamery rozmieszczone w znanej odległości od siebie, określanej jako \textit{baza stereo}. Kluczowym pojęciem jest \textit{paralaksa} – przesunięcie położenia obrazu tego samego punktu sceny między lewym a prawym obrazem. Większa wartość paralaksy odpowiada mniejszej odległości obiektu od kamery.
+
+Typowy proces obliczania głębi metodą stereowizyjną obejmuje następujące kluczowe kroki:
+
+\begin{enumerate}
+    \item \textbf{Rektyfikacja obrazów} – transformacja obrazów w taki sposób, aby linie epipolarne były równoległe i współpłaszczyznowe względem osi \(Y\), co umożliwia wyszukiwanie korespondencji wyłącznie wzdłuż osi \(X\).
+    \item \textbf{Wyszukiwanie korespondencji} – identyfikacja odpowiadających sobie punktów na obrazach lewym i prawym, prowadząca do wygenerowania \textit{mapy dysparycji} przedstawiającej różnice położenia na osi \(X\).
+    \item \textbf{Filtr WLS} – filtr wygładzający, który redukuje szumy w mapie dysparycji, zachowując jednocześnie ostrość krawędzi obiektów.
+    \item \textbf{Triangulacja} – przekształcenie mapy dysparycji na mapę głębi przy wykorzystaniu parametrów geometrycznych układu kamer.
+\end{enumerate}
 
 \section{Kalibracja}
 
@@ -638,27 +639,142 @@ Ze względu na prostotę algorytmu i brak optymalizacji globalnej, wyniki uzyska
 
 \texttt{StereoBM} jest powszechnie stosowany w systemach wymagających przetwarzania w czasie rzeczywistym przy ograniczonych zasobach, np. w robotyce mobilnej lub systemach wizyjnych dla pojazdów autonomicznych, gdy wymagana jest szybka, ale przybliżona estymacja głębi.
 
-\section{Filtr WLS}
+\section{Filtrowanie}
 
-W celu dalszego ograniczenia szumu w mapie dysparycji stosowany jest filtr ważonych najmniejszych kwadratów(ang. \textit{Weighted Least Squares}) \cite{wls}, dostępny w module \texttt{cv2.ximgproc}. Jest on szczególnie skuteczny w poprawianiu ciągłości strukturalnej oraz w zachowaniu ostrych krawędzi w scenach o złożonej geometrii.
+Filtrowanie jest jednym z podstawowych etapów przetwarzania obrazów, mającym na celu poprawę jakości danych wizualnych oraz przygotowanie ich do dalszej analizy. Proces ten polega na przekształcaniu wartości pikseli obrazu w sposób uwzględniający informacje pochodzące z otoczenia każdego piksela, co pozwala na redukcję szumów, wygładzenie niejednorodności intensywności lub uwydatnienie określonych cech obrazu.  
 
-Parametr lambda kontroluje stopień wygładzania mapy: im wyższa jego wartość, tym bardziej struktura wynikowej mapy przypomina obraz referencyjny (np. lewy obraz stereo). W praktyce często stosuje się wartości rzędu 8000, jednak w omawianym przypadku zastosowano wartość \texttt{lambda = 80000}, co pozwoliło uzyskać bardziej stabilne rezultaty. Z kolei parametr sigma określa, jak precyzyjnie filtr ma traktować obszary znajdujące się w pobliżu krawędzi – wyższe wartości sprzyjają lepszemu zachowaniu konturów obiektów.
+W kontekście przetwarzania stereowizyjnego filtrowanie odgrywa szczególnie istotną rolę. Obrazy uzyskiwane z kamer mogą zawierać szumy wynikające z zakłóceń sensorów, różnic oświetlenia czy artefaktów kompresji. Zastosowanie odpowiednich filtrów pozwala na stabilizację wartości intensywności pikseli, co zwiększa dokładność kolejnych etapów analizy, takich jak dopasowanie punktów korespondencyjnych, wyznaczanie mapy dysparycji czy obliczanie głębi sceny.  
 
-Aby skorzystać z filtra WLS, tworzony jest dodatkowy obiekt dopasowania stereo dla prawego obrazu, przy użyciu funkcji \texttt{ximgproc.createRightMatcher()}, bazujący na głównym obiekcie StereoSGBM. Następnie inicjalizowany jest filtr WLS poprzez \texttt{ximgproc.\allowbreak createDisparityWLSFilter()} i konfigurowany z użyciem uprzednio utworzonych dopasowań.
+Filtrowanie może mieć charakter liniowy lub nieliniowy, a jego dobór zależy od specyfiki przetwarzanego obrazu oraz celu analizy. W niniejszej pracy rozważane są między innymi filtry zachowujące ostrość krawędzi, takie jak \textbf{filtr bilateralny}, które umożliwiają jednoczesną redukcję szumów i zachowanie istotnych struktur w obrazach wykorzystywanych do detekcji przeszkód.
 
-Sam proces filtracji przeprowadzany jest metodą \texttt{filter()} filtra WLS, a jego wynik poddawany jest normalizacji za pomocą funkcji \texttt{cv2.normalize()}, co pozwala na wizualizację rezultatu.
+\subsection{Filtr Bilateralny}
 
-Należy jednak zauważyć, że wynik filtru WLS nie jest już bezpośrednio wykorzystywalną mapą dysparycji - jest to obraz zakodowany w formacie uint8, który dobrze uwidacznia krawędzie, lecz nie zawiera już rzeczywistych wartości głębokości (w przeciwieństwie do oryginalnej mapy dysparycji w formacie float32).
+Filtr bilateralny \cite{bilat} jest nieliniowym filtrem wygładzającym, który redukuje szumy w obrazach, jednocześnie zachowując ostrość krawędzi. W odróżnieniu od klasycznych filtrów liniowych, takich jak filtr uśredniający czy Gaussa \cite{gauss}, filtr bilateralny uwzględnia zarówno odległość przestrzenną między pikselami, jak i różnicę ich wartości intensywności. Dzięki temu zmiany intensywności odpowiadające rzeczywistym krawędziom nie są wygładzane, co pozwala na zachowanie istotnych struktur w obrazie.
 
-\subsection{Filtr zamykający}
-
-Na uzyskanym obrazie mogą nadal występować zakłócenia w postaci lokalnych szumów. W celu ich redukcji stosuje się filtrację morfologiczną, która pozwala poprawić spójność i ciągłość danych głębokości. W szczególności wykorzystywany jest operator zamykania (morphological closing), realizowany w OpenCV za pomocą funkcji \texttt{cv2.morphologyEx()} z flagą \texttt{cv2.MORPH\_CLOSE}. Zastosowanie tego filtru pozwala na eliminację drobnych czarnych artefaktów, które mogą pojawić się wewnątrz jednorodnych obszarów na mapie.
+Formalnie, dla piksela \(I(x)\) obraz filtrowany bilateralnie \(I_\text{bilateral}(x)\) jest obliczany jako:
+\[
+I_\text{bilateral}(x) = \frac{1}{W_p} \sum_{y \in \Omega} I(y) \, f_r(|I(y) - I(x)|) \, f_s(\|y - x\|),
+\]
+gdzie:
+\begin{itemize}
+    \item \(\Omega\) – otoczenie piksela \(x\) (okno filtrujące),
+    \item \(f_r(\cdot)\) – funkcja wagowa zależna od różnicy intensywności (funkcja radiacyjna), często przyjmująca postać funkcji Gaussa:
+    \[
+    f_r(\Delta I) = \exp\left(- \frac{\Delta I^2}{2\sigma_r^2}\right),
+    \]
+    \item \(f_s(\cdot)\) – funkcja wagowa zależna od odległości przestrzennej (funkcja przestrzenna), również często Gaussowska:
+    \[
+    f_s(\|y - x\|) = \exp\left(- \frac{\|y - x\|^2}{2\sigma_s^2}\right),
+    \]
+    \item \(W_p = \sum_{y \in \Omega} f_r(|I(y) - I(x)|) \, f_s(\|y - x\|)\) – współczynnik normalizujący zapewniający zachowanie zakresu intensywności.
+\end{itemize}
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.6\textwidth]{images/closeF.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.6\textwidth]{images/Bilateral_Filter.jpg}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
-    \caption[\textbf{Przykład filtra zamykającego}. \textit{https://www.graphicsmill.com/docs/gm/minimum-maximum-median-filters.html}]{Przykład filtra zamykającego.}
+    \caption[\textbf{Przykład filtra bilateralnego}. \textit{https://en.wikipedia.org/wiki/Bilateral\_filter}]{Przykład filtra bilateralnego.}
+\end{figure}
+
+\subsection{Filtr WLS}
+
+Filtr WLS(ang. \textit{Weighted Least Squares}) \cite{wls} jest techniką wygładzania obrazu, która minimalizuje zmiany w intensywności pikseli przy jednoczesnym zachowaniu istotnych krawędzi. Filtr ten jest szczególnie użyteczny w przetwarzaniu map dysparycji w systemach stereowizyjnych, gdzie ważne jest usunięcie szumów z mapy głębi, bez zatarcia informacji o krawędziach obiektów.  
+
+Podstawową ideą filtru WLS jest minimalizacja funkcji kosztu postaci:
+\[
+E(L) = \sum_i \left( (L_i - I_i)^2 + \lambda \sum_{j \in \mathcal{N}(i)} w_{ij} (L_i - L_j)^2 \right),
+\]
+gdzie:
+\begin{itemize}
+    \item \(I_i\) – wartość intensywności piksela wejściowego w obrazie \texttt{I},
+    \item \(L_i\) – wartość filtrowanego piksela w obrazie wyjściowym \texttt{L},
+    \item \(\lambda\) – parametr kontrolujący stopień wygładzenia,
+    \item \(\mathcal{N}(i)\) – otoczenie piksela \(i\) (sąsiedztwo),
+    \item \(w_{ij}\) – waga zależna od różnicy intensywności między pikselami \(i\) i \(j\):
+    \[
+    w_{ij} = \frac{1}{(|I_i - I_j|^\alpha + \epsilon)},
+    \]
+    gdzie \(\alpha\) i \(\epsilon\) są parametrami regulującymi czułość na różnice intensywności.
+\end{itemize}
+
+W praktyce filtr WLS działa w sposób adaptacyjny: w obszarach o jednolitej intensywności pikseli stosuje silne wygładzenie, natomiast w pobliżu krawędzi (gdzie różnice intensywności są duże) wygładzenie jest ograniczone, co pozwala zachować wyraźne granice obiektów.
+
+Filtr WLS jest szeroko stosowany w:
+\begin{itemize}
+    \item wygładzaniu map dysparycji w systemach stereowizyjnych (\textit{stereo depth refinement}),
+    \item redukcji szumów w obrazach intensywności przy zachowaniu krawędzi,
+    \item przetwarzaniu obrazów w systemach komputerowego widzenia, w których istotne jest zachowanie istotnych struktur geometrycznych.
+\end{itemize}
+
+\subsection{Filtr otwierający}
+
+Filtr otwierający(ang. \textit{morphological opening}) \cite{open} jest jedną z podstawowych operacji morfologii matematycznej stosowanych w przetwarzaniu obrazów binarnych i szarościowych. Operacja ta jest szczególnie użyteczna w redukcji szumów, eliminowaniu drobnych zakłóceń oraz rozdzielaniu połączonych obiektów w obrazie, zachowując jednocześnie kształt i wielkość większych struktur.
+
+Formalnie, filtr otwierający jest definiowany jako sekwencyjne zastosowanie dwóch podstawowych operacji morfologicznych:
+\[
+I_\text{open} = (I \ominus S) \oplus S,
+\]
+gdzie:
+\begin{itemize}
+    \item \(I\) – obraz wejściowy,
+    \item \(S\) – element strukturalny (\textit{structuring element}) definiujący kształt i rozmiar okna analizy,
+    \item \(\ominus\) – operator erozji,
+    \item \(\oplus\) – operator dylatacji.
+\end{itemize}
+
+\begin{itemize}
+    \item \textbf{Erozja} (\(\ominus\)) zmniejsza obszary jasnych pikseli w obrazie, eliminując drobne, izolowane punkty lub linie i ograniczając szerokość wąskich fragmentów obiektów.
+    \item \textbf{Dylatacja} (\(\oplus\)) przywraca pierwotny rozmiar i kształt obiektów, które nie zostały całkowicie usunięte przez erozję, pozostawiając jednocześnie usunięte wcześniej szumy.
+\end{itemize}
+
+Filtr otwierający jest szczególnie przydatny w:
+\begin{itemize}
+    \item usuwaniu drobnych zakłóceń w maskach binarnych,
+    \item separacji blisko położonych obiektów w obrazie,
+    \item przygotowaniu obrazów do dalszej analizy, np. detekcji konturów, segmentacji czy wyznaczania regionów zainteresowania (ROI).
+\end{itemize}
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.6\textwidth]{images/OpenF.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[\textbf{Przykład filtra otwierającego}. \textit{https://www.graphicsmill.com/docs/gm/minimum-maximum-median-filters.htm}]{Przykład filtra otwierającego.}
+\end{figure}
+
+\subsection{Filtr zamykający}
+
+Filtr zamykający(ang. \textit{morphological closing}) \cite{close} jest jedną z podstawowych operacji morfologicznych stosowanych w przetwarzaniu obrazów binarnych i grayscale. Operacja ta służy do wypełniania drobnych luk, szczelin oraz łączenia bliskich obiektów w spójną całość, co pozwala uzyskać bardziej jednorodną reprezentację obszarów zainteresowania.
+
+Filtr zamykający składa się z dwóch kolejnych operacji:
+\begin{enumerate}
+    \item \textbf{Dylatacja} (\textit{dilation}) – powiększa obszary obiektów poprzez rozprzestrzenienie ich granic na podstawie elementu strukturalnego (\textit{kernel}). Dylatacja umożliwia wypełnienie małych szczelin oraz połączenie sąsiadujących fragmentów obiektów.
+    \item \textbf{Erozja} (\textit{erosion}) – po dylatacji przeprowadzana jest erozja, która zmniejsza powiększone obszary do pierwotnych rozmiarów, jednocześnie zachowując wypełnione wcześniej luki i połączone fragmenty.
+\end{enumerate}
+
+Matematycznie filtr zamykający można zapisać jako:
+\[
+A \bullet B = (A \oplus B) \ominus B,
+\]
+gdzie:
+\begin{itemize}
+    \item \(A\) – obraz wejściowy,
+    \item \(B\) – element strukturalny,
+    \item \(\oplus\) – operacja dylatacji,
+    \item \(\ominus\) – operacja erozji.
+\end{itemize}
+
+Zastosowanie filtru zamykającego w analizie obrazów obejmuje:
+\begin{itemize}
+    \item usuwanie drobnych przerw w obiektach wykrytych w binarnej masce,
+    \item łączenie fragmentów obiektów, które zostały rozdzielone przez szumy lub niedoskonałości segmentacji,
+    \item przygotowanie spójnej maski obszaru zainteresowania do dalszej analizy, np. wyznaczania konturów czy pomiaru odległości w systemach stereowizyjnych.
+\end{itemize}
+
+\begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
+    \centering  % Centers the image
+    \includegraphics[width=0.6\textwidth]{images/CloseF.png}  % Adjust the path and width as necessary
+    \captionsetup{font=footnotesize}
+    \caption[\textbf{Przykład filtra zamykającego}. \textit{https://www.graphicsmill.com/docs/gm/minimum-maximum-median-filters.htm}]{Przykład filtra zamykającego.}
 \end{figure}
 
 \section{Triangulacja}
@@ -687,9 +803,9 @@ Zjawisko to ulega odwróceniu, gdy rozbieżność jest duża. Małe różnice dy
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
-    \includegraphics[width=0.6\textwidth]{images/diagram.png}  % Adjust the path and width as necessary
+    \includegraphics[width=0.7\textwidth]{images/diagram.png}  % Adjust the path and width as necessary
     \captionsetup{font=footnotesize}
-    \caption[\textbf{Schemat triangulacji}. \textit{Learning OpenCV 3, O'Reilly, Str. 705}]{Schemat triangulacji.}
+    \caption[\textbf{Diagram przepływu programu}. \textit{Opracowanie własne.}]{Diagram przepływu programu.}
     \label{fig:rpi}  % Optional: use to refer to this image later in the text
 \end{figure}
 
@@ -993,15 +1109,12 @@ W celu poprawy jakości uzyskanej mapy dysparycji stosuje się filtrację post-p
 \begin{lstlisting}[style=mypython]
 lmbda = 80000
 sigma = 1.8
-visual_multiplier = 1.0
 wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=stereo)
 wls_filter.setLambda(lmbda)
 wls_filter.setSigmaColor(sigma)
 \end{lstlisting}
 
 Parametr \texttt{lambda} (\( \lambda \)) kontroluje siłę wygładzania – większa wartość powoduje bardziej globalne uśrednianie mapy dysparycji, co redukuje zakłócenia, lecz może prowadzić do utraty szczegółów. Z kolei parametr \texttt{sigma} reguluje wpływ informacji barwnej podczas filtracji; większe wartości umożliwiają zachowanie ciągłości na jednolitych obszarach, a jednocześnie lepsze odwzorowanie krawędzi obiektów.  
-
-Zmienna \texttt{visual\_multiplier} określa współczynnik skalujący, wykorzystywany wyłącznie do wizualizacji przefiltrowanej mapy, nie wpływając na same wyniki obliczeń.  
 
 Poniższy fragment kodu odpowiada za inicjalizację strumienia wideo z kamery internetowej. Do akwizycji obrazu wykorzystano funkcję \texttt{cv2.VideoCapture()}, w której parametr \texttt{0} oznacza pierwsze urządzenie wideo podłączone do systemu.  
 
@@ -1037,9 +1150,11 @@ wątki oraz eliminuje konieczność ręcznego zarządzania cyklem życia każdeg
 distance_history = deque(maxlen=5)
 \end{lstlisting}
 
-Powyższy fragment kodu inicjalizuje strukturę \texttt{deque} (ang. double-ended queue) z maksymalną długością \texttt{5}. Struktura ta umożliwia wydajne dodawanie i usuwanie elementów z obu końców, a dzięki parametrowi \texttt{maxlen} pełni rolę bufora cyklicznego: po przekroczeniu określonej liczby elementów najstarsze wpisy są automatycznie usuwane. W kontekście analizy danych głębi kolejka ta służy do przechowywania historii obliczonych wartości odległości, co umożliwia późniejsze uśrednianie i wygładzanie wyników pomiarowych.
+Powyższy fragment kodu inicjalizuje strukturę \texttt{deque} (ang. \textit{double-ended queue}) z maksymalną długością \texttt{5}. Struktura ta umożliwia wydajne dodawanie i usuwanie elementów z obu końców, a dzięki parametrowi \texttt{maxlen} pełni rolę bufora cyklicznego: po przekroczeniu określonej liczby elementów najstarsze wpisy są automatycznie usuwane. W kontekście analizy danych głębi kolejka ta służy do przechowywania historii obliczonych wartości odległości, co umożliwia późniejsze uśrednianie i wygładzanie wyników pomiarowych.
 
-\section*{Główna pętla}
+\newpage
+
+\section*{Przetwarzanie obrazu z kamer w czasie rzeczywistym}
 
 Poniższy fragment kodu odpowiada za akwizycję pojedynczej klatki obrazu z urządzenia 
 wideo oraz weryfikację poprawności odczytu:  
@@ -1064,7 +1179,7 @@ pracy programu i zapobiega dalszemu przetwarzaniu niepoprawnych danych.
 Poniższy fragment kodu realizuje wyznaczenie wymiarów ramki obrazu oraz obliczenie współrzędnej środka w osi poziomej. Jest to niezbędne, ponieważ dane pochodzące z dwóch kamer rejestrowane są w postaci pojedynczej ramki, która następnie musi zostać rozdzielona na dwa odrębne obrazy odpowiadające kamerze lewej i prawej.
 
 \begin{lstlisting}[style=mypython]
-height, width, _ = frame.shape
+height, width = frame.shape
 mid = width // 2
 \end{lstlisting}
 
@@ -1072,7 +1187,6 @@ Właściwość \texttt{frame.shape} zwraca krotkę opisującą wymiary macierzy 
 \begin{itemize}
     \item \texttt{height} – wysokość obrazu w pikselach (liczba wierszy),  
     \item \texttt{width} – szerokość obrazu w pikselach (liczba kolumn),  
-    \item trzeci element (\texttt{\_}) – liczbę kanałów barwnych (np. 3 dla modelu RGB).  
 \end{itemize}
 
 Obliczenie wartości \texttt{mid = width // 2} pozwala uzyskać współrzędną $x$ odpowiadającą połowie szerokości obrazu.
@@ -1085,11 +1199,11 @@ right_frame = frame[:, mid:]
 Zaprezentowany fragment kodu realizuje proces rektyfikacji obrazów lewego i prawego pochodzących z kamery stereoskopowej, korzystając z uprzednio wyznaczonych map przekształceń geometrycznych:
 
 \begin{lstlisting}[style=mypython]
-Left_nice = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], 
+Left_rectified = executor.submit(cv2.remap, left_frame, Left_Stereo_Map[0], 
                             Left_Stereo_Map[1],
                             interpolation=cv2.INTER_LANCZOS4,
                             borderMode=cv2.BORDER_CONSTANT).result()
-Right_nice = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0],
+Right_rectified = executor.submit(cv2.remap, right_frame, Right_Stereo_Map[0],
                              Right_Stereo_Map[1],
                              interpolation=cv2.INTER_LANCZOS4, 
                              borderMode=cv2.BORDER_CONSTANT).result()
@@ -1099,48 +1213,63 @@ Wykorzystana funkcja \texttt{cv2.remap} dokonuje odwzorowania obrazu wejścioweg
 
 Przetwarzanie obu ramek (\texttt{left\_frame}, \texttt{right\_frame}) zostało zrealizowane równolegle dzięki wykorzystaniu obiektu \texttt{ThreadPoolExecutor}, co pozwala na zwiększenie efektywności obliczeń. Parametr \texttt{interpolation=cv2.INTER\_LANCZOS4} określa metodę interpolacji opartą na jądrze Lanczosa, która charakteryzuje się wysoką jakością odtwarzania szczegółów obrazu. Z kolei \texttt{borderMode=cv2.BORDER\_CONSTANT} ustala sposób traktowania pikseli wychodzących poza granice obrazu – w tym przypadku wypełniane są one stałą wartością (najczęściej czernią).  
 
-W wyniku działania kodu uzyskiwane są dwa obrazy: \texttt{Left\_nice} oraz \texttt{Right\_nice}, które stanowią rektyfikowane odpowiedniki oryginalnych ramek wejściowych i są przygotowane do dalszych etapów przetwarzania stereowizyjnego, takich jak obliczanie map dysparycji czy rekonstrukcja głębi sceny.
+W wyniku działania kodu uzyskiwane są dwa obrazy: \texttt{Left\_rectified} oraz \texttt{Right\_rectified}, które stanowią rektyfikowane odpowiedniki oryginalnych ramek wejściowych i są przygotowane do dalszych etapów przetwarzania stereowizyjnego, takich jak obliczanie map dysparycji czy rekonstrukcja głębi sceny.
 
 \begin{lstlisting}[style=mypython]
-Left_small = cv2.resize(Left_nice, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-Right_small = cv2.resize(Right_nice, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+Left_small = cv2.resize(Left_rectified, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+Right_small = cv2.resize(Right_rectified, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
 \end{lstlisting}
 
 Funkcja \texttt{resize()} dokonuje przeskalowania obrazu wejściowego do nowego rozmiaru. W tym przypadku nie podano docelowych wymiarów w pikselach (dsize = None), lecz określono współczynniki skalowania w osiach x i y.
 
-W konsekwencji rozdzielczość obu obrazów (\texttt{Left\_nice} i \texttt{Right\_nice}) zostaje zredukowana do 
+W konsekwencji rozdzielczość obu obrazów (\texttt{Left\_rectified} i \texttt{Right\_rectified}) zostaje zredukowana do 
 50\% wartości oryginalnej. Przeprowadzone testy wykazały, iż dalsze obniżanie rozdzielczości poniżej poziomu 50\% nie skutkowało zauważalnym wzrostem wydajności obliczeniowej, natomiast znacząco pogorszyło jakość przetwarzania. W szczególności analiza obrazów w kontekście detekcji obiektów oraz obliczania map dysparycji stała się praktycznie niemożliwa z uwagi na utratę istotnych szczegółów strukturalnych.
 
 Dodatkowo zastosowano metodę interpolacji \texttt{INTER\_AREA}, która jest szczególnie rekomendowana do zmniejszania obrazów, ponieważ polega na uwzględnianiu wartości wielu sąsiednich pikseli (metoda uśredniania obszarowego). Dzięki temu uzyskany wynik charakteryzuje się mniejszym poziomem aliasingu i artefaktów wizualnych w porównaniu do prostszych metod, np. interpolacji najbliższego sąsiada.
 
 \begin{lstlisting}[style=mypython]
-gray_left = executor.submit(cv2.cvtColor, Left_small, cv2.COLOR_BGR2GRAY).result()
-gray_right = executor.submit(cv2.cvtColor, Right_small, cv2.COLOR_BGR2GRAY).result()
+Left_gray = cv2.cvtColor(Left_small, cv2.COLOR_BGR2GRAY)
+Right_gray = cv2.cvtColor(Right_small, cv2.COLOR_BGR2GRAY)
 \end{lstlisting}
 
-W pierwszym etapie do obliczeń wykorzystywana jest funkcja \texttt{cvtColor}, która przekształca obraz z przestrzeni barw BGR (Blue-Green-Red) do przestrzeni odcieni szarości. Operacja ta jest realizowana równolegle przy użyciu mechanizmu wielowątkowości (executor.submit), co pozwala na jednoczesne przetwarzanie obrazu lewego i prawego, a w konsekwencji zwiększa efektywność całego systemu przetwarzania stereoskopowego.
+W pierwszym etapie do obliczeń wykorzystywana jest funkcja \texttt{cvtColor}, która przekształca obraz z przestrzeni barw BGR (Blue-Green-Red) do przestrzeni odcieni szarości. 
 
-Wynikiem tego etapu są dwa obrazy (gray\_left i gray\_right) w skali szarości, które stanowią podstawę do dalszych obliczeń, w szczególności do wyznaczania mapy dysparycji. Przekształcenie do skali szarości jest niezbędne, ponieważ większość algorytmów stereo (np. \texttt{StereoBM} czy \texttt{StereoSGBM}) operuje na intensywnościach pikseli, a nie na pełnej informacji kolorystycznej.
-
-W tym etapie zastosowano wcześniej zainicjalizowane algorytmy dopasowania stereo (\texttt{stereo} oraz \texttt{stereoR}), których zadaniem jest wyznaczenie dysparycji. Obliczenia są wykonywane równolegle dla obu kierunków.
+Wynikiem tego etapu są dwa obrazy (\texttt{Left\_gray} i \texttt{Right\_gray}) w skali szarości, które stanowią podstawę do dalszych obliczeń, w szczególności do wyznaczania mapy dysparycji. Przekształcenie do skali szarości jest niezbędne, ponieważ większość algorytmów stereo (np. \texttt{StereoBM} czy \texttt{StereoSGBM}) operuje na intensywnościach pikseli, a nie na pełnej informacji kolorystycznej.
 
 \begin{lstlisting}[style=mypython]
-futureL = executor.submit(lambda: stereo.compute(gray_left,
-                                                 gray_right).astype(np.float32) / 16.0)
-futureR = executor.submit(lambda: stereoR.compute(gray_right,
-                                                  gray_left).astype(np.float32) / 16.0)
-dispL = futureL.result()
-dispR = futureR.result()
+Left_gray = cv2.bilateralFilter(Left_gray, 9, 75, 75)
+Right_gray = cv2.bilateralFilter(Right_gray, 9, 75, 75)
+\end{lstlisting}
+
+Powyższy fragment kodu stosuje filtr bilateralny na dwóch obrazach w skali szarości: \texttt{Left\_gray} oraz \texttt{Right\_gray}. Filtr bilateralny jest nieliniowym filtrem wygładzającym, który redukuje szumy w obrazie, zachowując jednocześnie ostrość krawędzi.
+
+Parametry funkcji mają następujące znaczenie:
+
+\begin{itemize}
+  \item Pierwszy argument (9) określa średnicę sąsiedztwa używanego do filtracji pikseli.
+
+  \item Drugi argument (75) odpowiada za odchylenie standardowe w przestrzeni koloru, które wpływa na stopień wygładzenia w zależności od różnicy intensywności pomiędzy pikselami.
+
+  \item Trzeci argument (75) definiuje odchylenie standardowe w przestrzeni współrzędnych, które kontroluje wpływ odległości przestrzennej między pikselami na wynik filtracji.
+\end{itemize}
+
+W efekcie, filtracja bilateralna zmniejsza poziom szumu i artefaktów w obrazach wejściowych, jednocześnie zachowując struktury brzegowe istotne dla dalszych etapów przetwarzania stereowizyjnego, takich jak dopasowanie punktów korespondencji czy obliczanie mapy dysparytetu.
+
+W tym etapie zastosowano wcześniej zainicjalizowane algorytmy dopasowania stereo (\texttt{stereo} oraz \texttt{stereoR}), których zadaniem jest wyznaczenie dysparycji.
+
+\begin{lstlisting}[style=mypython]
+Left_disparity = stereo.compute(Left_gray, Right_gray).astype(np.float32) / 16.0
+Right_disparity = stereoR.compute(Right_gray, Left_gray).astype(np.float32) / 16.0
 \end{lstlisting}
 
 \begin{itemize}
-    \item \texttt{stereo.compute(gray\_left, gray\_right)} wyznacza mapę dysparycji z punktu widzenia kamery lewej,
-    \item \texttt{stereoR.compute(gray\_right, gray\_left)} oblicza analogiczną mapę z perspektywy kamery prawej.
+    \item \texttt{stereo.compute(Left\_gray, Right\_gray)} wyznacza mapę dysparycji z punktu widzenia kamery lewej,
+    \item \texttt{stereoR.compute(Right\_gray, Left\_gray)} oblicza analogiczną mapę z perspektywy kamery prawej.
 \end{itemize}
 
 Wynikiem działania algorytmów są macierze dysparycji w formacie całkowitoliczbowym, które następnie zostały przekonwertowane do typu \texttt{float32} oraz podzielone przez wartość 16.0. Operacja ta odpowiada za normalizację danych, ponieważ algorytmy \texttt{StereoSGBM} i \texttt{StereoBM} w implementacji OpenCV zwracają wartości zdyskretyzowane i przeskalowane domyślnie przez współczynnik 16.
 
-Uzyskane macierze (\texttt{dispL} oraz \texttt{dispR}) stanowią mapy dysparycji, będące kluczowym etapem rekonstrukcji głębi sceny. Na ich podstawie możliwe jest obliczenie mapy głębi oraz wykonanie trójwymiarowej rekonstrukcji obserwowanego otoczenia.
+Uzyskane macierze (\texttt{Left\_disparity} oraz \texttt{Right\_disparity}) stanowią mapy dysparycji, będące kluczowym etapem rekonstrukcji głębi sceny. Na ich podstawie możliwe jest obliczenie mapy głębi oraz wykonanie trójwymiarowej rekonstrukcji obserwowanego otoczenia.
 
 \begin{figure}[H]
 \centering
@@ -1155,19 +1284,17 @@ Analiza wizualna przedstawionych wyników wskazuje, że mapa dysparycji uzyskana
 Po uzyskaniu map dysparycji z obu kamer zastosowano filtrację z wykorzystaniem algorytmu WLS. Celem tego etapu jest redukcja szumu oraz artefaktów wynikających z niedokładności dopasowania stereo, przy jednoczesnym zachowaniu ostrych granic obiektów. Dzięki temu przefiltrowana mapa dysparycji charakteryzuje się wyższą spójnością wizualną i większą precyzją, szczególnie w obszarach o jednolitej teksturze.
 
 \begin{lstlisting}[style=mypython]
-filtered_disp = wls_filter.filter(dispL, gray_left, None, dispR)
+WLS_disparity = wls_filter.filter(Left_disparity, Left_gray, None, Right_disparity)
 \end{lstlisting}
 
 Proces filtracji realizowany jest w oparciu o następujące elementy:
 \begin{itemize}
-\item \texttt{dispL} – surowa mapa dysparycji obliczona z perspektywy kamery lewej,
-\item \texttt{gray\_left} – obraz przewodni (ang. guidance image), umożliwiający filtrowi dopasowanie procesu wygładzania do struktury krawędzi w obrazie,
-\item \texttt{dispR} – mapa dysparycji z perspektywy kamery prawej, wykorzystywana w celu poprawy spójności wyników.
+\item \texttt{Left\_disparity} – surowa mapa dysparycji obliczona z perspektywy kamery lewej,
+\item \texttt{Left\_gray} – obraz przewodni (ang. \textit{guidance image}), umożliwiający filtrowi dopasowanie procesu wygładzania do struktury krawędzi w obrazie,
+\item \texttt{Right\_disparity} – mapa dysparycji z perspektywy kamery prawej, wykorzystywana w celu poprawy spójności wyników.
 \end{itemize}
 
-Rezultatem działania jest \texttt{filtered\_disp} – przefiltrowana mapa dysparycji.
-
-Po zastosowaniu filtra WLS, który redukuje artefakty i poprawia spójność mapy dysparycji, wykonano dodatkowo operację domykania (closing filter). W morfologii matematycznej polega ona na sekwencyjnym zastosowaniu dylatacji, a następnie erozji z użyciem zadanego elementu strukturalnego (kernel).
+Rezultatem działania jest \texttt{WLS\_disparity} – przefiltrowana mapa dysparycji.
 
 \begin{figure}[H]  % 'h' means "here", it places the figure at the current location in the document
     \centering  % Centers the image
@@ -1179,156 +1306,198 @@ Po zastosowaniu filtra WLS, który redukuje artefakty i poprawia spójność map
 Na rysunku powyżej przedstawiono rezultat zastosowania filtra WLS dla map dysparycji wygenerowanych przez algorytmy \texttt{StereoSGBM} oraz \texttt{StereoBM}.
 
 \begin{lstlisting}[style=mypython]
-disp_closed = cv2.morphologyEx(filtered_disp, cv2.MORPH_CLOSE, kernel)
+focal_length_px = focal_length_px_full * 0.5
 \end{lstlisting}
 
-W kontekście przetwarzania mapy dysparycji:
+Powyższa operacja dokonuje skalowania ogniskowej wyrażonej w pikselach proporcjonalnie do zmiany rozdzielczości obrazu. W praktyce oznacza to, że wartość ogniskowej \texttt{focal\_length\_px\_full}, odpowiadająca pełnej rozdzielczości obrazu, zostaje pomniejszona o połowę i zapisana w zmiennej \texttt{focal\_length\_px}.
 
-\begin{itemize}
-  \item \texttt{filtered\_disp} reprezentuje mapę głębi uzyskaną po wcześniejszej filtracji WLS,
-  \item \texttt{kernel} to element strukturalny definiujący sąsiedztwo pikseli, na podstawie którego wykonywana jest operacja morfologiczna,
-  \item \texttt{MORPH\_CLOSE} określa, że zostanie zastosowane domykanie.
-\end{itemize}
+Zabieg ten jest niezbędny w sytuacji, gdy obraz wejściowy został zmniejszony dwukrotnie (np. przy przetwarzaniu w mniejszej skali, w celu zwiększenia wydajności obliczeń). Ponieważ ogniskowa w jednostkach pikselowych jest zależna od rozdzielczości obrazu, zmiana skali obrazu wymaga proporcjonalnego przeskalowania tej wartości, aby zachować poprawne odwzorowanie geometryczne w obliczeniach stereowizyjnych i triangulacji.
 
-W efekcie uzyskana mapa \texttt{disp\_closed} charakteryzuje się większą zwartością i spójnością powierzchni, co czyni ją bardziej użyteczną w dalszych etapach, takich jak rekonstrukcja 3D, segmentacja czy detekcja przeszkód.
+Poniższy fragment kodu:
 
 \begin{lstlisting}[style=mypython]
-disp_height, disp_width = disp_closed.shape
-roi_width = disp_width // 3  
-roi_height = disp_height // 2  
-roi_x = (disp_width - roi_width + 150) // 2
-roi_y = (disp_height - roi_height) // 2
-roi_rect = (roi_x, roi_y, roi_width, roi_height)
+disp = np.maximum(WLS_disparity, 0).astype(np.float32)
+Depth_Map = np.full_like(disp, np.inf, dtype=np.float32)
+valid = disp > 0.0
+Depth_Map[valid] = (focal_length_px * baseline_m) / disp[valid]
 \end{lstlisting}
 
-Powyższy fragment kodu realizuje wyznaczenie prostokątnego obszaru zainteresowania (ang. Region of Interest) w obrębie analizowanego obrazu, którego wymiary określa macierz \texttt{disp\_closed}. Proces ten przebiega w następujących etapach:
+\noindent
+realizuje konwersję \textbf{mapy dysparycji} na \textbf{mapę głębi}, wykorzystując zależność geometryczną pomiędzy dysparycją, a odległością punktu od kamery w układzie stereowizyjnym.
 
 \begin{enumerate}
-  \item Pobranie wymiarów obrazu – zmienne \texttt{disp\_height} oraz \texttt{disp\_width} są inicjalizowane wartościami wysokości i szerokości obrazu na podstawie jego rozmiaru (shape), co umożliwia dalsze obliczenia w jednostkach pikselowych.
+    \item Wartości dysparycji ujemne, powstałe w wyniku błędów dopasowania, zostają zastąpione zerami. Następnie cała macierz jest konwertowana do formatu \texttt{float32}, co zapewnia odpowiednią precyzję obliczeń w dalszych etapach przetwarzania.
+
+    \item Tworzona jest nowa macierz \texttt{Depth\_Map}, o tych samych wymiarach co mapa dysparycji, wypełniona wartościami nieskończoności (\texttt{np.inf}). Oznacza to brak danych głębi w pikselach, dla których nie uzyskano prawidłowej dysparycji.
+
+    \item Definiowany jest zbiór pikseli o \textbf{prawidłowej dysparycji}, dla których możliwe jest obliczenie głębi (dysparycja dodatnia).
+
+    \item Dla pikseli spełniających warunek poprawności obliczana jest głębia (odległość od kamery) według równania:
+    \[
+    Z = \frac{f \cdot B}{d}
+    \]
+    gdzie:
+    \begin{itemize}
+        \item \( Z \) – głębia (odległość w metrach),
+        \item \( f \) – ogniskowa kamery w pikselach (\texttt{focal\_length\_px}),
+        \item \( B \) – baza, czyli odległość pomiędzy kamerami w układzie stereowizyjnym (\texttt{baseline\_m}),
+        \item \( d \) – dysparycja danego piksela (\texttt{disp}).
+    \end{itemize}
+Wzór ten jest równoważny klasycznemu równaniu triangulacji:
+
+\[Z=f*T/(x^l-x^r)\]
+
+z tą różnicą, że zamiast bezpośredniej różnicy współrzędnych $x^l - x^r$ wykorzystuje się wartość dysparycji w danym regionie. Takie podejście zmniejsza wpływ szumów oraz pojedynczych błędnych dopasowań.
+\end{enumerate}
+
+\noindent
+W wyniku wykonania powyższego kodu powstaje macierz \texttt{Depth\_Map}, zawierająca dla każdego piksela przybliżoną wartość odległości od kamery. Mapa ta stanowi podstawę do dalszej analizy przestrzennej sceny, w tym do detekcji przeszkód oraz segmentacji przestrzennej.
+
+\begin{lstlisting}[style=mypython]
+depth_height, depth_width = Depth_Map.shape
+roi_width = depth_width // 3
+roi_height = depth_height // 2
+roi_x = (depth_width - roi_width + 150) // 2
+roi_y = (depth_height - roi_height) // 2
+\end{lstlisting}
+
+Powyższy fragment kodu realizuje wyznaczenie prostokątnego obszaru zainteresowania (ang. \textit{Region of Interest}) w obrębie analizowanego obrazu, którego wymiary określa macierz \texttt{Depth\_Map}. Proces ten przebiega w następujących etapach:
+
+\begin{enumerate}
+  \item Pobranie wymiarów obrazu – zmienne \texttt{depth\_height} oraz \texttt{depth\_width} są inicjalizowane wartościami wysokości i szerokości obrazu na podstawie jego rozmiaru (shape), co umożliwia dalsze obliczenia w jednostkach pikselowych.
   \item Wyznaczenie wymiarów ROI – obszar zainteresowania jest definiowany jako prostokąt o szerokości równej jednej trzeciej szerokości obrazu oraz wysokości stanowiącej połowę wysokości obrazu. Zastosowanie operatora dzielenia całkowitego (//) zapewnia, że wymiary te są liczbami całkowitymi.
   \item Określenie położenia ROI – współrzędne lewego górnego narożnika prostokąta ROI są wyliczane tak, aby obszar ten był centralnie zlokalizowany w obrazie, z dodatkowym przesunięciem w osi poziomej o 150 pikseli w prawo:
   \begin{itemize}
     \item współrzędna \texttt{roi\_x} jest obliczana jako połowa różnicy pomiędzy szerokością obrazu a szerokością ROI, powiększona o wartość 150 pikseli,
     \item współrzędna \texttt{roi\_y} jest obliczana jako połowa różnicy pomiędzy wysokością obrazu a wysokością ROI.
   \end{itemize}
-
-\item Definicja prostokąta ROI – zmienna \texttt{roi\_rect} przyjmuje postać krotki (\texttt{roi\_x}, \texttt{roi\_y}, \texttt{roi\_width}, \texttt{roi\_height}), która jednoznacznie opisuje położenie oraz rozmiary wyodrębnionego obszaru zainteresowania.
 \end{enumerate}
 
 W efekcie powyższych operacji uzyskuje się parametry umożliwiające dalszą analizę lub przetwarzanie wybranego fragmentu obrazu w sposób zlokalizowany, co jest szczególnie istotne w detekcji obiektów w wybranym regionie.
 
-\begin{lstlisting}[style=mypython]
-_, close_mask = cv2.threshold(disp_closed, 160, 255, cv2.THRESH_BINARY)
-\end{lstlisting}
-
-Powyższy fragment kodu implementuje etap segmentacji obrazu poprzez zastosowanie progowania binarnego (ang. binary thresholding) z wykorzystaniem flagi \texttt{THRESH\_BINARY}. Celem tej operacji jest wyodrębnienie obiektów znajdujących się w niewielkiej odległości od kamery. Proces realizowany jest za pomocą funkcji \texttt{threshold} i przebiega w następujących krokach.
-
-Dane wejściowe stanowi macierz \texttt{disp\_closed}, reprezentująca obraz głębi (np. mapę dysparycji), w której wyższe wartości odpowiadają mniejszym odległościom od obserwatora. Następnie wykonywana jest operacja progowania, w której każda wartość piksela porównywana jest z ustalonym progiem równym 160. Jeśli wartość piksela jest większa lub równa progowi, w obrazie wynikowym przypisywana jest wartość maksymalna (255), co oznacza piksel należący do obiektu bliskiego. W przeciwnym przypadku przypisywana jest wartość 0, odpowiadająca obiektowi odległemu lub tłu.
-
-W rezultacie uzyskuje się obraz \texttt{close\_mask} w postaci maski binarnej, w której piksele reprezentujące obiekty znajdujące się blisko kamery mają wartość 255, natomiast pozostałe – 0.
+Poniższy fragment kodu:
 
 \begin{lstlisting}[style=mypython]
-roi_mask = np.zeros_like(close_mask)
-roi_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
-         = close_mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
+Binary_Mask = np.zeros_like(Depth_Map, dtype=np.uint8)
+Binary_Mask[(Depth_Map < 0.20) & (Depth_Map > 0)] = 255
 \end{lstlisting}
 
-Powyższy fragment kodu odpowiada za ograniczenie obszaru analizy binarnej maski {\sloppy \texttt{close\_mask}  do wcześniej zdefiniowanego regionu zainteresowania. \par} Uzyskana maska \texttt{roi\_mask} zawiera wartości binarne (0 i 255) tylko w wyznaczonym regionie zainteresowania, natomiast wszystkie pozostałe piksele przyjmują wartość 0. W ten sposób dalsza analiza (np. wykrywanie konturów, obliczanie miar) jest ograniczona wyłącznie do fragmentu obrazu istotnego z punktu widzenia aplikacji.
+realizuje proces \textbf{progowania mapy głębi} w celu utworzenia \textbf{maski binarnej}, pozwalającej na identyfikację obiektów znajdujących się w określonej odległości od kamery.
+
+\begin{enumerate}
+    \item Tworzona jest macierz \texttt{Binary\_Mask} o takich samych wymiarach jak mapa głębi (\texttt{Depth\_Map}), wypełniona wartościami zerowymi. Typ danych \texttt{uint8} (8-bitowa liczba całkowita bez znaku) jest typowy dla obrazów binarnych, w których wartości pikseli mieszczą się w zakresie od 0 do 255. Wartość 0 odpowiada kolorowi czarnemu, co oznacza brak wykrytego obiektu.
+
+    \item Dla pikseli, których wartość głębi znajduje się w przedziale od 0 do 0{,}20 metra, przypisywana jest wartość 255 (biały). W ten sposób wyróżnione zostają obszary sceny znajdujące się bliżej niż 20 cm od kamery, co odpowiada potencjalnym przeszkodom w strefie bezpieczeństwa. 
+
+    Dodatkowy warunek \texttt{(Depth\_Map > 0)} eliminuje piksele, dla których brak jest ważnych danych głębi (oznaczonych wcześniej wartością \texttt{np.inf} lub zerem), zapewniając poprawność maski.
+\end{enumerate}
+
+W rezultacie powstaje macierz \texttt{Binary\_Mask}, stanowiąca \textbf{obraz binarny}, w którym białe obszary reprezentują obiekty znajdujące się w ustalonej odległości od kamery. Taka maska może zostać wykorzystana w dalszym etapie do \textbf{detekcji przeszkód}, analizy konturów lub aktywacji procedury reakcji systemu antykolizyjnego.
+
+Poniższy fragment kodu:
+
+\begin{lstlisting}[style=mypython]
+ROI_Mask = np.zeros_like(Binary_Mask)
+ROI_Mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width] 
+        = Binary_Mask[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
+\end{lstlisting}
+
+odpowiada za \textbf{wydzielenie obszaru zainteresowania} (ang. \textit{Region of Interest}) z binarnej maski \texttt{Binary\_Mask}. Operacja ta pozwala skupić analizę jedynie na wybranym fragmencie obrazu, pomijając pozostałe obszary sceny.
+
+\begin{enumerate}
+    \item Tworzona jest nowa macierz \texttt{ROI\_Mask} o takich samych wymiarach jak \texttt{Binary\_Mask}, wypełniona wartościami zerowymi. Wartość 0 odpowiada czarnemu tłu, co oznacza brak aktywnych (białych) pikseli. Dzięki temu uzyskany obraz stanowi pustą maskę, do której następnie kopiowany jest wyłącznie wybrany fragment.
+
+    \item Z oryginalnej maski binarnej \texttt{Binary\_Mask} kopiowany jest fragment obrazu określony współrzędnymi \texttt{roi\_x}, \texttt{roi\_y} oraz wymiarami \texttt{roi\_width} i \texttt{roi\_height}. 
+    Odpowiada to prostokątnemu obszarowi zainteresowania (ROI), który zostaje umieszczony w nowej macierzy \texttt{ROI\_Mask} w tym samym położeniu przestrzennym. 
+    W rezultacie wszystkie piksele spoza wyznaczonego regionu pozostają czarne (zerowe), a analiza skupia się wyłącznie na wybranym fragmencie sceny.
+\end{enumerate}
+
+Dzięki takiemu podejściu uzyskana maska \texttt{ROI\_Mask} zawiera jedynie informacje o obiektach znajdujących się w określonym obszarze obrazu, co pozwala ograniczyć zakres dalszego przetwarzania i zmniejszyć liczbę potencjalnych fałszywych detekcji w obszarach nieistotnych z punktu widzenia systemu antykolizyjnego.
+
+\begin{lstlisting}[style=mypython]
+ROI_Mask = cv2.morphologyEx(ROI_Mask, cv2.MORPH_OPEN, kernel, iterations=1)
+ROI_Mask = cv2.morphologyEx(ROI_Mask, cv2.MORPH_CLOSE, kernel, iterations=2)
+\end{lstlisting}
+
+Powyższy fragment kodu realizuje \textbf{morfologiczne przetwarzanie obrazu binarnego} w celu poprawy jakości maski obszaru zainteresowania (\texttt{ROI\_Mask}). Operacje morfologiczne służą do usuwania zakłóceń, wygładzania krawędzi i łączenia fragmentów należących do tego samego obiektu.
+
+\begin{enumerate}
+    \item Wykonywana jest operacja \textbf{otwarcia morfologicznego} (\textit{morphological opening}), która polega na sekwencyjnym zastosowaniu erozji, a następnie dylatacji z wykorzystaniem elementu strukturalnego \texttt{kernel}. 
+    Operacja ta usuwa drobne szumy oraz małe, izolowane piksele tła znajdujące się wewnątrz maski, pozostawiając jedynie większe i bardziej zwarte obszary.
+
+    \item Następnie stosowana jest operacja \textbf{domknięcia morfologicznego} (\textit{morphological closing}), będąca odwrotnością otwarcia. Składa się ona z dylatacji, po której następuje erozja. 
+    Jej celem jest wypełnienie drobnych przerw, szczelin lub luk w obrębie obiektów, a także połączenie fragmentów tego samego regionu w jedną spójną całość. 
+    Dwukrotne wykonanie operacji (\texttt{iterations=2}) zapewnia bardziej skuteczne łączenie bliskich fragmentów.
+
+\end{enumerate}
+
+Zastosowanie obu operacji w przedstawionej kolejności (\textit{otwarcie} → \textit{domknięcie}) umożliwia uzyskanie \textbf{czystej i spójnej maski binarnej}, wolnej od szumów i nieciągłości. Tak przetworzona maska może zostać następnie wykorzystana w dalszych etapach przetwarzania, takich jak detekcja konturów, wyznaczanie obszarów kolizji czy analiza kształtu przeszkód.
 
 \newpage
 
-\subsection*{Wykrywanie obiektów}
+\subsection*{Detekcja obiektów}
 
 \begin{lstlisting}[style=mypython]
-contours, _ = cv2.findContours(roi_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
 current_stop_flag = False
 
-for cnt in contours:
+Found_Contours, _ = cv2.findFound_Contours(ROI_Mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+for cnt in Found_Contours:
     if cv2.contourArea(cnt) < 500:
         continue
 
     x, y, w, h = cv2.boundingRect(cnt)
-    cx, cy = x + w // 2, y + h // 2
 
-    if cy - 1 < 0 or cy + 2 > dispL.shape[0] or cx - 1 < 0 or cx + 2 > dispL.shape[1]:
+    mask = np.zeros_like(Depth_Map, dtype=np.uint8)
+    cv2.drawFound_Contours(mask, [cnt], -1, 255, -1)
+    depth_vals = Depth_Map[mask == 255]
+    valid_depth = depth_vals[(depth_vals > 0) & np.isfinite(depth_vals)]
+    if valid_depth.size == 0:
         continue
 
-    roi_disp = dispL[cy - 1:cy + 2, cx - 1:cx + 2]
-    valid_disp = roi_disp[(roi_disp > 1.0) & (roi_disp < 150.0)]
-
-    if valid_disp.size == 0:
-        continue
-
-    avg_disp = np.median(valid_disp)
-    focal_length_px = PL[0, 0]
-    baseline_m = abs(T[0][0]) / 100  
-    distance = (focal_length_px * baseline_m) / avg_disp
+    distance = np.median(valid_depth)
     distance_history.append(distance)
-    smoothed_distance = np.median(distance_history)
+    avg_distance = float(np.median(distance_history))
 
-    if smoothed_distance < 0.65:
+    if avg_distance < 0.20:
         current_stop_flag = True
-        break
+    else:
+        current_stop_flag = False
 
-if current_stop_flag:
+    break
+
+if current_stop_flag == True:
     lgpio.gpio_write(chip, PIN, 0)
-elif len(distance_history) == 5 and smoothed_distance > 0.7:
+else:
     lgpio.gpio_write(chip, PIN, 1)
 \end{lstlisting}
 
-Powyższy fragment kodu realizuje kompletną procedurę detekcji obiektów znajdujących się w obszarze zainteresowania oraz określenia ich odległości na podstawie mapy dysparycji. Dodatkowo implementuje logikę sterowania urządzeniem z wykorzystaniem mechanizmu histerezy w celu zapewnienia stabilności działania. Szczegółowe etapy działania można opisać następująco:
+Powyższy fragment kodu realizuje kompletną procedurę detekcji obiektów znajdujących się w obszarze zainteresowania oraz określenia ich odległości na podstawie mapy głębi. Dodatkowo implementuje logikę sterowania urządzeniem z wykorzystaniem mechanizmu histerezy w celu zapewnienia stabilności działania. Szczegółowe etapy działania można opisać następująco:
 
 \begin{enumerate}
-  \item \textbf{Detekcja konturów w masce ograniczonej do ROI}
+    \item \textbf{Inicjalizacja zmiennej flagi:}
+    Zmienna logiczna \texttt{current\_stop\_flag} służy do sygnalizowania, czy pojazd powinien zostać zatrzymany w bieżącym cyklu analizy.
 
-  Funkcja \texttt{findContours} wyszukuje kontury w binarnej masce \texttt{roi\_mask}, uprzednio ograniczonej do regionu zainteresowania. Zastosowany tryb \texttt{RETR\_EXTERNAL} powoduje, że wykrywane są wyłącznie kontury zewnętrzne, natomiast metoda \texttt{CHAIN\_APPROX\allowbreak\_SIMPLE} dokonuje kompresji punktów konturu w celu redukcji pamięci.
-\item \textbf{Iteracja po wykrytych konturach z filtracją szumu}
-  \begin{itemize}
-    \item Filtracja według powierzchni: Kontury o polu mniejszym niż zadany próg (\texttt{500}) są odrzucane jako szum lub obiekty nieistotne.
-    \item Wyznaczenie prostokąta otaczającego: Funkcja \texttt{boundingRect} oblicza minimalny prostokąt obejmujący dany kontur. Na jego podstawie wyznaczany jest środek prostokąta (\texttt{cx},\texttt{cy}).
-  \end{itemize}
-\item \textbf{Weryfikacja poprawności położenia}
+    \item \textbf{Wykrywanie konturów w masce ROI:}
+    Funkcja \texttt{cv2.findContours} identyfikuje zewnętrzne kontury obiektów w binarnej masce \texttt{ROI\_Mask}. Parametr \texttt{cv2.RETR\_EXTERNAL} ogranicza detekcję do konturów zewnętrznych, a \texttt{cv2.CHAIN\_APPROX\_SIMPLE} redukuje liczbę punktów konturu, zachowując jego kształt.
 
-  Aby uniknąć błędów indeksowania, sprawdzane jest, czy punkt środkowy prostokąta wraz z niewielkim marginesem (1 piksel w górę i w dół) mieści się w granicach obrazu \texttt{dispL}.
-\item \textbf{Analiza lokalnej mapy dysparycji}
+    \item \textbf{Analiza wykrytych konturów:}
+    Pętla iteruje po wszystkich wykrytych konturach, pomijając te, których powierzchnia jest mniejsza niż 500 pikseli, co pozwala odfiltrować drobne szumy i nieistotne fragmenty sceny.
 
-  Z obrazu dysparycji (\texttt{dispL}) pobierany jest fragment 3×3 wokół punktu centralnego obiektu (\texttt{roi\_disp}). Następnie wybierane są jedynie te wartości, które mieszczą się w dopuszczalnym zakresie \texttt{(1.0, 150.0)}, eliminując w ten sposób punkty nieprawidłowe lub o niskiej jakości pomiaru.
+    \item \textbf{Wyznaczenie prostokąta ograniczającego:}
+    Dla konturu tworzony jest prostokąt ograniczający, który umożliwia szybkie określenie położenia obiektu w przestrzeni obrazu.
 
-\item \textbf{Estymacja odległości}
+    \item \textbf{Wydzielenie pikseli głębi należących do konturu:}
+      Tworzona jest tymczasowa maska binarna, w której zaznaczony jest aktualny kontur. Następnie z mapy głębi wydzielane są wartości odpowiadające pikselom w konturze. Warunek \texttt{((depth\_vals > 0) \& np.isfinite(depth\_vals)} filtruje nieprawidłowe lub nieokreślone wartości głębi.
 
-Jeżeli w analizowanym fragmencie obrazu znajdują się prawidłowe wartości dysparycji, obliczana jest ich mediana (\texttt{avg\_disp}). Na tej podstawie wyznaczana jest odległość do obiektu zgodnie ze wzorem:
+    \item \textbf{Obliczenie odległości do obiektu:}
+      Odległość do obiektu określana jest jako \textbf{mediana wartości głębi} w obrębie konturu, co redukuje wpływ szumów i pojedynczych błędnych pomiarów. Następnie tworzona jest średnia mediana na podstawie historii kilku ostatnich pomiarów (\texttt{distance\_history}) w celu uzyskania stabilnej wartości.
 
-\[
-\text{distance} = \frac{\text{focal\_length\_px} \cdot \text{baseline\_m}}{\text{avg\_disp}}
-\]
-gdzie:
-\begin{itemize}
-    \item $\text{focal\_length\_px}$ – ogniskowa wyrażona w pikselach,
-    \item $\text{baseline\_m}$ – odległość między kamerami stereoskopowymi,
-    \item $\text{avg\_disp}$ – medianowa wartość dysparycji w ROI.
-\end{itemize}
+    \item \textbf{Decyzja o zatrzymaniu pojazdu:}
+    Jeśli średnia odległość jest mniejsza niż 0,20 m, flaga \texttt{current\_stop\_flag} zostaje ustawiona na \texttt{True}, co sygnalizuje konieczność zatrzymania pojazdu. W przeciwnym przypadku flaga pozostaje \texttt{False}.
 
-Wzór ten jest równoważny klasycznemu równaniu triangulacji:
-
-\[Z=f*T/(x^l-x^r)\]
-
-z tą różnicą, że zamiast bezpośredniej różnicy współrzędnych $x^l - x^r$ wykorzystuje się medianową wartość dysparycji w danym regionie. Takie podejście zmniejsza wpływ szumów oraz pojedynczych błędnych dopasowań.
-
-Obliczona wartość odległości zapisywana jest w historii pomiarów (\texttt{distance\_history}), a następnie obliczana jest jej mediana (\texttt{smoothed\_distance}), co pozwala dodatkowo wygładzić wyniki i zredukować fluktuacje spowodowane zakłóceniami pomiarowymi.
-
-\item \textbf{Zastosowanie logiki histerezy}
-
-  Jeżeli wygładzona odległość jest mniejsza niż zadany próg (0.65), ustawiany jest znacznik \texttt{current\_stop\_flag = True}. Pętla zostaje przerwana po pierwszym wykryciu obiektu spełniającego kryteria.
-
-\item \textbf{Sterowanie urządzeniem za pomocą GPIO}
-
-  Na koniec, w zależności od wartości \texttt{current\_stop\_flag} oraz mediany odległości w historii pomiarów, podejmowana jest decyzja o wysłaniu sygnału do wyjścia GPIO:
-  \begin{itemize}
-    \item Jeżeli obiekt znajduje się zbyt blisko (\texttt{current\_stop\_flag == True}), na pinie sterującym ustawiany jest stan niski (\texttt{lgpio.gpio\_write(chip, PIN, 0)}), co odpowiada zatrzymaniu urządzenia.
-    \item Jeżeli w historii znajduje się pełny zestaw pomiarów (\texttt{5}) i odległość przekracza wartość 0.7, wysyłany jest sygnał uruchomienia ruchu (\texttt{lgpio.gpio\_write(chip, PIN, 1)}).
-  \end{itemize}
-
+    \item \textbf{Sterowanie wyjściem GPIO:}
+    Na podstawie stanu flagi lub wartości wygładzonej odległości sterowane jest wyjście GPIO. W przypadku wykrycia przeszkody (\texttt{current\_stop\_flag = True}) sygnał jest ustawiany nisko (zatrzymanie pojazdu), natomiast jeśli historia pomiarów jest kompletna i średnia odległość wskazuje brak zagrożenia, sygnał zostaje przywrócony do stanu wysokiego, zezwalając na kontynuację ruchu.
 \end{enumerate}
 
 \begin{figure}[H]
@@ -1356,7 +1525,7 @@ Rozbieżność ta może wynikać z kilku czynników:
   \item Ograniczona rozdzielczość oraz zmniejszenie obrazu w procesie przetwarzania mogły wpłynąć na redukcję precyzji detekcji punktów korespondencyjnych. 
 \end{itemize}
 
-\chapter{Wnioski i możliwe ulepszenia}
+\chapter{Podsumowanie i wnioski}
 
 Analiza literatury oraz przeprowadzone badania wykazały, że systemy stereowizyjne, mimo swojej użyteczności w detekcji głębi, posiadają szereg ograniczeń, które należy uwzględnić przy projektowaniu systemów antykolizyjnych. Główne problemy wynikają z podatności stereowizji na zakłócenia w warunkach zmiennego oświetlenia. Zarówno silne światło, jak i niedostateczne oświetlenie, a także obecność refleksów, utrudniają prawidłowe dopasowanie pikseli. Ponadto w obszarach ubogich w teksturę, takich jak jednolite powierzchnie ścian czy niebo, proces dopasowania może być zawodny, prowadząc do błędów w mapie dysparycji. Ograniczone pole widzenia kamer stereowizyjnych skutkuje powstawaniem martwych stref pomiędzy kamerami lub poza obszarem ich obserwacji, co dodatkowo ogranicza niezawodność systemu.
 
@@ -1366,7 +1535,7 @@ Dodatkowo, stereowizja napotyka trudności w przypadku dynamicznych scen, gdy ob
     \centering
     \includegraphics[width=0.6\textwidth]{images/cpu-compare.png}
     \captionsetup{font=footnotesize}
-    \caption[\textbf{Porównanie CPU ARM i x86}. \textit{https://www.cpubenchmark.net/}]{Porównanie CPU ARM i x86}
+    \caption[\textbf{Porównanie CPU ARM i x64}. \textit{https://www.cpubenchmark.net/}]{Porównanie CPU ARM i x64}
 \end{figure}
 
 Dla porównania, zastosowanie wydajniejszego CPU pozwoliło uzyskać około $32,\text{FPS}$, co zapewnia znacznie stabilniejsze działanie i lepszą reakcję systemu. Niemniej jednak, porównując moc obliczeniową obu procesorów, można zauważyć, że mikroprocesory muszą przejść znaczącą ewolucję, aby osiągać stabilne wartości powyżej 30 FPS w tego typu zastosowaniach czasu rzeczywistego.
@@ -1407,7 +1576,11 @@ Zaproponowany zestaw pozwala na uzyskanie systemu stereowizyjnego charakteryzuj�
 \bibitem{semi-global} \textbf{Heiko Hirschmüller}, \textit{https://en.wikipedia.org/wiki/Semi\_global\_matching}, 2005.
 \bibitem{bm} \textbf{Sushma Sri, Motion Estimation using Block Matching Algorithm}, \textit{https://media.neliti.com/media/publications/237501-motion-estimation-using-block-matching-a-4e613693.pdf}, 2018-05.
 \bibitem{SAD} \textbf{David R. Bull, Fan Zhang, Intelligent Image and Video Compression (Second Edition)}, \textit{https://www.sciencedirect.com/topics/computer-science/sum-of-absolute-difference}, 2021
+\bibitem{bilat} \textbf{Filtr Bilateralny}, \textit{https://en.wikipedia.org/wiki/Bilateral\_filter}, 2025-09-08.
+\bibitem{gauss} \textbf{Tomasz Lubiński, Filtrowanie obrazów}, \textit{http://www.algorytm.org/przetwarzanie-obrazow/filtrowanie-obrazow.html}, 2007-08-15.
 \bibitem{wls} \textbf{Renzhi Mao, Kaijie Wei, Hideharu Amano, Yuki Kuno, Masatoshi Arai, Weighted Least Square Filter for Improving the Quality of Depth Map on FPGA}, \textit{http://www.ijnc.org/index.php/ijnc/article/view/291}, 2022-07.
+\bibitem{open} \textbf{Morphological Transformations}, \textit{https://docs.opencv.org/4.x/d9/d61/tutorial\_py\_morphological\_ops.html}, 2025-10-29.
+\bibitem{close} \textbf{Morphological Transformations}, \textit{https://docs.opencv.org/4.x/d9/d61/tutorial\_py\_morphological\_ops.html}, 2025-10-29.
 \bibitem{hamming} \textbf{Odległość Hamminga}, \textit{https://pl.wikipedia.org/wiki/Odległość\_Hamminga}.
 \bibitem{lambert} \textbf{John Lambert, Stereo and Disparity}, \textit{https://johnwlambert.github.io/stereo/}.
 
