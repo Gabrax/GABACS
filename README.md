@@ -23,7 +23,9 @@ https://github.com/user-attachments/assets/4c4dc64d-1806-4e21-bd8e-4c137a9bdfe6
 <div align="center">
 
 <p>
-<a href="https://pypi.org/project/opencv-contrib-python/">opencv-contrib-python</a>
+<a href="https://pypi.org/project/opencv-contrib-python/">opencv-contrib-python</a> •
+<a href="https://pypi.org/project/numpy/">numpy</a> •
+<a href="https://pypi.org/project/lgpio/">lgpio</a>
 </p>
 
 </div>
